@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#161B47">
+<title>미리내 마법학교</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dongle:wght@400;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#161B47;
+  --sky2:#1C2152;
+  --panel:#232A66;
+  --ink:#EDE6D3;
+  --soft:#A9A6C7;
+  --gold:#E9C46A;
+  --parch:#F3EAD3;
+  --parch-ink:#2B2548;
+  --line:rgba(237,230,211,.18);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{min-height:100%}
+body{background:var(--sky);color:var(--ink);font-family:'Dongle',sans-serif;font-size:23px;line-height:1.25;min-height:100vh}
+button,input{font:inherit;color:inherit}
+input{font-family:'Dongle',sans-serif}
+button{cursor:pointer;border:none;background:none}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:10px}
+.hz{font-family:'Noto Serif KR',serif;font-weight:900}
+
+#stars{position:fixed;inset:0;pointer-events:none;z-index:0}
+#stars i{position:absolute;border-radius:50%;background:#FFF6DC;opacity:.6;animation:tw 4s ease-in-out infinite}
+@keyframes tw{50%{opacity:.15}}
+
+#app{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) 18px calc(28px + env(safe-area-inset-bottom));min-height:calc(100vh / var(--z,1));zoom:var(--z,1)}
+.scr{display:none;flex-direction:column;justify-content:center;min-height:calc(100vh / var(--z,1) - 48px)}
+.scr.on{display:flex}
+
+.btn{display:block;width:100%;padding:14px;border-radius:14px;font-size:24px;font-weight:700;text-align:center}
+.btn.gold{background:var(--gold);color:var(--parch-ink)}
+.btn.gold:active{transform:translateY(2px)}
+.btn.ghost{border:1px solid var(--line);background:rgba(255,255,255,.05)}
+.btn:disabled{opacity:.4;pointer-events:none}
+.small{font-size:18px;color:var(--soft)}
+.center{text-align:center}
+
+/* ---------- 교문 ---------- */
+.gate{margin:0 auto;width:100%;max-width:420px}
+.gate svg{width:100%;height:auto;display:block}
+.gate-title{text-align:center;margin-top:18px}
+.gate-title h1{font-size:48px;font-weight:700;letter-spacing:-.5px;color:var(--parch)}
+.gate-title p{color:var(--soft);font-size:20px;margin-top:4px}
+.spacer{height:24px;flex:none}
+
+/* ---------- 친구 고르기 ---------- */
+.head{text-align:center;margin-bottom:12px}
+.head .t1{font-size:19px;color:var(--soft)}
+.head .t2{font-size:28px;font-weight:700;color:var(--parch)}
+.stage{display:flex;align-items:center;gap:8px}
+.navb{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.06);font-size:28px;flex:none}
+.pic{flex:1;height:310px;display:flex;align-items:flex-end;justify-content:center;background:var(--panel);border-radius:18px;overflow:hidden;touch-action:pan-y}
+.pic svg{height:296px;width:auto}
+.nm{text-align:center;font-size:34px;font-weight:700;margin-top:12px}
+.tag{text-align:center;font-size:20px;margin-bottom:12px}
+.card{background:var(--parch);color:var(--parch-ink);border-radius:16px;padding:14px 16px;font-size:21px;line-height:1.25}
+.card .row{display:flex;gap:10px}
+.card .row b{flex:none;width:66px;font-weight:500;color:#6E6690}
+.dots{display:flex;justify-content:center;gap:6px;margin:14px 0}
+.dots i{width:7px;height:7px;border-radius:50%;background:var(--line);display:block;transition:all .2s}
+.dots i.on{background:var(--gold);width:18px;border-radius:999px}
+
+/* ---------- 이름 ---------- */
+.mini{width:100%;height:230px;margin:4px auto 10px;background:var(--panel);border-radius:18px;display:flex;align-items:flex-end;justify-content:center}
+.mini svg{height:218px;width:auto}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.05);margin-top:10px}
+.opt .ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--soft);flex:none;display:grid;place-items:center}
+.opt.on{border-color:var(--gold);background:rgba(233,196,106,.1)}
+.opt.on .ck{border-color:var(--gold)}
+.opt .lvsub{color:var(--gold)}
+.opt.on .ck::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.opt b{font-weight:500;display:block}
+.field{width:100%;margin-top:10px;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:rgba(255,255,255,.06);font-size:24px}
+.field:focus{outline:none;border-color:var(--gold)}
+.err{min-height:20px;font-size:18px;color:#F29C9C;margin-top:6px}
+
+/* ---------- 학생증 ---------- */
+.idcard{background:var(--parch);color:var(--parch-ink);border-radius:18px;overflow:hidden;margin-top:6px;animation:rise .5s cubic-bezier(.3,1.3,.5,1)}
+@keyframes rise{from{transform:translateY(24px) scale(.96);opacity:0}}
+.idtop{background:#2C3474;color:var(--parch);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
+.idtop b{font-weight:700;font-size:22px}
+.idtop .hz{font-size:20px;color:var(--gold);letter-spacing:2px}
+.idbody{display:flex;gap:16px;padding:20px 18px}
+.idphoto{width:132px;height:168px;border-radius:12px;background:#232A66;flex:none;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
+.idphoto svg{height:162px;width:auto}
+.idinfo{flex:1;display:flex;flex-direction:column;gap:6px;font-size:20px}
+.idinfo .k{color:#6E6690;font-size:18px}
+.idinfo .v{font-weight:700;font-size:25px;margin-top:-4px}
+.idspell{display:inline-flex;align-items:center;gap:6px}
+.idspell .hz{font-size:22px}
+.idfoot{border-top:1px dashed rgba(43,37,72,.2);padding:10px 16px;font-size:18px;color:#6E6690;display:flex;justify-content:space-between}
+
+/* ---------- 복도 ---------- */
+.me{display:flex;align-items:center;gap:14px;padding:12px 16px 12px 12px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
+.me .face{width:64px;height:64px;border-radius:50%;background:var(--panel);overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
+.me .face svg{height:118px;width:auto;margin-bottom:-48px}
+.me b{font-weight:700;font-size:25px}
+.me span{font-size:18px;color:var(--soft);display:block;line-height:1.2}
+.hall-title{font-size:31px;font-weight:700;margin:18px 0 4px;color:var(--parch)}
+.rooms{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.room{border-radius:18px;border:1.5px dashed #3A4190;padding:30px 12px;text-align:center;background:rgba(255,255,255,.03)}
+.room .ic{font-size:53px;filter:grayscale(.6);opacity:.7}
+.room b{display:block;font-weight:700;font-size:24px;margin-top:6px}
+.room span{font-size:18px;color:var(--soft)}
+.room.next{border-style:solid;border-color:var(--gold)}
+.room.next .ic{filter:none;opacity:1}
+.room.next span{color:var(--gold)}
+.foot-links{display:flex;justify-content:center;margin-top:8px}
+.link{font-size:19px;color:var(--soft);text-decoration:underline;text-underline-offset:3px;padding:6px}
+
+.modal{position:fixed;inset:0;background:rgba(10,12,40,.7);display:none;align-items:center;justify-content:center;z-index:30;padding:20px}
+.modal.on{display:flex}
+.modal .box{background:var(--sky2);border:1px solid var(--line);border-radius:18px;padding:20px;max-width:340px;width:100%}
+.modal p{margin-bottom:16px}
+.modal .row2{display:flex;gap:10px}
+.modal .row2 .btn{flex:1}
+
+/* ---------- 급식실 ---------- */
+.room.open{border-style:solid;border-color:var(--gold);background:rgba(233,196,106,.08);cursor:pointer}
+.room.open .ic{filter:none;opacity:1}
+.room.open span{color:var(--gold)}
+.room.open:active{transform:scale(.97)}
+.cbar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.cbar h2{flex:1;font-size:28px;font-weight:700;color:var(--parch)}
+.icb{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.06);font-size:24px;display:grid;place-items:center;flex:none}
+.stat{display:flex;justify-content:space-between;align-items:center;font-size:20px}
+.hearts{font-size:25px;letter-spacing:2px}
+.tbar{height:9px;border-radius:999px;background:rgba(255,255,255,.1);margin:8px 0 12px;overflow:hidden}
+.tbar i{display:block;height:100%;background:var(--gold);border-radius:999px;width:100%}
+.tbar i.low{background:#F29C9C}
+.hallc{background:#2A2F6E;border-radius:18px;padding:12px 12px 0;position:relative;overflow:hidden}
+.bub{background:var(--parch);color:var(--parch-ink);border-radius:16px;padding:12px 14px;font-size:24px;font-weight:700;position:relative;margin-bottom:12px;min-height:56px;display:flex;align-items:center;gap:10px}
+.bub .em{font-size:39px;flex:none}
+.bub .kw{color:#B8342A;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:4px;text-decoration-color:rgba(233,196,106,.9)}
+.bub .conn{display:block;font-size:20px;font-weight:500;color:#2B6B63;margin-top:2px}
+.bub.sad .conn{color:#9A3B3B}
+.bub .conn .hz{font-size:18px}
+.plate.hint{animation:glow .6s ease-in-out 3;background:#FFF4CC}
+@keyframes glow{50%{box-shadow:0 0 0 4px var(--gold),0 4px 0 #CDBF9D}}
+.bub::after{content:"";position:absolute;left:44px;bottom:-9px;border:9px solid transparent;border-top-color:var(--parch);border-bottom:0}
+.bub.happy{background:#D9F3EE}
+.bub.happy::after{border-top-color:#D9F3EE}
+.bub.sad{background:#F9DADA}
+.bub.sad::after{border-top-color:#F9DADA}
+.queue{display:flex;align-items:flex-end;gap:2px;height:170px;position:relative}
+.stu{display:flex;flex-direction:column;align-items:center;transition:transform .35s,opacity .35s}
+.stu svg{display:block;width:auto}
+.stu.front svg{height:164px}
+.stu.q1 svg{height:122px;opacity:.9}
+.stu.q2 svg{height:100px;opacity:.75}
+.stu.q3 svg{height:84px;opacity:.6}
+.stu.leave{transform:translateX(-120%);opacity:0}
+.stu.mad{animation:shake .4s}
+.pat{position:absolute;left:12px;bottom:18px;width:96px;height:7px;border-radius:999px;background:rgba(0,0,0,.35);overflow:hidden}
+.pat i{display:block;height:100%;width:100%;background:#72D3C9;border-radius:999px}
+.pat i.low{background:#F29C9C}
+.countertop{height:16px;background:#6B4A34;border-top:3px solid #8A6444;margin:0 -12px}
+.plates{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.plate{background:var(--parch);color:var(--parch-ink);border-radius:16px;padding:10px 4px 8px;text-align:center;box-shadow:0 4px 0 #CDBF9D}
+.plate:active{transform:translateY(3px);box-shadow:0 1px 0 #CDBF9D}
+.plate .h{font-family:'Noto Serif KR',serif;font-weight:900;font-size:36px;line-height:1.15}
+.plate .f{font-size:18px;color:#6E6690;transition:opacity .4s}
+.plate .f.dim{opacity:.35}
+.plate .f.hide{visibility:hidden}
+.plate:disabled{cursor:default}
+.bub .em.two{font-size:30px;letter-spacing:-4px}
+.bub .got .kw{color:#2E8A6A;text-decoration-color:rgba(46,138,106,.5)}
+.bub .chk{color:#2E9E6A;font-size:26px;margin-right:3px}
+.bub .kw .sy{color:#2E8A6A}
+.lvtag{display:inline-block;border:1px solid var(--gold);color:var(--gold);border-radius:8px;padding:0 8px;font-size:18px;margin-left:4px;vertical-align:middle}
+.plate.ok{background:#D9F3EE;box-shadow:0 4px 0 #9CCFC6}
+.plate.no{background:#F9DADA;box-shadow:0 4px 0 #D9A5A5;animation:shake .35s}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.over{position:absolute;inset:0;background:rgba(22,27,71,.98);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;border-radius:18px;z-index:5}
+.over.on{display:flex}
+.cwrap{position:relative;min-height:600px}
+.rules{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:left;font-size:20px;line-height:1.3;margin:12px 0 18px;width:100%}
+.big-n{font-size:67px;font-weight:700;color:var(--gold);line-height:1.1}
+.review{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:14px 0 16px;max-height:220px;overflow:auto}
+.review div{background:rgba(255,255,255,.06);border-radius:10px;padding:6px 8px;font-size:18px;text-align:left;display:flex;align-items:center;gap:6px}
+.review .hz{font-size:20px;color:var(--gold)}
+.row2x{display:flex;gap:10px;width:100%}
+.row2x .btn{flex:1}
+
+/* ---------- 동글 글씨체 ---------- */
+:root{--cute:'Dongle','Noto Sans KR',sans-serif}
+.gate-title h1{font-family:var(--cute);font-size:54px;font-weight:700;line-height:1.05;letter-spacing:0}
+.gate-title p{font-family:var(--cute);font-size:23px;line-height:1.05}
+.head .t1{font-family:var(--cute);font-size:22px;line-height:1.1}
+.head .t2{font-family:var(--cute);font-size:34px;line-height:1.05}
+.nm{font-family:var(--cute);font-size:40px;line-height:1.05}
+.tag{font-family:var(--cute);font-size:23px;line-height:1.1}
+.btn{font-family:var(--cute);font-size:28px;font-weight:700;line-height:1.1;padding:10px 14px}
+.opt b{font-family:var(--cute);font-size:25px;font-weight:400;line-height:1.1}
+.idtop b{font-family:var(--cute);font-size:26px;line-height:1.1}
+.idinfo .k{font-family:var(--cute);font-size:19px;line-height:1}
+.idinfo .v{font-family:var(--cute);font-size:30px;line-height:1.05}
+.me b{font-family:var(--cute);font-size:30px;line-height:1.05}
+.hall-title{font-family:var(--cute);font-size:36px;line-height:1.1}
+.room b{font-family:var(--cute);font-size:28px;font-weight:700;line-height:1.1}
+.room span{font-family:var(--cute);font-size:20px}
+.link{font-family:var(--cute);font-size:21px}
+.cbar h2{font-family:var(--cute);font-size:34px;line-height:1.1}
+.stat{font-family:var(--cute);font-size:24px;line-height:1.1}
+.bub{font-family:var(--cute);font-size:27px;font-weight:400;line-height:1.1}
+.bub .conn{font-family:var(--cute);font-size:22px;line-height:1.15}
+.plate .f{font-family:var(--cute);font-size:19px;line-height:1.1}
+.big-n{font-family:var(--cute);font-size:76px;line-height:1}
+.over > div, .over .small{font-family:var(--cute)}
+.review div{font-family:var(--cute);font-size:19px;line-height:1.1}
+.err{font-family:var(--cute);font-size:20px}
+
+/* ---------- 나머지 글씨도 모두 동글로 ---------- */
+body{font-family:var(--cute);font-size:23px;line-height:1.25}
+.small{font-size:20px;line-height:1.15}
+.card{font-size:22px;line-height:1.25}
+.card .row b{width:74px;font-weight:400}
+.opt .small{font-size:19px}
+.field{font-size:24px;padding:8px 14px}
+.idfoot{font-size:18px}
+.idinfo{font-size:21px}
+.me span{font-size:19px;line-height:1.1}
+.rules{font-size:22px;line-height:1.3}
+.modal p{font-size:23px;line-height:1.3}
+
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div id="stars" aria-hidden="true"></div>
+<div id="app">
+
+  <!-- 교문 -->
+  <section class="scr on" id="sGate">
+    <div class="gate" id="gateArt"></div>
+    <div class="gate-title">
+      <h1>미리내 마법학교</h1>
+      <p>교문의 글씨를 읽을 수 있게 되면<br>무언가 일어날지도 몰라요</p>
+    </div>
+    <div class="spacer"></div>
+    <button class="btn gold" id="bEnter">입학하기</button>
+  </section>
+
+  <!-- 친구 고르기 -->
+  <section class="scr" id="sPick">
+    <div class="head"><div class="t1">함께 입학할 친구를 골라주세요</div><div class="t2">미리내 마법학교</div></div>
+    <div class="stage">
+      <button class="navb" id="bPrev" aria-label="이전 친구">‹</button>
+      <div class="pic" id="pPic"></div>
+      <button class="navb" id="bNext" aria-label="다음 친구">›</button>
+    </div>
+    <div class="nm" id="pName"></div>
+    <div class="tag" id="pTag"></div>
+    <div class="card" id="pCard"></div>
+    <div class="dots" id="pDots"></div>
+    <div class="spacer"></div>
+    <button class="btn gold" id="bChoose"></button>
+  </section>
+
+  <!-- 이름 정하기 -->
+  <section class="scr" id="sName">
+    <div class="head"><div class="t1">학생증에 쓸 이름을 정해요</div><div class="t2">이름 정하기</div></div>
+    <div class="mini" id="nPic"></div>
+    <button class="opt on" id="oKeep"><span class="ck"></span><span><b id="oKeepT"></b><span class="small">캐릭터 이름을 그대로 써요</span></span></button>
+    <button class="opt" id="oMine"><span class="ck"></span><span><b>내 이름을 적을래요</b><span class="small">최대 8글자</span></span></button>
+    <input class="field" id="nInput" placeholder="이름을 적어주세요" autocomplete="off" style="display:none">
+    <div class="err" id="nErr"></div>
+    <div class="spacer"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn ghost" id="bBackPick" style="flex:1">다시 고르기</button>
+      <button class="btn gold" id="bDone" style="flex:2">다음</button>
+    </div>
+  </section>
+
+  <!-- 학생증 -->
+  <section class="scr" id="sLevel">
+    <div class="head"><div class="t1">지금 아는 만큼 골라요</div><div class="t2" id="lvTitle">급수 고르기</div></div>
+    <div id="lvOpts">
+      <button class="opt" data-lv="8"><span class="ck"></span><span><b>8급 <span class="lvsub">처음 배워요</span></b><span class="small">한자 50자 · 한 글자로 주문</span></span></button>
+      <button class="opt" data-lv="7"><span class="ck"></span><span><b>7급 <span class="lvsub">조금 알아요</span></b><span class="small">한자 150자 · 두 글자 낱말로 주문</span></span></button>
+      <button class="opt" data-lv="6"><span class="ck"></span><span><b>6급 <span class="lvsub">꽤 알아요</span></b><span class="small">한자 300자 · 문제 준비 중</span></span></button>
+    </div>
+    <p class="small" id="lvNote" style="text-align:center;margin-top:10px">나중에 복도에서 바꿀 수 있어요</p>
+    <div class="spacer"></div>
+    <div style="display:flex;gap:10px">
+      <button class="btn ghost" id="lvBack" style="flex:1">이전</button>
+      <button class="btn gold" id="lvDone" style="flex:2">입학 완료</button>
+    </div>
+  </section>
+  <section class="scr" id="sCard">
+    <div class="head"><div class="t1">입학을 축하해요!</div><div class="t2">나의 학생증</div></div>
+    <div class="idcard" id="idCard"></div>
+    <p class="small center" style="margin-top:14px" id="idMsg"></p>
+    <div class="spacer"></div>
+    <button class="btn gold" id="bIn">학교 안으로 들어가기</button>
+  </section>
+
+  <!-- 복도 -->
+  <section class="scr" id="sHall">
+    <div class="me" id="hMe"></div>
+    <div class="hall-title">1층 복도</div>
+    <p class="small">아직 공사 중인 곳이 많아요. 곧 하나씩 문이 열릴 거예요.</p>
+    <div class="rooms">
+      <button class="room open" id="goCafe"><div class="ic">🍛</div><b>급식실</b><span>배식 당번</span></button>
+      <div class="room"><div class="ic">📖</div><b>교실</b><span>공사 중</span></div>
+      <div class="room"><div class="ic">🏃</div><b>운동장</b><span>공사 중</span></div>
+      <div class="room"><div class="ic">📚</div><b>도서관</b><span>공사 중</span></div>
+    </div>
+    <div class="spacer"></div>
+    <div class="foot-links">
+      <button class="link" id="bShowCard">학생증 보기</button>
+      <button class="link" id="bLevel">급수 바꾸기</button>
+      <button class="link" id="bReset">처음부터 다시 입학하기</button>
+    </div>
+  </section>
+
+  <!-- 급식실 -->
+  <section class="scr" id="sCafe">
+    <div class="cbar">
+      <button class="icb" id="cBack" aria-label="복도로">←</button>
+      <h2>🍛 급식실</h2>
+      <button class="icb" id="cSnd" aria-label="소리 켜기 끄기">🔊</button>
+    </div>
+    <div class="cwrap">
+      <div class="stat"><span class="hearts" id="cHearts"></span><span id="cServed">배식 0명</span><span id="cTime">60초</span></div>
+      <div class="tbar"><i id="cBar"></i></div>
+      <div class="hallc">
+        <div class="bub" id="cBub"><span class="em">🍽️</span><span>줄을 서는 중...</span></div>
+        <div class="queue" id="cQueue"></div>
+        <div class="pat" id="cPat"><i id="cPatBar"></i></div>
+        <div class="countertop"></div>
+      </div>
+      <div class="plates" id="cPlates"></div>
+
+      <div class="over on" id="cStart">
+        <div style="font-size:44px">🍛</div>
+        <div style="font-size:21px;font-weight:700;margin-top:6px">오늘의 배식 당번 <span class="lvtag" id="cLvTag"></span></div>
+        <div class="rules" id="cRules"></div>
+        <button class="btn gold" id="cGo">배식 시작</button>
+        <p class="small" style="margin-top:10px" id="cBestTxt"></p>
+      </div>
+      <div class="over" id="cEnd"></div>
+    </div>
+  </section>
+</div>
+
+<div class="modal" id="mReset"><div class="box">
+  <p>지금 학생증이 사라지고 교문으로 돌아가요. 다시 입학할까요?</p>
+  <div class="row2"><button class="btn ghost" id="rNo">아니오</button><button class="btn gold" id="rYes">예</button></div>
+</div></div>
+
+<script>
+/* =========================================================
+   캐릭터
+   ========================================================= */
+const S='stroke="#241B38" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"';
+const blush='<ellipse cx="-19" cy="-128" rx="5" ry="3" fill="#F7A08E"/><ellipse cx="19" cy="-128" rx="5" ry="3" fill="#F7A08E"/>';
+const CH=[
+{id:'haeon',n:'해온',t:'활발한 운동부',c:'#F07A5A',hz:'火',hun:'불 화',
+ look:'산호색 삐죽머리, 빨간 후드 점퍼, 반바지',good:'누구보다 빠르고 씩씩해요',bad:'급해서 가끔 덜렁대요',like:'운동장, 매운 떡볶이',
+ svg:`<g ${S}><path d="M-14 -20 L-13 -4 L-5 -4 L-5 -20 Z M5 -20 L5 -4 L13 -4 L14 -20 Z" fill="#F8DCC6"/><path d="M-18 -6 L-2 -6 L-2 2 L-20 2 Z M2 -6 L18 -6 L20 2 L2 2 Z" fill="#F4F1EA"/><path d="M-24 -44 L24 -44 L26 -16 L4 -16 L0 -26 L-4 -16 L-26 -16 Z" fill="#3B4280"/><path d="M-30 -110 Q 0 -94 30 -110 Q 22 -122 0 -120 Q -22 -122 -30 -110 Z" fill="#B83A27"/><rect x="-8" y="-114" width="16" height="18" fill="#F8DCC6"/><path d="M-26 -104 Q -36 -74 -30 -40 L 30 -40 Q 36 -74 26 -104 Q 0 -94 -26 -104 Z" fill="#E0513B"/><line x1="0" y1="-98" x2="0" y2="-42" stroke-width="1.6"/><path d="M-18 -60 L-6 -60 L-6 -48 L-18 -48 Z M6 -60 L18 -60 L18 -48 L6 -48 Z" fill="#C8432F" stroke-width="1.6"/><path d="M-26 -102 Q -40 -80 -38 -58 L -30 -56 Q -30 -78 -20 -94 Z" fill="#E0513B"/><path d="M26 -102 Q 40 -86 44 -70 L 36 -66 Q 32 -80 20 -94 Z" fill="#E0513B"/><circle cx="-34" cy="-54" r="6" fill="#F8DCC6"/><line x1="42" y1="-66" x2="58" y2="-104"/><circle cx="42" cy="-66" r="6" fill="#F8DCC6"/><circle cx="61" cy="-114" r="13" fill="#FFE2D6"/><circle cx="0" cy="-144" r="36" fill="#F8DCC6"/><path d="M-38 -138 Q -42 -172 -26 -184 L -30 -198 L -12 -188 L -8 -204 L 4 -190 L 16 -202 L 18 -186 L 34 -192 L 30 -176 Q 42 -162 38 -138 Q 30 -158 16 -154 L 10 -166 L 0 -152 L -10 -164 L -18 -150 Q -30 -154 -38 -138 Z" fill="#F07A5A"/></g><text x="61" y="-109" text-anchor="middle" font-family="Noto Serif KR,serif" font-weight="900" font-size="15" fill="#B8342A">火</text><circle cx="-10" cy="-138" r="3.2" fill="#241B38"/><circle cx="10" cy="-138" r="3.2" fill="#241B38"/><path d="M-7 -127 Q 0 -119 7 -127 Z" fill="#fff" stroke="#241B38" stroke-width="1.8" stroke-linejoin="round"/><ellipse cx="-19" cy="-128" rx="5" ry="3" fill="#F7A08E"/><ellipse cx="19" cy="-128" rx="5" ry="3" fill="#F7A08E"/>`},
+{id:'mulgyeol',n:'물결',t:'차분한 반장',c:'#A9CFF5',hz:'水',hun:'물 수',
+ look:'하늘색 긴 생머리, 베레모, 세일러 교복',good:'꼼꼼해서 실수가 적어요',bad:'걱정이 많아 결정이 느려요',like:'도서관, 비 오는 날',
+ svg:`<g ${S}><path d="M-38 -142 Q -46 -82 -34 -62 L 34 -62 Q 46 -82 38 -142 Z" fill="#A9CFF5"/><rect x="-8" y="-114" width="16" height="18" fill="#F8DCC6"/><path d="M-12 -22 L-12 -4 L-4 -4 L-4 -22 Z M4 -22 L4 -4 L12 -4 L12 -22 Z" fill="#F8DCC6"/><path d="M-13 -14 L-3 -14 L-3 -4 L-13 -4 Z M3 -14 L13 -14 L13 -4 L3 -4 Z" fill="#F4F7FC"/><path d="M-16 -4 L-2 -4 L-2 2 L-18 2 Z M2 -4 L16 -4 L18 2 L2 2 Z" fill="#1F2A55"/><path d="M-26 -52 L26 -52 L36 -20 L-36 -20 Z" fill="#2E5FA8"/><path d="M-14 -52 L-18 -20 M0 -52 L0 -20 M14 -52 L18 -20" stroke-width="1.4"/><path d="M-24 -104 L24 -104 L28 -50 L-28 -50 Z" fill="#F4F7FC"/><path d="M-28 -106 L0 -80 L28 -106 L34 -90 L0 -68 L-34 -90 Z" fill="#2E5FA8"/><path d="M-31 -96 L0 -74 L31 -96" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M-8 -76 L0 -70 L8 -76 L6 -62 L0 -66 L-6 -62 Z" fill="#6FC3FF" stroke-width="1.6"/><path d="M-24 -102 Q -36 -80 -34 -58 L -26 -56 Q -26 -78 -18 -94 Z" fill="#F4F7FC"/><path d="M24 -102 Q 38 -86 42 -70 L 34 -66 Q 30 -80 18 -94 Z" fill="#F4F7FC"/><circle cx="-30" cy="-54" r="6" fill="#F8DCC6"/><line x1="40" y1="-66" x2="56" y2="-106"/><circle cx="40" cy="-66" r="6" fill="#F8DCC6"/><circle cx="59" cy="-116" r="13" fill="#DDF0FF"/><circle cx="0" cy="-144" r="36" fill="#F8DCC6"/><path d="M-38 -136 Q -40 -186 0 -188 Q 40 -186 38 -136 Q 32 -152 22 -154 L 12 -148 L 0 -154 L -12 -148 L -22 -154 Q -32 -152 -38 -136 Z" fill="#A9CFF5"/><ellipse cx="4" cy="-184" rx="36" ry="12" fill="#2E86DE" transform="rotate(-10 4 -184)"/><circle cx="8" cy="-198" r="4" fill="#2E86DE"/></g><text x="59" y="-111" text-anchor="middle" font-family="Noto Serif KR,serif" font-weight="900" font-size="15" fill="#1F5FA8">水</text><circle cx="-10" cy="-136" r="3.2" fill="#241B38"/><circle cx="10" cy="-136" r="3.2" fill="#241B38"/><path d="M-3 -126 Q 0 -123 3 -126" fill="none" stroke="#241B38" stroke-width="1.8" stroke-linecap="round"/>${blush}<path d="M-30 -166 Q -37 -154 -30 -148 Q -23 -154 -30 -166 Z" fill="#5DB2FF" stroke="#241B38" stroke-width="1.4"/>`},
+{id:'saessak',n:'새싹',t:'느긋한 모범생',c:'#9ED99A',hz:'木',hun:'나무 목',
+ look:'민트색 짧은 머리, 동그란 안경, 조끼와 나비넥타이',good:'다정하고 참을성이 강해요',bad:'느긋해서 지각을 잘해요',like:'식물 키우기, 낮잠',
+ svg:`<g ${S}><rect x="-8" y="-114" width="16" height="16" fill="#F8DCC6"/><path d="M-18 -6 L-2 -6 L-2 2 L-20 2 Z M2 -6 L18 -6 L20 2 L2 2 Z" fill="#6B4A2E"/><path d="M-22 -44 L22 -44 L20 -6 L3 -6 L0 -30 L-3 -6 L-20 -6 Z" fill="#7A8A5E"/><path d="M-24 -104 L24 -104 L26 -42 L-26 -42 Z" fill="#F4F1EA"/><path d="M-24 -100 L-10 -100 L0 -76 L10 -100 L24 -100 L26 -44 L-26 -44 Z" fill="#3FAE5A"/><line x1="-24" y1="-100" x2="26" y2="-48" stroke="#8A5A2B" stroke-width="4"/><rect x="18" y="-56" width="20" height="16" rx="3" fill="#A06B3A" stroke-width="1.8"/><path d="M-24 -102 Q -36 -80 -34 -58 L -26 -56 Q -26 -78 -18 -94 Z" fill="#F4F1EA"/><path d="M24 -102 Q 38 -86 42 -70 L 34 -66 Q 30 -80 18 -94 Z" fill="#F4F1EA"/><circle cx="-30" cy="-54" r="6" fill="#F8DCC6"/><line x1="40" y1="-66" x2="56" y2="-106" stroke="#8A5A2B" stroke-width="3.4"/><circle cx="40" cy="-66" r="6" fill="#F8DCC6"/><circle cx="59" cy="-116" r="13" fill="#E4F7DA"/><circle cx="0" cy="-144" r="36" fill="#F8DCC6"/><path d="M-17 -106 L0 -96 L17 -106 L20 -98 L0 -86 L-20 -98 Z" fill="#F4F1EA"/><path d="M-7 -94 L0 -90 L7 -94 L7 -86 L0 -90 L-7 -86 Z" fill="#E9C46A" stroke-width="1.6"/><path d="M-38 -132 Q -44 -170 -18 -182 Q 10 -192 32 -174 Q 42 -162 38 -132 Q 34 -148 26 -152 Q 14 -148 2 -158 Q -2 -148 -14 -150 Q -22 -144 -28 -150 Q -34 -144 -38 -132 Z" fill="#9ED99A"/><path d="M-34 -166 Q 0 -196 36 -172 L 40 -162 Q 0 -180 -36 -158 Z" fill="#2F7A45"/><path d="M-36 -160 Q 0 -174 40 -162 L 52 -158 Q 0 -172 -38 -154 Z" fill="#2A6A3C"/><circle cx="-11" cy="-136" r="9" fill="none"/><circle cx="11" cy="-136" r="9" fill="none"/></g><text x="59" y="-111" text-anchor="middle" font-family="Noto Serif KR,serif" font-weight="900" font-size="15" fill="#2A7A3E">木</text><line x1="-2" y1="-137" x2="2" y2="-137" stroke="#241B38" stroke-width="2"/><circle cx="-11" cy="-136" r="2.8" fill="#241B38"/><circle cx="11" cy="-136" r="2.8" fill="#241B38"/><path d="M-4 -124 Q 0 -121 4 -124" fill="none" stroke="#241B38" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="-22" cy="-124" rx="4.5" ry="2.6" fill="#F7A08E"/><ellipse cx="22" cy="-124" rx="4.5" ry="2.6" fill="#F7A08E"/><path d="M18 -176 Q 28 -190 38 -180 Q 28 -170 18 -176 Z" fill="#5CCB6A" stroke="#241B38" stroke-width="1.4"/>`},
+{id:'dalbit',n:'달빛',t:'신비한 전학생',c:'#D8CCF7',hz:'月',hun:'달 월',
+ look:'은보라 긴 머리, 뾰족 모자, 별 무늬 로브',good:'상상력이 풍부하고 직감이 좋아요',bad:'멍하니 딴생각을 자주 해요',like:'별 보기, 수수께끼',
+ svg:`<g ${S}><path d="M-36 -142 Q -44 -82 -32 -66 L 32 -66 Q 44 -82 36 -142 Z" fill="#D8CCF7"/><rect x="-8" y="-114" width="16" height="18" fill="#F8DCC6"/><path d="M-16 -6 L-2 -6 L-2 2 L-18 2 Z M2 -6 L16 -6 L18 2 L2 2 Z" fill="#3A2F55"/><path d="M-22 -104 Q -30 -50 -30 -6 Q 0 0 30 -6 Q 30 -50 22 -104 Q 0 -96 -22 -104 Z" fill="#6D4BC7"/><path d="M-22 -102 Q -36 -80 -36 -58 L -26 -56 Q -26 -78 -16 -94 Z" fill="#6D4BC7"/><path d="M22 -102 Q 38 -86 42 -70 L 34 -66 Q 30 -80 16 -94 Z" fill="#6D4BC7"/><path d="M-12 -100 L0 -86 L12 -100" fill="none" stroke="#E9DFFF" stroke-width="2"/><circle cx="-31" cy="-54" r="6" fill="#F8DCC6"/><line x1="40" y1="-66" x2="56" y2="-106"/><circle cx="40" cy="-66" r="6" fill="#F8DCC6"/><circle cx="59" cy="-116" r="13" fill="#EFE6FF"/><circle cx="0" cy="-144" r="36" fill="#F8DCC6"/><path d="M-38 -136 Q -42 -188 4 -190 Q 42 -186 38 -136 Q 18 -164 -12 -154 Q -28 -148 -38 -136 Z" fill="#D8CCF7"/><ellipse cx="0" cy="-178" rx="40" ry="8" fill="#4E34A0"/><path d="M-24 -180 Q -6 -216 20 -228 Q 10 -200 26 -180 Z" fill="#4E34A0"/></g><text x="59" y="-111" text-anchor="middle" font-family="Noto Serif KR,serif" font-weight="900" font-size="15" fill="#6D3FD6">月</text><path d="M-14 -136 Q -10 -139 -6 -136" fill="none" stroke="#241B38" stroke-width="2.2" stroke-linecap="round"/><circle cx="10" cy="-136" r="3.2" fill="#241B38"/><path d="M-3 -126 Q 0 -123 3 -126" fill="none" stroke="#241B38" stroke-width="1.8" stroke-linecap="round"/>${blush}<circle cx="-2" cy="-196" r="6" fill="#FFE08A"/><circle cx="1" cy="-198" r="5" fill="#4E34A0"/><g fill="#FFE08A"><circle cx="-14" cy="-70" r="1.8"/><circle cx="12" cy="-44" r="1.8"/><circle cx="-8" cy="-24" r="1.8"/><circle cx="16" cy="-86" r="1.5"/><circle cx="18" cy="-16" r="1.5"/></g>`},
+];
+const drawChar=(c,label)=>`<svg viewBox="-80 -240 160 250" role="img" aria-label="${label||c.n}">${c.svg}</svg>`;
+
+/* =========================================================
+   도구
+   ========================================================= */
+const $=id=>document.getElementById(id);
+const mem={};
+const LS={
+  get(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):(mem[k]??null); }catch(e){ return mem[k]??null; } },
+  set(k,v){ mem[k]=v; try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} },
+  del(k){ delete mem[k]; try{ localStorage.removeItem(k); }catch(e){} },
+};
+const nfc=t=>{ try{ return String(t).normalize('NFC'); }catch(e){ return String(t); } };
+const esc=s=>nfc(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+// 받침에 따라 "으로/로"를 골라요 (ㄹ 받침은 "로")
+function ie(word){
+  const ch=nfc(word).trim().slice(-1), code=ch.charCodeAt(0)-0xAC00;
+  if(code<0||code>11171) return '이에요';
+  return code%28===0?'예요':'이에요';
+}
+function ro(word){
+  const ch=nfc(word).trim().slice(-1), code=ch.charCodeAt(0)-0xAC00;
+  if(code<0||code>11171) return '(으)로';
+  const jong=code%28;
+  return (jong===0||jong===8)?'로':'으로';
+}
+function show(id){ document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id)); window.scrollTo(0,0); }
+
+/* 큰 화면에서는 앱을 통째로 키워요 (휴대폰에서는 그대로) */
+function fitScreen(){
+  const w=window.innerWidth, h=window.innerHeight;
+  let z=1;
+  if(w>=700) z=Math.max(1, Math.min(h/820, w/520, 2.4));
+  document.documentElement.style.setProperty('--z', z.toFixed(3));
+}
+fitScreen(); window.addEventListener('resize',fitScreen);
+
+/* 별 */
+(function(){ let h=''; for(let i=0;i<70;i++){ const s=Math.random()<.15?2.6:1.6;
+  h+=`<i style="left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*100).toFixed(1)}%;width:${s}px;height:${s}px;animation-delay:${(Math.random()*4).toFixed(2)}s"></i>`; }
+  $('stars').innerHTML=h; })();
+
+/* =========================================================
+   교문 그림
+   ========================================================= */
+$('gateArt').innerHTML=`
+<svg viewBox="0 0 360 300" role="img" aria-label="은하수가 흐르는 밤하늘 아래 銀河水 현판이 걸린 학교 교문">
+  <path d="M-10 120 Q 120 40 370 10 L 370 60 Q 140 80 -10 170 Z" fill="#2B3280" opacity=".55"/>
+  <g fill="#FFF6DC" opacity=".8">
+    ${Array.from({length:40},()=>{const t=Math.random();const x=-10+t*380;const y=150-t*125+(Math.random()-.5)*55;return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(Math.random()*1.2+.4).toFixed(1)}"/>`;}).join('')}
+  </g>
+  <path d="M40 300 L40 170 L90 130 L140 170 L140 120 L180 84 L220 120 L220 170 L270 130 L320 170 L320 300 Z" fill="#1E2463"/>
+  <g fill="#E9C46A" opacity=".85">
+    <rect x="64" y="200" width="14" height="20" rx="7"/><rect x="102" y="200" width="14" height="20" rx="7"/>
+    <rect x="160" y="140" width="14" height="20" rx="7"/><rect x="186" y="140" width="14" height="20" rx="7"/>
+    <rect x="244" y="200" width="14" height="20" rx="7"/><rect x="282" y="200" width="14" height="20" rx="7"/>
+  </g>
+  <circle cx="180" cy="110" r="6" fill="#E9C46A"/>
+  <rect x="58" y="176" width="26" height="124" fill="#2C3474" stroke="#3E478F" stroke-width="2"/>
+  <rect x="276" y="176" width="26" height="124" fill="#2C3474" stroke="#3E478F" stroke-width="2"/>
+  <circle cx="71" cy="170" r="10" fill="#E9C46A"/><circle cx="289" cy="170" r="10" fill="#E9C46A"/>
+  <path d="M58 196 Q 180 150 302 196 L302 210 Q 180 166 58 210 Z" fill="#2C3474" stroke="#3E478F" stroke-width="2"/>
+  <rect x="118" y="148" width="124" height="46" rx="6" fill="#3A2A20" stroke="#E9C46A" stroke-width="2.5"/>
+  <text x="180" y="182" text-anchor="middle" font-family="Noto Serif KR,serif" font-weight="900" font-size="30" fill="#E9C46A" letter-spacing="6">銀河水</text>
+  <path d="M84 300 L84 236 Q 180 206 276 236 L276 300" fill="#12163A"/>
+  <path d="M0 290 Q 180 276 360 290 L360 300 L0 300 Z" fill="#232A66"/>
+</svg>`;
+
+/* =========================================================
+   흐름
+   ========================================================= */
+let pick=0, useMine=false;
+let ST=LS.get('mirinae_v1');   // {char, name, date}
+
+$('bEnter').onclick=()=>{ paintPick(); show('sPick'); };
+
+/* 친구 고르기 */
+function paintPick(){
+  const c=CH[pick];
+  $('pPic').innerHTML=drawChar(c);
+  $('pName').textContent=c.n;
+  $('pTag').textContent=c.t; $('pTag').style.color=c.c;
+  $('pCard').innerHTML=`
+    <div class="row"><b>생김새</b><span>${c.look}</span></div>
+    <div class="row"><b>장점</b><span>${c.good}</span></div>
+    <div class="row"><b>단점</b><span>${c.bad}</span></div>
+    <div class="row"><b>좋아해요</b><span>${c.like}</span></div>
+    <div class="row"><b>첫 주문</b><span><span class="hz" style="font-size:18px">${c.hz}</span> ${c.hun}</span></div>`;
+  $('pDots').innerHTML=CH.map((_,k)=>`<i class="${k===pick?'on':''}"></i>`).join('');
+  $('bChoose').textContent=`${c.n}${ro(c.n)} 입학하기`;
+}
+$('bPrev').onclick=()=>{ pick=(pick+CH.length-1)%CH.length; paintPick(); };
+$('bNext').onclick=()=>{ pick=(pick+1)%CH.length; paintPick(); };
+// 손가락으로 밀어서 넘기기
+(function(){ let x0=null;
+  $('pPic').addEventListener('pointerdown',e=>{ x0=e.clientX; });
+  $('pPic').addEventListener('pointerup',e=>{ if(x0===null) return; const d=e.clientX-x0; x0=null;
+    if(Math.abs(d)>40){ pick=(pick+(d<0?1:CH.length-1))%CH.length; paintPick(); } });
+})();
+$('bChoose').onclick=()=>{ useMine=false; paintName(); show('sName'); };
+
+/* 이름 정하기 */
+function paintName(){
+  const c=CH[pick];
+  $('nPic').innerHTML=drawChar(c);
+  $('oKeepT').textContent=`"${c.n}" 그대로 쓸래요`;
+  $('oKeep').classList.toggle('on',!useMine);
+  $('oMine').classList.toggle('on',useMine);
+  $('nInput').style.display=useMine?'block':'none';
+  $('nErr').textContent='';
+}
+$('oKeep').onclick=()=>{ useMine=false; paintName(); };
+$('oMine').onclick=()=>{ useMine=true; paintName(); setTimeout(()=>$('nInput').focus(),50); };
+$('nInput').addEventListener('input',()=>{ $('nErr').textContent=''; });
+$('bBackPick').onclick=()=>{ paintPick(); show('sPick'); };
+$('bDone').onclick=()=>{
+  const c=CH[pick];
+  let name=c.n;
+  if(useMine){
+    name=[...nfc($('nInput').value).trim()].slice(0,8).join('');
+    if(!name){ $('nErr').textContent='이름을 적어주세요.'; $('nInput').focus(); return; }
+  }
+  NEWST={char:c.id,name};
+  openLevel(false);
+};
+
+/* 급수 고르기 (입학할 때, 또는 복도에서 바꿀 때) */
+let NEWST=null, lvPick='8', lvChange=false;
+function paintLevel(){ document.querySelectorAll('#lvOpts .opt').forEach(o=>o.classList.toggle('on',o.dataset.lv===lvPick)); }
+function openLevel(change){
+  lvChange=change;
+  lvPick=change?myLevel():'8';
+  $('lvTitle').textContent=change?'급수 바꾸기':'급수 고르기';
+  $('lvNote').textContent=change?'급식실 최고 기록은 급수마다 따로 남아요':'나중에 복도에서 바꿀 수 있어요';
+  $('lvBack').textContent=change?'취소':'이전';
+  $('lvDone').textContent=change?'바꾸기':'입학 완료';
+  paintLevel(); show('sLevel');
+}
+document.querySelectorAll('#lvOpts .opt').forEach(o=>o.onclick=()=>{ lvPick=o.dataset.lv; paintLevel(); });
+$('lvBack').onclick=()=>{ if(lvChange){ paintHall(); show('sHall'); } else show('sName'); };
+$('lvDone').onclick=()=>{
+  if(lvChange){ ST.level=lvPick; LS.set('mirinae_v1',ST); paintHall(); show('sHall'); return; }
+  const d=new Date();
+  ST={...NEWST, level:lvPick, date:`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`};
+  LS.set('mirinae_v1',ST);
+  paintCard(true); show('sCard');
+};
+
+/* 학생증 */
+function curChar(){ return CH.find(x=>x.id===ST.char)||CH[0]; }
+function cardHTML(){
+  const c=curChar();
+  return `
+    <div class="idtop"><b>미리내 마법학교 학생증</b><span class="hz">銀河水</span></div>
+    <div class="idbody">
+      <div class="idphoto">${drawChar(c,ST.name)}</div>
+      <div class="idinfo">
+        <span class="k">이름</span><span class="v">${esc(ST.name)}</span>
+        <span class="k">학년 · 급수</span><span class="v">1학년 · ${myLevel()}급</span>
+      </div>
+    </div>
+    <div class="idfoot"><span>입학일 ${ST.date}</span><span>${c.t}</span></div>`;
+}
+function paintCard(first){
+  $('idCard').innerHTML=cardHTML();
+  $('idMsg').textContent = first
+    ? `${ST.name}님, 교문의 銀河水 세 글자를 모두 배우면 교문이 빛난대요!`
+    : '학생증을 잘 간직해요.';
+}
+$('bIn').onclick=()=>{ paintHall(); show('sHall'); };
+
+/* 복도 */
+function paintHall(){
+  const c=curChar();
+  $('hMe').innerHTML=`<span class="face">${drawChar(c)}</span><span><b>${esc(ST.name)}</b><span>1학년 · ${myLevel()}급</span></span>`;
+}
+$('bLevel').onclick=()=>openLevel(true);
+$('bShowCard').onclick=()=>{ paintCard(false); show('sCard'); };
+$('bReset').onclick=()=>$('mReset').classList.add('on');
+$('rNo').onclick=()=>$('mReset').classList.remove('on');
+$('rYes').onclick=()=>{ $('mReset').classList.remove('on'); LS.del('mirinae_v1'); ST=null; pick=0; show('sGate'); };
+
+/* =========================================================
+   🍛 급식실 — 배식 당번
+   ========================================================= */
+// 한자 10자 (뜻과 음)
+const HZ={火:'불 화',水:'물 수',木:'나무 목',金:'쇠 금',土:'흙 토',日:'날 일',月:'달 월',山:'메 산',白:'흰 백',靑:'푸를 청'};
+// 메뉴 50가지: 한자마다 5개. kw = 빨간 글씨로 보일 핵심 낱말
+const MENU=[
+  ['火','불꽃 드래곤 함박스테이크','🍖','불꽃','불꽃은 불이니까'],
+  ['火','불타는 용암 떡볶이','🌶️','불타는','불타는 건 불이 붙은 거니까'],
+  ['火','불새 날개 치킨','🍗','불새','불새는 불로 된 새니까'],
+  ['火','불씨 마법 군고구마','🍠','불씨','불씨는 작은 불이니까'],
+  ['火','모닥불 캠프 소시지','🌭','모닥불','모닥불도 불이니까'],
+  ['水','인어공주의 샘물 에이드','🥤','샘물','샘물은 물이니까'],
+  ['水','물방울 요정 푸딩','🍮','물방울','물방울은 물이니까'],
+  ['水','물의 정령 냉면','🍜','물','물은 그대로 물이니까'],
+  ['水','빗물 요정 소다','🧃','빗물','빗물은 하늘에서 내린 물이니까'],
+  ['水','호수 물빛 수정떡','🍡','물빛','물빛은 물의 빛깔이니까'],
+  ['木','요정 숲 나뭇잎 샐러드','🥗','나뭇잎','나뭇잎은 나무에서 나니까'],
+  ['木','나무 요정 도토리묵','🌰','나무','나무는 그대로 나무니까'],
+  ['木','고목나무 정령의 버섯 수프','🍲','고목나무','고목나무는 오래된 나무니까'],
+  ['木','나무껍질 초코 롤케이크','🍫','나무껍질','나무껍질은 나무의 겉이니까'],
+  ['木','나무 열매 파이','🥧','나무 열매','나무 열매는 나무에서 열리니까'],
+  ['金','황금 드래곤 알 푸딩','🍮','황금','황금도 쇠붙이의 하나라서'],
+  ['金','금화 동전 쿠키','🍪','금화','금화는 금으로 만든 돈이라서'],
+  ['金','금덩이 치즈 케이크','🧀','금덩이','금덩이는 금 덩어리라서'],
+  ['金','금빛 달걀 볶음밥','🍚','금빛','금빛은 금의 빛깔이라서'],
+  ['金','금가루 뿌린 호떡','🥞','금가루','금가루는 금을 곱게 간 가루라서'],
+  ['土','두더지네 흙 초코케이크','🍰','흙','흙은 그대로 흙이니까'],
+  ['土','흙 속 보물 감자전','🥔','흙 속','감자는 흙 속에서 자라니까'],
+  ['土','흙냄새 고구마 맛탕','🍠','흙냄새','흙냄새는 흙에서 나는 냄새라서'],
+  ['土','진흙 골렘 초코 푸딩','🍮','진흙','진흙은 물에 젖은 흙이라서'],
+  ['土','흙더미 땅콩 쿠키','🥜','흙더미','흙더미는 흙이 쌓인 거라서'],
+  ['日','아침 햇살 오므라이스','🍳','햇살','햇살은 해의 빛이고, 日은 해를 본뜬 글자라서'],
+  ['日','해님 달걀 프라이','🍳','해님','해님은 해고, 日은 해를 본뜬 글자라서'],
+  ['日','햇빛 요정 레모네이드','🍋','햇빛','햇빛은 해의 빛이고, 日은 해를 본뜬 글자라서'],
+  ['日','해돋이 호박죽','🥣','해돋이','해돋이는 해가 뜨는 거고, 日은 해를 본뜬 글자라서'],
+  ['日','한낮 해바라기 씨앗 빵','🌻','해바라기','해바라기는 해를 따라 도는 꽃이고, 日은 해를 본뜬 글자라서'],
+  ['月','초승달 크루아상','🥐','초승달','초승달은 달이니까'],
+  ['月','보름달 찹쌀떡','🍡','보름달','보름달은 둥근 달이니까'],
+  ['月','달토끼 송편','🐇','달토끼','달토끼는 달에 사는 토끼라서'],
+  ['月','반달 요정 만두','🥟','반달','반달은 반쪽 달이니까'],
+  ['月','달빛 우유 푸딩','🍮','달빛','달빛은 달의 빛이니까'],
+  ['山','눈 덮인 설산 빙수','🍧','설산','설산은 눈 덮인 산이고, 메는 산의 옛말이라서'],
+  ['山','산꼭대기 구름 케이크','🎂','산꼭대기','산꼭대기는 산의 맨 위고, 메는 산의 옛말이라서'],
+  ['山','산신령의 나물 비빔밥','🍚','산신령','산신령은 산을 지키는 신령이고, 메는 산의 옛말이라서'],
+  ['山','뾰족산 주먹밥','🍙','뾰족산','뾰족산은 뾰족한 산이고, 메는 산의 옛말이라서'],
+  ['山','산속 도깨비 도토리전','🥞','산속','산속은 산의 안쪽이고, 메는 산의 옛말이라서'],
+  ['白','흰 구름 우유','🥛','흰','흰 구름은 하얀색이니까'],
+  ['白','새하얀 눈사람 떡','⛄','새하얀','새하얀 건 아주 흰 거니까'],
+  ['白','흰 토끼 경단','🍡','흰','흰 토끼는 하얀 토끼니까'],
+  ['白','하얀 백조 슈크림','🦢','하얀','하얀 건 흰색이니까'],
+  ['白','흰 눈송이 크림 수프','🥣','흰','흰 눈송이는 하얀색이니까'],
+  ['靑','푸른 요정 젤리','🍬','푸른','푸른색이니까'],
+  ['靑','푸른 바다 소다','🥤','푸른','푸른 바다는 푸른색이니까'],
+  ['靑','푸른 숲 시금치 파스타','🍝','푸른','푸른 숲은 푸른색이니까'],
+  ['靑','푸른 달 블루베리 머핀','🧁','푸른','푸른 달은 푸른색이니까'],
+  ['靑','푸른 포도 요정 에이드','🍇','푸른','푸른 포도는 푸른색이니까'],
+].map(([hz,dish,em,kw,why],i)=>({id:i,hz,hun:HZ[hz],dish,em,kw,why}));
+// 메뉴 이름 속 핵심 낱말을 표시해요
+const dishHTML=m=>m.dish.replace(m.kw,`<span class="kw">${m.kw}</span>`);
+const shuf=a=>{ a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+// 받침이 있으면 "이랑", 없으면 "랑"
+function rang(word){
+  const ch=nfc(word).trim().slice(-1), code=ch.charCodeAt(0)-0xAC00;
+  if(code<0||code>11171) return '랑';
+  return code%28===0?'랑':'이랑';
+}
+// 급수별 한자 (한국어문회 기준). [한자, 뜻과 음]
+const HANJA8='校 학교 교|敎 가르칠 교|九 아홉 구|國 나라 국|軍 군사 군|金 쇠 금|南 남녘 남|女 계집 녀|年 해 년|大 큰 대|東 동녘 동|六 여섯 륙|萬 일만 만|母 어미 모|木 나무 목|門 문 문|民 백성 민|白 흰 백|父 아비 부|北 북녘 북|四 넉 사|山 메 산|三 석 삼|生 날 생|西 서녘 서|先 먼저 선|小 작을 소|水 물 수|室 집 실|十 열 십|五 다섯 오|王 임금 왕|外 바깥 외|月 달 월|二 두 이|人 사람 인|日 날 일|一 한 일|長 긴 장|弟 아우 제|中 가운데 중|靑 푸를 청|寸 마디 촌|七 일곱 칠|土 흙 토|八 여덟 팔|學 배울 학|韓 한국 한|兄 형 형|火 불 화';
+const HANJA7='家 집 가|間 사이 간|江 강 강|車 수레 차|工 장인 공|空 빌 공|記 기록할 기|氣 기운 기|男 사내 남|內 안 내|農 농사 농|答 대답 답|道 길 도|動 움직일 동|力 힘 력|立 설 립|每 매양 매|名 이름 명|物 물건 물|方 모 방|不 아닐 불|事 일 사|上 윗 상|姓 성 성|世 인간 세|手 손 수|市 저자 시|時 때 시|食 밥 식|安 편안 안|午 낮 오|右 오른 우|自 스스로 자|子 아들 자|場 마당 장|電 번개 전|前 앞 전|全 온전 전|正 바를 정|足 발 족|左 왼 좌|直 곧을 직|平 평평할 평|下 아래 하|漢 한수 한|海 바다 해|話 말씀 화|活 살 활|孝 효도 효|後 뒤 후|歌 노래 가|口 입 구|旗 기 기|同 한가지 동|洞 골 동|冬 겨울 동|登 오를 등|來 올 래|老 늙을 로|里 마을 리|林 수풀 림|面 낯 면|命 목숨 명|問 물을 문|文 글월 문|百 일백 백|夫 지아비 부|算 셈 산|色 빛 색|夕 저녁 석|少 적을 소|所 바 소|數 셈 수|植 심을 식|心 마음 심|語 말씀 어|然 그럴 연|有 있을 유|育 기를 육|邑 고을 읍|入 들 입|字 글자 자|祖 할아비 조|主 주인 주|住 살 주|重 무거울 중|地 땅 지|紙 종이 지|千 일천 천|天 하늘 천|川 내 천|草 풀 초|村 마을 촌|秋 가을 추|春 봄 춘|出 날 출|便 편할 편|夏 여름 하|花 꽃 화|休 쉴 휴';
+const toMap=s=>Object.fromEntries(s.split('|').map(x=>[x[0],x.slice(2)]));
+const HUN8=toMap(HANJA8), HUN7=toMap(HANJA7);
+// 7급 두 글자 낱말 메뉴: [낱말, 한자, 메뉴 이름, 그림]
+const WORDS7=[
+ ['화산','火山','화산 용암 피자','🍕'],['농가','農家','농가 텃밭 비빔밥','🥗'],['시간','時間','시간 여행자 샌드위치','🥪'],
+ ['한강','漢江','한강 달빛 라면','🍜'],['전차','電車','마법 전차 도시락','🍱'],['공장','工場','초콜릿 공장 쿠키','🍪'],
+ ['공중','空中','공중에 뜬 솜사탕','🍭'],['일기','日記','일기장 모양 와플','🧇'],['인기','人氣','인기 만점 떡꼬치','🍢'],
+ ['남녀','男女','남녀 모두 좋아하는 김밥','🍙'],['실내','室內','실내 정원 샐러드','🥗'],['정답','正答','정답 맞힌 날 쿠키','🍪'],
+ ['수도','水道','수도꼭지 레모네이드','🍋'],['동물','動物','동물 모양 비스킷','🐻'],['화력','火力','센 화력 불고기','🥩'],
+ ['국립','國立','국립 마법 도서관 머핀','🧁'],['매일','每日','매일 먹고 싶은 도넛','🍩'],['명물','名物','학교 명물 떡볶이','🌶️'],
+ ['사방','四方','사방에 향기 퍼지는 수프','🍲'],['부족','不足','부족함 없는 곱빼기 짜장면','🍝'],['식사','食事','마법사의 든든한 식사 도시락','🍱'],
+ ['천상','天上','천상의 맛 케이크','🍰'],['성명','姓名','성명을 새긴 이름표 쿠키','🍪'],['세상','世上','세상에서 제일 큰 빙수','🍧'],
+ ['가수','歌手','가수 요정의 꿀물','🍯'],['시장','市場','시장표 호떡','🥞'],['평안','平安','평안한 밤 우유','🥛'],
+ ['오전','午前','오전 간식 요거트','🥣'],['좌우','左右','좌우 반반 피자','🍕'],['자연','自然','자연 그대로 과일 샐러드','🍓'],
+ ['왕자','王子','왕자님의 딸기 타르트','🍓'],['전화','電話','전화로 주문한 치킨','🍗'],['전국','全國','전국 일등 만두','🥟'],
+ ['정직','正直','정직한 농부의 찐감자','🥔'],['지하','地下','지하 동굴 버섯 볶음','🍄'],['동해','東海','동해 바다 오징어 튀김','🦑'],
+ ['생활','生活','기숙사 생활 컵라면','🍜'],['효자','孝子','효자 아들의 약밥','🍚'],['오후','午後','오후 세 시 핫케이크','🥞'],
+ ['입구','入口','입구에서 파는 츄러스','🥖'],['국기','國旗','국기 꽂은 오므라이스','🍳'],['동생','同生','동생이 좋아하는 푸딩','🍮'],
+ ['동구','洞口','동구 밖 과수원 사과','🍎'],['입동','立冬','입동 날 먹는 군밤','🌰'],['등산','登山','등산 가서 먹는 김밥','🍙'],
+ ['내년','來年','내년에도 먹고 싶은 떡국','🥣'],['노인','老人','노인 마법사의 호박죽','🥣'],['천리','千里','천리마의 당근 주스','🥕'],
+ ['산림','山林','산림 요정 버섯 수프','🍄'],['수면','水面','잔잔한 수면 젤리','🍮'],['생명','生命','생명의 물약 주스','🧃'],
+ ['문답','問答','문답 퀴즈 쿠키','🍪'],['문자','文字','문자 모양 비스킷','🍪'],['백년','百年','백년 묵은 된장찌개','🍲'],
+ ['농부','農夫','농부 아저씨의 옥수수','🌽'],['산수','算數','산수 시험 합격 떡','🍡'],['오색','五色','오색 무지개 경단','🍡'],
+ ['추석','秋夕','추석 보름달 송편','🍡'],['소년','少年','소년 마법사의 핫도그','🌭'],['주소','住所','주소 없는 비밀 가게 빵','🥐'],
+ ['식목','植木','식목일 새싹 비빔밥','🥗'],['중심','中心','중심에 크림 가득 빵','🍞'],['국어','國語','국어 선생님의 김밥','🍙'],
+ ['유명','有名','유명한 마법 호떡','🥞'],['교육','敎育','교육 받은 요정 셰프의 파스타','🍝'],['읍내','邑內','읍내 장터 국밥','🍲'],
+ ['조상','祖上','조상님 전통 약과','🍪'],['주인','主人','가게 주인 추천 떡볶이','🌶️'],['중력','重力','중력을 이기는 둥둥 젤리','🍮'],
+ ['백지','白紙','백지처럼 하얀 우유 푸딩','🥛'],['산천','山川','산천어 소금구이','🐟'],['화초','花草','화초 꽃잎 샐러드','🌸'],
+ ['농촌','農村','농촌 할머니 비빔밥','🍚'],['입춘','立春','입춘 봄나물 전','🥬'],['출구','出口','출구 앞 아이스크림','🍦'],
+ ['편지','便紙','편지 봉투 모양 만두','🥟'],['입하','立夏','입하 날 수박 화채','🍉'],['휴일','休日','휴일 브런치 팬케이크','🥞'],
+ ['형제','兄弟','형제가 나눠 먹는 피자','🍕'],['부모','父母','부모님께 드리는 떡','🍡'],['대문','大門','대문 모양 와플','🧇'],
+];
+
+
+const HUNALL={...HUN8,...HUN7};
+MENU.forEach(m=>{ m.type='dish'; m.hzs=[m.hz]; });
+const W7=WORDS7.map(([kw,hz,dish,em],i)=>({id:'w'+i,type:'word',kw,hzs:[...hz],dish,em}));
+// 음 (두음법칙으로 바뀌는 소리도 같이 봐요)
+const DU={'녀':'여','년':'연','륙':'육','력':'역','립':'입','래':'내','로':'노','리':'이','림':'임'};
+const eumOf=h=>{ const e=(HUNALL[h]||'').slice(-1); return [e,DU[e]].filter(Boolean); };
+// 받침이 있으면 "은", 없으면 "는"
+function eun(word){
+  const ch=nfc(word).trim().slice(-1), code=ch.charCodeAt(0)-0xAC00;
+  if(code<0||code>11171) return '은(는)';
+  return code%28===0?'는':'은';
+}
+// 카드 섞기처럼 뽑아요: 한 바퀴 다 나오기 전에는 같은 메뉴가 다시 나오지 않아요
+const BAGS={};
+function drawFrom(name,list,avoidHz){
+  const ok=it=>!it.hzs.some(h=>avoidHz.includes(h));
+  if(!BAGS[name]||!BAGS[name].length) BAGS[name]=shuf(list);
+  const bag=BAGS[name];
+  let k=bag.findIndex(ok);
+  if(k<0){ const fresh=shuf(list).filter(x=>!bag.includes(x)); k=fresh.findIndex(ok); if(k>=0) return fresh[k]; return bag.shift(); }
+  return bag.splice(k,1)[0];
+}
+function myLevel(){ return (ST&&ST.level)||'8'; }
+// 주문 만들기: 8급은 메뉴 1~2개, 7급·6급은 두 글자 낱말 메뉴 (가끔 8급 복습 메뉴)
+function makeOrder(served,avoid){
+  if(myLevel()==='8'){
+    const n=orderSize(served), items=[];
+    for(let k=0;k<n;k++) items.push(drawFrom('m8',MENU,[...avoid,...items.flatMap(m=>m.hzs)]));
+    return items;
+  }
+  return [Math.random()<.7 ? drawFrom('w7',W7,avoid) : drawFrom('m8',MENU,avoid)];
+}
+function orderSize(n){ if(n<3) return 1; if(n<8) return Math.random()<.6?2:1; return 2; }
+let CF=null, soundOn=LS.get('mirinae_sound')!==false;
+
+let AC=null;
+function beep(type){
+  if(!soundOn) return;
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    if(AC.state==='suspended') AC.resume();
+    const now=AC.currentTime;
+    const t=(f,s,d,v=.05,w='sine')=>{ const o=AC.createOscillator(),g=AC.createGain(); o.type=w; o.frequency.value=f;
+      g.gain.setValueAtTime(0,now+s); g.gain.linearRampToValueAtTime(v,now+s+.02); g.gain.exponentialRampToValueAtTime(.0001,now+s+d);
+      o.connect(g).connect(AC.destination); o.start(now+s); o.stop(now+s+d+.05); };
+    if(type==='ok'){ t(880,0,.18); t(1320,.07,.22,.035); }
+    if(type==='no'){ t(240,0,.22,.05,'triangle'); }
+    if(type==='mad'){ t(300,0,.15,.05,'triangle'); t(200,.14,.25,.05,'triangle'); }
+    if(type==='end'){ [523,659,784,1047].forEach((f,i)=>t(f,i*.1,.35,.04)); }
+  }catch(e){}
+}
+function paintSnd(){ $('cSnd').textContent=soundOn?'🔊':'🔇'; }
+$('cSnd').onclick=()=>{ soundOn=!soundOn; LS.set('mirinae_sound',soundOn); paintSnd(); };
+
+function openCafe(){
+  stopCafe();
+  $('cStart').classList.add('on'); $('cEnd').classList.remove('on');
+  const best=(LS.get(bestKey())||0);
+  $('cBestTxt').textContent= best?`${myLevel()}급 최고 기록 ${best}명`:'';
+  const lv=myLevel();
+  $('cRules').innerHTML = lv==='8'
+    ? `학생이 마법 메뉴를 한두 개 주문해요.<br>메뉴에 들어간 <b>한자</b>를 찾아 반찬통을 모두 눌러주세요.<br>틀린 한자를 누르거나 너무 늦으면 ❤️이 하나 줄어요.<br>점심시간은 <b>60초</b>! 몇 명에게 줄 수 있을까요?`
+    : `${lv}급 배식이에요. 메뉴 속 <b>두 글자 낱말</b>을 보고<br>그 낱말의 <b>한자 두 개</b>를 모두 찾아 눌러주세요.<br>8급 복습 메뉴도 가끔 나와요.<br>틀린 한자를 누르거나 너무 늦으면 ❤️이 하나 줄어요.${lv==='6'?'<br><span class="small">6급 문제는 준비 중이라 지금은 7급 문제가 나와요.</span>':''}`;
+  $('cLvTag').textContent=lv+'급';
+  $('cHearts').textContent='❤️❤️❤️'; $('cServed').textContent='배식 0명'; $('cTime').textContent='60초';
+  $('cBar').style.width='100%';
+  $('cBub').className='bub'; $('cBub').innerHTML='<span class="em">🍽️</span><span>학생들이 줄을 서고 있어요</span>';
+  $('cQueue').innerHTML=''; $('cPlates').innerHTML=''; $('cPatBar').style.width='100%';
+  paintSnd(); show('sCafe');
+}
+$('goCafe').onclick=openCafe;
+$('cBack').onclick=()=>{ stopCafe(); paintHall(); show('sHall'); };
+
+function bestKey(){ return myLevel()==='8'?'mirinae_cafe_best':'mirinae_cafe_best_'+myLevel(); }
+function stopCafe(){ if(CF){ cancelAnimationFrame(CF.raf); CF=null; } }
+
+const VAR=[
+  {base:'haeon',   sw:{'#F07A5A':'#6B4A2E','#E0513B':'#3FA7A0','#B83A27':'#2E7F7A','#C8432F':'#338F89'}},
+  {base:'haeon',   sw:{'#F07A5A':'#2B2548','#E0513B':'#E9A23B','#B83A27':'#B87A1E','#C8432F':'#C98A2A'}},
+  {base:'mulgyeol',sw:{'#A9CFF5':'#F6C177','#2E86DE':'#E0513B','#2E5FA8':'#8A3F5A'}},
+  {base:'mulgyeol',sw:{'#A9CFF5':'#3A2B25','#2E86DE':'#3FAE5A','#2E5FA8':'#2F6A48'}},
+  {base:'saessak', sw:{'#9ED99A':'#3A2B25','#3FAE5A':'#E9A23B','#2F7A45':'#8A5A2B','#2A6A3C':'#6B4A2E'}},
+  {base:'saessak', sw:{'#9ED99A':'#F6C177','#3FAE5A':'#6D4BC7','#2F7A45':'#4E34A0','#2A6A3C':'#3E2A86'}},
+  {base:'dalbit',  sw:{'#D8CCF7':'#F4B6C8','#6D4BC7':'#2E86DE','#4E34A0':'#1F4E8C'}},
+  {base:'dalbit',  sw:{'#D8CCF7':'#6B4A2E','#6D4BC7':'#E0513B','#4E34A0':'#9A2E22'}},
+];
+const CLASSMATES=VAR.map((v,k)=>{
+  const b=CH.find(c=>c.id===v.base);
+  let svg=b.svg.replace(/<text[^>]*>[^<]*<\/text>/,'');   // 지팡이 한자는 빼요
+  for(const [a,z] of Object.entries(v.sw)) svg=svg.split(a).join(z);
+  return {id:'mate'+k,n:'친구',svg};
+});
+function newStudent(){
+  const mine=ST&&ST.char;
+  const pool=CH.filter(c=>c.id!==mine).concat(CLASSMATES);
+  const last=CF&&CF.queue&&CF.queue.length?CF.queue[CF.queue.length-1].c.id:null;
+  let c; do{ c=pool[Math.floor(Math.random()*pool.length)]; }while(c.id===last && pool.length>1);
+  return {c};   // 주문은 맨 앞에 섰을 때 정해요
+}
+function startCafe(){
+  $('cStart').classList.remove('on');
+  CF={time:60, hearts:3, served:0, log:[], queue:[], reveal:new Set(), prevHz:[],
+      pat:0, patMax:7, last:performance.now(), raf:0, lock:false};
+  for(let k=0;k<4;k++) CF.queue.push(newStudent());
+  nextOrder();
+  CF.raf=requestAnimationFrame(tick);
+}
+$('cGo').onclick=startCafe;
+
+function patienceFor(n){ return Math.max(4.2, 7.5-n*0.2); }  // 처음 7.5초 → 최소 4.2초
+// 뜻과 음: 10명까지 보이고, 20명까지 흐리게, 그다음 숨겨요. 이번 판에 틀린 한자는 계속 보여요
+function hunClass(hz){
+  if(CF.reveal.has(hz) || CF.served<10) return 'f';
+  return CF.served<20 ? 'f dim' : 'f hide';
+}
+function nextOrder(){
+  const front=CF.queue[0];
+  const items=makeOrder(CF.served, CF.prevHz);
+  front.items=items; front.got=items.map(it=>it.hzs.map(()=>false));
+  CF.prevHz=items.flatMap(it=>it.hzs);
+  const taps=CF.prevHz.length;
+  CF.patMax=patienceFor(CF.served)*(taps>1?1.6:1); CF.pat=CF.patMax;
+  paintQueue(); paintOrder();
+  const need=[...new Set(CF.prevHz)];
+  const syl=new Set(items.flatMap(it=>it.type==='word'?[...it.kw]:eumOf(it.hz)));
+  const pool=myLevel()==='8'?Object.keys(HZ):Object.keys(HUNALL);
+  // 헷갈리지 않게, 주문 속 소리와 같은 소리의 한자는 빼요
+  const others=shuf(pool.filter(h=>!need.includes(h) && !eumOf(h).some(e=>syl.has(e)))).slice(0,6-need.length);
+  const six=shuf([...need,...others]);
+  $('cPlates').innerHTML=six.map(h=>`<button class="plate" data-h="${h}"><div class="h">${h}</div><div class="${hunClass(h)}">${HUNALL[h]}</div></button>`).join('');
+  $('cPlates').querySelectorAll('.plate').forEach(b=>b.onclick=()=>serve(b));
+  CF.lock=false;
+}
+// 메뉴 이름 속 핵심 낱말: 낱말 메뉴는 찾은 글자가 초록색이 돼요
+function itemHTML(it,got){
+  if(it.type==='dish'){
+    const all=got.every(x=>x);
+    return `<span class="${all?'got':''}">${all?'<b class="chk">✓</b>':''}${dishHTML(it)}</span>`;
+  }
+  const all=got.every(x=>x);
+  const kw=`<span class="kw">${[...it.kw].map((s,i)=>`<span class="${got[i]?'sy':''}">${s}</span>`).join('')}</span>`;
+  return `<span class="${all?'got':''}">${all?'<b class="chk">✓</b>':''}${it.dish.replace(it.kw,kw)}</span>`;
+}
+function paintOrder(){
+  const s=CF.queue[0], it=s.items;
+  const txt=it.length===1 ? `${itemHTML(it[0],s.got[0])} 주세요!` : `${itemHTML(it[0],s.got[0])}${rang(it[0].dish)} ${itemHTML(it[1],s.got[1])} 주세요!`;
+  $('cBub').className='bub';
+  $('cBub').innerHTML=`<span class="em${it.length>1?' two':''}">${it.map(m=>m.em).join('')}</span><span>${txt}</span>`;
+}
+function connHTML(it){
+  if(it.type==='dish') return `${it.kw} = <span class="hz">${it.hz}</span> ${it.hun}`;
+  return `${it.kw} = <span class="hz">${it.hzs.join('')}</span> ${it.hzs.map(h=>HUNALL[h]).join(' + ')}`;
+}
+function paintQueue(){
+  const cls=['front','q1','q2','q3'];
+  $('cQueue').innerHTML=CF.queue.slice(0,4).map((s,i)=>`<div class="stu ${cls[i]}" ${i===0?'id="cFront"':''}>${drawChar(s.c)}</div>`).join('');
+}
+function serve(b){
+  if(!CF || CF.lock) return;
+  const s=CF.queue[0], h=b.dataset.h;
+  let hit=null;
+  s.items.forEach((it,i)=>it.hzs.forEach((x,j)=>{ if(!hit && x===h && !s.got[i][j]) hit=[i,j]; }));
+  if(hit){
+    s.got[hit[0]][hit[1]]=true; b.classList.add('ok'); b.disabled=true; beep('ok');
+    if(s.got.every(g=>g.every(x=>x))){
+      // 다 담았어요: 친구가 인사하고 떠나요
+      CF.lock=true; CF.served++; s.items.forEach(m=>CF.log.push(m));
+      $('cServed').textContent=`배식 ${CF.served}명`;
+      $('cBub').className='bub happy';
+      $('cBub').innerHTML=`<span class="em">😋</span><span>고마워요!${s.items.map(m=>`<span class="conn">${connHTML(m)}</span>`).join('')}</span>`;
+      const f=$('cFront'); if(f) f.classList.add('leave');
+      setTimeout(()=>{ if(!CF) return; CF.queue.shift(); CF.queue.push(newStudent()); nextOrder(); },s.items.length>1||s.items[0].type==='word'?1300:900);
+    }else paintOrder();
+  }else{
+    b.classList.add('no'); beep('no'); b.disabled=true;
+    // 아직 못 찾은 한자들
+    const left=[]; s.items.forEach((it,i)=>it.hzs.forEach((x,j)=>{ if(!s.got[i][j]) left.push({it,j,hz:x}); }));
+    const L=left[0], it=L.it;
+    const msg= it.type==='dish'
+      ? `${it.why} <span class="hz">${it.hz}</span> ${it.hun}${ie(it.hun)}`
+      : `${it.kw}의 '${it.kw[L.j]}'${eun(it.kw[L.j])} <span class="hz">${L.hz}</span> ${HUNALL[L.hz]}${ie(HUNALL[L.hz])}`;
+    // 정답 한자와 방금 누른 한자는 이번 판 동안 뜻과 음을 다시 보여줘요
+    left.forEach(x=>CF.reveal.add(x.hz)); CF.reveal.add(h);
+    $('cPlates').querySelectorAll('.plate').forEach(p=>{ const f=p.querySelector('.f'); if(f) f.className=hunClass(p.dataset.h); });
+    left.forEach(x=>{ const r=$('cPlates').querySelector(`.plate[data-h="${x.hz}"]`); if(r){ r.classList.remove('hint'); void r.offsetWidth; r.classList.add('hint'); } });
+    loseHeart(`앗, 그건 아니에요!<span class="conn">${msg}</span>`);
+  }
+}
+function loseHeart(msg){
+  CF.hearts--;
+  $('cHearts').textContent='❤️'.repeat(Math.max(0,CF.hearts))+'🤍'.repeat(3-Math.max(0,CF.hearts));
+  const f=$('cFront'); if(f){ f.classList.remove('mad'); void f.offsetWidth; f.classList.add('mad'); }
+  if(msg){
+    const front=CF.queue[0];
+    $('cBub').className='bub sad';
+    $('cBub').innerHTML=`<span class="em">😣</span><span>${msg}</span>`;
+    setTimeout(()=>{ if(!CF||CF.lock||CF.queue[0]!==front) return; paintOrder(); },1800);
+  }
+  if(CF.hearts<=0) endCafe('하트를 모두 잃었어요');
+}
+function tick(t){
+  if(!CF) return;
+  const dt=Math.min(.1,(t-CF.last)/1000); CF.last=t;
+  CF.time-=dt;
+  if(!CF.lock) CF.pat-=dt;
+  const tl=Math.max(0,CF.time);
+  $('cTime').textContent=Math.ceil(tl)+'초';
+  $('cBar').style.width=(tl/60*100)+'%';
+  $('cBar').classList.toggle('low',tl<=10);
+  const pr=Math.max(0,CF.pat/CF.patMax);
+  $('cPatBar').style.width=(pr*100)+'%';
+  $('cPatBar').classList.toggle('low',pr<.35);
+  if(CF.time<=0){ endCafe('점심시간이 끝났어요'); return; }
+  if(CF.pat<=0 && !CF.lock){
+    CF.lock=true; beep('mad');
+    $('cBub').className='bub sad';
+    $('cBub').innerHTML=`<span class="em">😤</span><span>너무 오래 걸려요! 그냥 갈래요</span>`;
+    const f=$('cFront'); if(f) f.classList.add('leave');
+    loseHeart();
+    if(!CF) return;
+    setTimeout(()=>{ if(!CF) return; CF.queue.shift(); CF.queue.push(newStudent()); nextOrder(); },700);
+  }
+  CF.raf=requestAnimationFrame(tick);
+}
+function endCafe(why){
+  if(!CF) return;
+  const n=CF.served, log=CF.log;
+  cancelAnimationFrame(CF.raf); CF=null;
+  const bk=bestKey(); const best=LS.get(bk)||0;
+  const rec=n>best; if(rec) LS.set(bk,n);
+  beep('end');
+  // 오늘 배식한 메뉴 (중복 없이)
+  const seen={}; const uniq=log.filter(m=>seen[m.id]?false:(seen[m.id]=true));
+  $('cEnd').innerHTML=`
+    <div class="small">${why}</div>
+    <div class="big-n" style="margin-top:6px">${n}명</div>
+    <div style="margin-top:4px">${rec?'🎉 새 기록이에요!':`최고 기록 ${Math.max(best,n)}명`}</div>
+    ${uniq.length?`<div class="small" style="margin-top:14px;align-self:flex-start">오늘 배식한 메뉴</div>
+    <div class="review">${uniq.map(m=>`<div><span class="hz">${m.hzs.join('')}</span><span><b style="font-weight:500">${m.kw}</b> = ${m.hzs.map(h=>HUNALL[h]).join(' + ')}<br><span class="small">${m.dish}</span></span></div>`).join('')}</div>`:'<div style="height:18px"></div>'}
+    <div class="row2x"><button class="btn ghost" id="cHall">복도로</button><button class="btn gold" id="cAgain">한 번 더</button></div>`;
+  $('cEnd').classList.add('on');
+  $('cAgain').onclick=()=>{ $('cEnd').classList.remove('on'); startCafe(); };
+  $('cHall').onclick=()=>{ paintHall(); show('sHall'); };
+}
+
+/* 시작: 이미 입학했다면 복도로 */
+if(ST && ST.char){ pick=Math.max(0,CH.findIndex(x=>x.id===ST.char)); paintHall(); show('sHall'); }
+</script>
+</body>
+</html>
