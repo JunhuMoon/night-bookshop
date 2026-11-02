@@ -2,916 +2,499 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#161B47">
-<title>미리내 마법학교</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>밤하늘 책방</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Dongle:wght@400;700&family=Noto+Serif+KR:wght@700;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Jua&display=swap" rel="stylesheet">
 <style>
 :root{
-  --sky:#161B47;
-  --sky2:#1C2152;
-  --panel:#232A66;
-  --ink:#EDE6D3;
-  --soft:#A9A6C7;
-  --gold:#E9C46A;
-  --parch:#F3EAD3;
-  --parch-ink:#2B2548;
-  --line:rgba(237,230,211,.18);
+  --sky1:#0b1033; --sky2:#1b1f5e; --sky3:#3a2a72;
+  --star:#fff6c9; --gold:#ffd86b; --text:#eef0ff; --soft:#b9bde8;
+  --card:rgba(255,255,255,0.07); --line:rgba(255,255,255,0.16);
 }
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;margin:0;padding:0}
 html,body{min-height:100%}
-body{background:var(--sky);color:var(--ink);font-family:'Dongle',sans-serif;font-size:23px;line-height:1.25;min-height:100vh}
-button,input{font:inherit;color:inherit}
-input{font-family:'Dongle',sans-serif}
-button{cursor:pointer;border:none;background:none}
-:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:10px}
-.hz{font-family:'Noto Serif KR',serif;font-weight:900}
-
+body{
+  font-family:'Gowun Dodum',sans-serif;color:var(--text);
+  background:radial-gradient(ellipse at 70% 0%,var(--sky3) 0%,var(--sky2) 35%,var(--sky1) 80%) fixed;
+  min-height:100vh;overflow-x:hidden;
+}
 #stars{position:fixed;inset:0;pointer-events:none;z-index:0}
-#stars i{position:absolute;border-radius:50%;background:#FFF6DC;opacity:.6;animation:tw 4s ease-in-out infinite}
-@keyframes tw{50%{opacity:.15}}
-
-#app{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:calc(20px + env(safe-area-inset-top)) 18px calc(28px + env(safe-area-inset-bottom));min-height:calc(100vh / var(--z,1));zoom:var(--z,1)}
-.scr{display:none;flex-direction:column;justify-content:center;min-height:calc(100vh / var(--z,1) - 48px)}
-.scr.on{display:flex}
-
-.btn{display:block;width:100%;padding:14px;border-radius:14px;font-size:24px;font-weight:700;text-align:center}
-.btn.gold{background:var(--gold);color:var(--parch-ink)}
-.btn.gold:active{transform:translateY(2px)}
-.btn.ghost{border:1px solid var(--line);background:rgba(255,255,255,.05)}
-.btn:disabled{opacity:.4;pointer-events:none}
-.small{font-size:18px;color:var(--soft)}
-.center{text-align:center}
-
-/* ---------- 교문 ---------- */
-.gate{margin:0 auto;width:100%;max-width:420px}
-.gate svg{width:100%;height:auto;display:block}
-.gate-title{text-align:center;margin-top:18px}
-.gate-title h1{font-size:48px;font-weight:700;letter-spacing:-.5px;color:var(--parch)}
-.gate-title p{color:var(--soft);font-size:20px;margin-top:4px}
-.spacer{height:24px;flex:none}
-
-/* ---------- 친구 고르기 ---------- */
-.head{text-align:center;margin-bottom:12px}
-.head .t1{font-size:19px;color:var(--soft)}
-.head .t2{font-size:28px;font-weight:700;color:var(--parch)}
-.stage{display:flex;align-items:center;gap:8px}
-.navb{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.06);font-size:28px;flex:none}
-.pic{flex:1;height:310px;display:flex;align-items:flex-end;justify-content:center;background:var(--panel);border-radius:18px;overflow:hidden;touch-action:pan-y}
-.pic svg{height:296px;width:auto}
-.nm{text-align:center;font-size:34px;font-weight:700;margin-top:12px}
-.tag{text-align:center;font-size:20px;margin-bottom:12px}
-.card{background:var(--parch);color:var(--parch-ink);border-radius:16px;padding:14px 16px;font-size:21px;line-height:1.25}
-.card .row{display:flex;gap:10px}
-.card .row b{flex:none;width:66px;font-weight:500;color:#6E6690}
-.dots{display:flex;justify-content:center;gap:6px;margin:14px 0}
-.dots i{width:7px;height:7px;border-radius:50%;background:var(--line);display:block;transition:all .2s}
-.dots i.on{background:var(--gold);width:18px;border-radius:999px}
-
-/* ---------- 이름 ---------- */
-.mini{width:100%;height:230px;margin:4px auto 10px;background:var(--panel);border-radius:18px;display:flex;align-items:flex-end;justify-content:center}
-.mini svg{height:218px;width:auto}
-.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:14px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.05);margin-top:10px}
-.opt .ck{width:22px;height:22px;border-radius:50%;border:2px solid var(--soft);flex:none;display:grid;place-items:center}
-.opt.on{border-color:var(--gold);background:rgba(233,196,106,.1)}
-.opt.on .ck{border-color:var(--gold)}
-.opt .lvsub{color:var(--gold)}
-.opt.on .ck::after{content:"";width:10px;height:10px;border-radius:50%;background:var(--gold)}
-.opt b{font-weight:500;display:block}
-.field{width:100%;margin-top:10px;padding:13px 14px;border-radius:12px;border:1.5px solid var(--line);background:rgba(255,255,255,.06);font-size:24px}
-.field:focus{outline:none;border-color:var(--gold)}
-.err{min-height:20px;font-size:18px;color:#F29C9C;margin-top:6px}
-
-/* ---------- 학생증 ---------- */
-.idcard{background:var(--parch);color:var(--parch-ink);border-radius:18px;overflow:hidden;margin-top:6px;animation:rise .5s cubic-bezier(.3,1.3,.5,1)}
-@keyframes rise{from{transform:translateY(24px) scale(.96);opacity:0}}
-.idtop{background:#2C3474;color:var(--parch);padding:12px 16px;display:flex;align-items:center;justify-content:space-between}
-.idtop b{font-weight:700;font-size:22px}
-.idtop .hz{font-size:20px;color:var(--gold);letter-spacing:2px}
-.idbody{display:flex;gap:16px;padding:20px 18px}
-.idphoto{width:132px;height:168px;border-radius:12px;background:#232A66;flex:none;display:flex;align-items:flex-end;justify-content:center;overflow:hidden}
-.idphoto svg{height:162px;width:auto}
-.idinfo{flex:1;display:flex;flex-direction:column;gap:6px;font-size:20px}
-.idinfo .k{color:#6E6690;font-size:18px}
-.idinfo .v{font-weight:700;font-size:25px;margin-top:-4px}
-.idspell{display:inline-flex;align-items:center;gap:6px}
-.idspell .hz{font-size:22px}
-.idfoot{border-top:1px dashed rgba(43,37,72,.2);padding:10px 16px;font-size:18px;color:#6E6690;display:flex;justify-content:space-between}
-
-/* ---------- 복도 ---------- */
-.me{display:flex;align-items:center;gap:14px;padding:12px 16px 12px 12px;border-radius:18px;background:rgba(255,255,255,.06);border:1px solid var(--line)}
-.me .face{width:64px;height:64px;border-radius:50%;background:var(--panel);overflow:hidden;display:flex;align-items:flex-end;justify-content:center}
-.me .face svg{height:118px;width:auto;margin-bottom:-48px}
-.me b{font-weight:700;font-size:25px}
-.me span{font-size:18px;color:var(--soft);display:block;line-height:1.2}
-.hall-title{font-size:31px;font-weight:700;margin:18px 0 4px;color:var(--parch)}
-.rooms{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
-.room{border-radius:18px;border:1.5px dashed #3A4190;padding:30px 12px;text-align:center;background:rgba(255,255,255,.03)}
-.room .ic{font-size:53px;filter:grayscale(.6);opacity:.7}
-.room b{display:block;font-weight:700;font-size:24px;margin-top:6px}
-.room span{font-size:18px;color:var(--soft)}
-.room.next{border-style:solid;border-color:var(--gold)}
-.room.next .ic{filter:none;opacity:1}
-.room.next span{color:var(--gold)}
-.foot-links{display:flex;justify-content:center;margin-top:8px}
-.link{font-size:19px;color:var(--soft);text-decoration:underline;text-underline-offset:3px;padding:6px}
-
-.modal{position:fixed;inset:0;background:rgba(10,12,40,.7);display:none;align-items:center;justify-content:center;z-index:30;padding:20px}
+.star{position:absolute;border-radius:50%;background:var(--star);animation:tw 3s infinite ease-in-out}
+@keyframes tw{0%,100%{opacity:.25}50%{opacity:1}}
+.shoot{position:absolute;width:120px;height:2px;background:linear-gradient(90deg,#fff,transparent);transform:rotate(-25deg);opacity:0;animation:shoot 9s infinite}
+@keyframes shoot{0%,90%{opacity:0;transform:translate(0,0) rotate(-25deg)}92%{opacity:1}100%{opacity:0;transform:translate(-300px,140px) rotate(-25deg)}}
+main{position:relative;z-index:1;max-width:880px;margin:0 auto;padding:28px 18px 60px}
+h1,h2,h3,.jua{font-family:'Jua',sans-serif;font-weight:400}
+.screen{display:none;animation:fade .5s}
+.screen.on{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1}}
+.hero{text-align:center;padding:48px 0 20px}
+.moon{font-size:64px;filter:drop-shadow(0 0 24px rgba(255,230,140,.6))}
+.hero h1{font-size:46px;margin:10px 0;color:var(--gold);text-shadow:0 0 18px rgba(255,216,107,.45)}
+.hero p{color:var(--soft);font-size:18px;line-height:1.7}
+.btn{font-family:'Jua',sans-serif;font-size:20px;border:none;cursor:pointer;border-radius:999px;padding:14px 30px;
+  background:linear-gradient(135deg,#ffe28a,#ffb86b);color:#2a1d4d;box-shadow:0 6px 24px rgba(255,200,100,.35);transition:transform .15s}
+.btn:hover{transform:translateY(-2px) scale(1.03)}
+.btn.ghost{background:transparent;color:var(--text);border:1.5px solid var(--line);box-shadow:none}
+.btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+.step-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+.dots{display:flex;gap:8px}
+.dots i{width:10px;height:10px;border-radius:50%;background:var(--line)}
+.dots i.on{background:var(--gold);box-shadow:0 0 10px var(--gold)}
+.q{font-size:28px;line-height:1.4;margin-bottom:8px}
+.hint{color:var(--soft);margin-bottom:20px;font-size:16px}
+.chips{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px}
+.chip{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px 14px;cursor:pointer;
+  text-align:left;color:var(--text);font-family:inherit;font-size:16px;transition:all .15s}
+.chip b{display:block;font-family:'Jua',sans-serif;font-weight:400;font-size:19px;margin-bottom:4px}
+.chip span{color:var(--soft);font-size:14px}
+.chip:hover{border-color:rgba(255,216,107,.6)}
+.chip.sel{background:rgba(255,216,107,.16);border-color:var(--gold);box-shadow:0 0 18px rgba(255,216,107,.25)}
+.chip .em{font-size:26px;display:block;margin-bottom:6px}
+.inputrow{display:flex;gap:10px;flex-wrap:wrap}
+input[type=text]{flex:1;min-width:200px;font-family:inherit;font-size:18px;padding:14px 18px;border-radius:16px;
+  border:1.5px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);outline:none}
+input[type=text]:focus{border-color:var(--gold)}
+input::placeholder{color:#8e93c4}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.tag{background:rgba(255,216,107,.15);border:1px solid rgba(255,216,107,.5);padding:7px 12px;border-radius:999px;font-size:15px}
+.tag button{background:none;border:none;color:var(--gold);margin-left:6px;cursor:pointer;font-size:15px}
+.tag.miss{background:rgba(255,255,255,.06);border-color:var(--line);color:var(--soft)}
+.sug{margin-top:8px;display:flex;flex-direction:column;gap:4px}
+.sug button{text-align:left;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--text);
+  padding:10px 14px;border-radius:12px;cursor:pointer;font-family:inherit;font-size:16px}
+.sug button:hover{border-color:var(--gold)}
+.nav{display:flex;justify-content:space-between;margin-top:32px;gap:10px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:18px}
+.book{cursor:pointer;text-align:center;transition:transform .2s}
+.book:hover{transform:translateY(-6px)}
+.book .t{font-family:'Jua',sans-serif;font-size:16px;margin-top:10px;line-height:1.3}
+.book .a{color:var(--soft);font-size:13px;margin-top:2px}
+.cover{position:relative;aspect-ratio:2/3;border-radius:6px 12px 12px 6px;overflow:hidden;
+  box-shadow:0 10px 30px rgba(0,0,0,.45),inset 6px 0 0 rgba(0,0,0,.18);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;padding:12px;text-align:center}
+.cover .ce{font-size:44px;filter:drop-shadow(0 4px 8px rgba(0,0,0,.35));z-index:1}
+.cover .ct{font-family:'Jua',sans-serif;font-size:15px;margin-top:10px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.5);z-index:1;line-height:1.3;word-break:keep-all}
+.cover .ca{font-size:11px;color:rgba(255,255,255,.8);margin-top:6px;z-index:1}
+.cover .sp{position:absolute;width:2px;height:2px;background:#fff;border-radius:50%;opacity:.7}
+.cover img.real{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:3}
+.rank{z-index:4;position:absolute;top:8px;left:8px;background:var(--gold);color:#2a1d4d;border-radius:999px;font-family:'Jua';font-size:13px;padding:2px 8px;}
+.result-head{text-align:center;margin-bottom:26px}
+.result-head h2{font-size:32px;color:var(--gold)}
+.result-head p{color:var(--soft);margin-top:8px;line-height:1.6}
+.modal{position:fixed;inset:0;background:rgba(5,6,25,.75);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:10;padding:16px}
 .modal.on{display:flex}
-.modal .box{background:var(--sky2);border:1px solid var(--line);border-radius:18px;padding:20px;max-width:340px;width:100%}
-.modal p{margin-bottom:16px}
-.modal .row2{display:flex;gap:10px}
-.modal .row2 .btn{flex:1}
-
-/* ---------- 급식실 ---------- */
-.room.open{border-style:solid;border-color:var(--gold);background:rgba(233,196,106,.08);cursor:pointer}
-.room.open .ic{filter:none;opacity:1}
-.room.open span{color:var(--gold)}
-.room.open:active{transform:scale(.97)}
-.cbar{display:flex;align-items:center;gap:10px;margin-bottom:10px}
-.cbar h2{flex:1;font-size:28px;font-weight:700;color:var(--parch)}
-.icb{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:rgba(255,255,255,.06);font-size:24px;display:grid;place-items:center;flex:none}
-.stat{display:flex;justify-content:space-between;align-items:center;font-size:20px}
-.hearts{font-size:25px;letter-spacing:2px}
-.tbar{height:9px;border-radius:999px;background:rgba(255,255,255,.1);margin:8px 0 12px;overflow:hidden}
-.tbar i{display:block;height:100%;background:var(--gold);border-radius:999px;width:100%}
-.tbar i.low{background:#F29C9C}
-.hallc{background:#2A2F6E;border-radius:18px;padding:12px 12px 0;position:relative;overflow:hidden}
-.bub{background:var(--parch);color:var(--parch-ink);border-radius:16px;padding:12px 14px;font-size:24px;font-weight:700;position:relative;margin-bottom:12px;min-height:56px;display:flex;align-items:center;gap:10px}
-.bub .em{font-size:39px;flex:none}
-.bub .kw{color:#B8342A;text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:4px;text-decoration-color:rgba(233,196,106,.9)}
-.bub .conn{display:block;font-size:20px;font-weight:500;color:#2B6B63;margin-top:2px}
-.bub.sad .conn{color:#9A3B3B}
-.bub .conn .hz{font-size:18px}
-.plate.hint{animation:glow .6s ease-in-out 3;background:#FFF4CC}
-@keyframes glow{50%{box-shadow:0 0 0 4px var(--gold),0 4px 0 #CDBF9D}}
-.bub::after{content:"";position:absolute;left:44px;bottom:-9px;border:9px solid transparent;border-top-color:var(--parch);border-bottom:0}
-.bub.happy{background:#D9F3EE}
-.bub.happy::after{border-top-color:#D9F3EE}
-.bub.sad{background:#F9DADA}
-.bub.sad::after{border-top-color:#F9DADA}
-.queue{display:flex;align-items:flex-end;gap:2px;height:170px;position:relative}
-.stu{display:flex;flex-direction:column;align-items:center;transition:transform .35s,opacity .35s}
-.stu svg{display:block;width:auto}
-.stu.front svg{height:164px}
-.stu.q1 svg{height:122px;opacity:.9}
-.stu.q2 svg{height:100px;opacity:.75}
-.stu.q3 svg{height:84px;opacity:.6}
-.stu.leave{transform:translateX(-120%);opacity:0}
-.stu.mad{animation:shake .4s}
-.pat{position:absolute;left:12px;bottom:18px;width:96px;height:7px;border-radius:999px;background:rgba(0,0,0,.35);overflow:hidden}
-.pat i{display:block;height:100%;width:100%;background:#72D3C9;border-radius:999px}
-.pat i.low{background:#F29C9C}
-.countertop{height:16px;background:#6B4A34;border-top:3px solid #8A6444;margin:0 -12px}
-.plates{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.plate{background:var(--parch);color:var(--parch-ink);border-radius:16px;padding:10px 4px 8px;text-align:center;box-shadow:0 4px 0 #CDBF9D}
-.plate:active{transform:translateY(3px);box-shadow:0 1px 0 #CDBF9D}
-.plate .h{font-family:'Noto Serif KR',serif;font-weight:900;font-size:36px;line-height:1.15}
-.plate .f{font-size:18px;color:#6E6690;transition:opacity .4s}
-.plate .f.dim{opacity:.35}
-.plate .f.hide{visibility:hidden}
-.plate:disabled{cursor:default}
-.bub .em.two{font-size:30px;letter-spacing:-4px}
-.bub .got .kw{color:#2E8A6A;text-decoration-color:rgba(46,138,106,.5)}
-.bub .chk{color:#2E9E6A;font-size:26px;margin-right:3px}
-.bub .kw .sy{color:#2E8A6A}
-.lvtag{display:inline-block;border:1px solid var(--gold);color:var(--gold);border-radius:8px;padding:0 8px;font-size:18px;margin-left:4px;vertical-align:middle}
-.plate.ok{background:#D9F3EE;box-shadow:0 4px 0 #9CCFC6}
-.plate.no{background:#F9DADA;box-shadow:0 4px 0 #D9A5A5;animation:shake .35s}
-@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
-.over{position:absolute;inset:0;background:rgba(22,27,71,.98);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;border-radius:18px;z-index:5}
-.over.on{display:flex}
-.cwrap{position:relative;min-height:600px}
-.rules{background:rgba(255,255,255,.06);border:1px solid var(--line);border-radius:14px;padding:14px;text-align:left;font-size:20px;line-height:1.3;margin:12px 0 18px;width:100%}
-.big-n{font-size:67px;font-weight:700;color:var(--gold);line-height:1.1}
-.review{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:14px 0 16px;max-height:220px;overflow:auto}
-.review div{background:rgba(255,255,255,.06);border-radius:10px;padding:6px 8px;font-size:18px;text-align:left;display:flex;align-items:center;gap:6px}
-.review .hz{font-size:20px;color:var(--gold)}
-.row2x{display:flex;gap:10px;width:100%}
-.row2x .btn{flex:1}
-
-/* ---------- 동글 글씨체 ---------- */
-:root{--cute:'Dongle','Noto Sans KR',sans-serif}
-.gate-title h1{font-family:var(--cute);font-size:54px;font-weight:700;line-height:1.05;letter-spacing:0}
-.gate-title p{font-family:var(--cute);font-size:23px;line-height:1.05}
-.head .t1{font-family:var(--cute);font-size:22px;line-height:1.1}
-.head .t2{font-family:var(--cute);font-size:34px;line-height:1.05}
-.nm{font-family:var(--cute);font-size:40px;line-height:1.05}
-.tag{font-family:var(--cute);font-size:23px;line-height:1.1}
-.btn{font-family:var(--cute);font-size:28px;font-weight:700;line-height:1.1;padding:10px 14px}
-.opt b{font-family:var(--cute);font-size:25px;font-weight:400;line-height:1.1}
-.idtop b{font-family:var(--cute);font-size:26px;line-height:1.1}
-.idinfo .k{font-family:var(--cute);font-size:19px;line-height:1}
-.idinfo .v{font-family:var(--cute);font-size:30px;line-height:1.05}
-.me b{font-family:var(--cute);font-size:30px;line-height:1.05}
-.hall-title{font-family:var(--cute);font-size:36px;line-height:1.1}
-.room b{font-family:var(--cute);font-size:28px;font-weight:700;line-height:1.1}
-.room span{font-family:var(--cute);font-size:20px}
-.link{font-family:var(--cute);font-size:21px}
-.cbar h2{font-family:var(--cute);font-size:34px;line-height:1.1}
-.stat{font-family:var(--cute);font-size:24px;line-height:1.1}
-.bub{font-family:var(--cute);font-size:27px;font-weight:400;line-height:1.1}
-.bub .conn{font-family:var(--cute);font-size:22px;line-height:1.15}
-.plate .f{font-family:var(--cute);font-size:19px;line-height:1.1}
-.big-n{font-family:var(--cute);font-size:76px;line-height:1}
-.over > div, .over .small{font-family:var(--cute)}
-.review div{font-family:var(--cute);font-size:19px;line-height:1.1}
-.err{font-family:var(--cute);font-size:20px}
-
-/* ---------- 나머지 글씨도 모두 동글로 ---------- */
-body{font-family:var(--cute);font-size:23px;line-height:1.25}
-.small{font-size:20px;line-height:1.15}
-.card{font-size:22px;line-height:1.25}
-.card .row b{width:74px;font-weight:400}
-.opt .small{font-size:19px}
-.field{font-size:24px;padding:8px 14px}
-.idfoot{font-size:18px}
-.idinfo{font-size:21px}
-.me span{font-size:19px;line-height:1.1}
-.rules{font-size:22px;line-height:1.3}
-.modal p{font-size:23px;line-height:1.3}
-
-@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.mbox{background:linear-gradient(160deg,#252a6e,#141842);border:1px solid var(--line);border-radius:24px;max-width:620px;width:100%;
+  max-height:90vh;overflow:auto;padding:24px;display:grid;grid-template-columns:170px 1fr;gap:22px;position:relative}
+.mbox .close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--soft);font-size:26px;cursor:pointer}
+.mbox h3{font-size:26px;color:var(--gold);line-height:1.3;padding-right:24px}
+.mbox .au{color:var(--soft);margin:4px 0 12px}
+.mbox .sum{line-height:1.8;font-size:17px}
+.why{margin-top:14px;background:rgba(255,216,107,.1);border-left:3px solid var(--gold);padding:10px 12px;border-radius:8px;font-size:15px;line-height:1.6}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.pill{font-size:13px;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid var(--line)}
+.mact{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+.mact a,.mact button{font-family:'Jua';font-size:16px;padding:10px 16px;border-radius:999px;text-decoration:none;cursor:pointer;border:1.5px solid var(--line);background:transparent;color:var(--text)}
+.mact .heart.on{background:rgba(255,120,160,.2);border-color:#ff8fb1;color:#ffc1d4}
+.filter{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px}
+.filter button{font-family:'Jua';font-size:15px;padding:8px 14px;border-radius:999px;border:1.5px solid var(--line);background:transparent;color:var(--text);cursor:pointer}
+.filter button.sel{background:rgba(255,216,107,.18);border-color:var(--gold)}
+.note{margin-top:34px;text-align:center;color:var(--soft);font-size:14px;line-height:1.7}
+.empty{text-align:center;color:var(--soft);padding:30px}
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;gap:10px;flex-wrap:wrap}
+.home{background:none;border:none;color:var(--gold);font-family:'Jua';font-size:20px;cursor:pointer}
+@media (max-width:560px){
+  .hero h1{font-size:38px}.q{font-size:23px}
+  .mbox{grid-template-columns:1fr;justify-items:center;text-align:left}
+  .mbox .mc{width:150px}
+  .grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .chips{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
-<div id="stars" aria-hidden="true"></div>
-<div id="app">
+<div id="stars"></div>
+<main>
 
-  <!-- 교문 -->
-  <section class="scr on" id="sGate">
-    <div class="gate" id="gateArt"></div>
-    <div class="gate-title">
-      <h1>미리내 마법학교</h1>
-      <p>교문의 글씨를 읽을 수 있게 되면<br>무언가 일어날지도 몰라요</p>
+<!-- 시작 -->
+<section class="screen on" id="s-home">
+  <div class="hero">
+    <div class="moon">🌙</div>
+    <h1>밤하늘 책방</h1>
+    <p>밤하늘 별을 이어 별자리를 만들듯,<br>네가 좋아하는 것들을 이어서 <b>딱 맞는 책</b>을 찾아 줄게.</p>
+    <div class="btns">
+      <button class="btn" onclick="startQuiz()">✨ 내 책 찾으러 가기</button>
+      <button class="btn ghost" onclick="openShelf()">📚 책장 구경하기</button>
+      <button class="btn ghost" onclick="openLikes()">♡ 찜한 책</button>
     </div>
-    <div class="spacer"></div>
-    <button class="btn gold" id="bEnter">입학하기</button>
-  </section>
+  </div>
+</section>
 
-  <!-- 친구 고르기 -->
-  <section class="scr" id="sPick">
-    <div class="head"><div class="t1">함께 입학할 친구를 골라주세요</div><div class="t2">미리내 마법학교</div></div>
-    <div class="stage">
-      <button class="navb" id="bPrev" aria-label="이전 친구">‹</button>
-      <div class="pic" id="pPic"></div>
-      <button class="navb" id="bNext" aria-label="다음 친구">›</button>
-    </div>
-    <div class="nm" id="pName"></div>
-    <div class="tag" id="pTag"></div>
-    <div class="card" id="pCard"></div>
-    <div class="dots" id="pDots"></div>
-    <div class="spacer"></div>
-    <button class="btn gold" id="bChoose"></button>
-  </section>
+<!-- 질문 1: 좋아하는 책 -->
+<section class="screen" id="s-q1">
+  <div class="step-top"><button class="home" onclick="go('s-home')">🌙 밤하늘 책방</button><div class="dots"><i class="on"></i><i></i><i></i><i></i></div></div>
+  <h2 class="q">재밌게 읽은 책이 있니? 📖</h2>
+  <p class="hint">제목을 쓰면 비슷한 책을 찾아 줄게. 여러 권 넣어도 되고, 없으면 그냥 넘어가도 돼!</p>
+  <div class="inputrow">
+    <input type="text" id="favIn" placeholder="예) 기억 전달자" autocomplete="off" oninput="suggest()" onkeydown="if(event.key==='Enter'){addFav(this.value)}">
+    <button class="btn" style="padding:12px 22px;font-size:18px" onclick="addFav(document.getElementById('favIn').value)">넣기</button>
+  </div>
+  <div class="sug" id="sug"></div>
+  <div class="tags" id="favTags"></div>
+  <div class="nav"><button class="btn ghost" onclick="go('s-home')">← 처음으로</button><button class="btn" onclick="go('s-q2')">다음 →</button></div>
+</section>
 
-  <!-- 이름 정하기 -->
-  <section class="scr" id="sName">
-    <div class="head"><div class="t1">학생증에 쓸 이름을 정해요</div><div class="t2">이름 정하기</div></div>
-    <div class="mini" id="nPic"></div>
-    <button class="opt on" id="oKeep"><span class="ck"></span><span><b id="oKeepT"></b><span class="small">캐릭터 이름을 그대로 써요</span></span></button>
-    <button class="opt" id="oMine"><span class="ck"></span><span><b>내 이름을 적을래요</b><span class="small">최대 8글자</span></span></button>
-    <input class="field" id="nInput" placeholder="이름을 적어주세요" autocomplete="off" style="display:none">
-    <div class="err" id="nErr"></div>
-    <div class="spacer"></div>
-    <div style="display:flex;gap:10px">
-      <button class="btn ghost" id="bBackPick" style="flex:1">다시 고르기</button>
-      <button class="btn gold" id="bDone" style="flex:2">다음</button>
-    </div>
-  </section>
+<!-- 질문 2: 장르 -->
+<section class="screen" id="s-q2">
+  <div class="step-top"><button class="home" onclick="go('s-home')">🌙 밤하늘 책방</button><div class="dots"><i class="on"></i><i class="on"></i><i></i><i></i></div></div>
+  <h2 class="q">어떤 이야기가 좋아? 🌟</h2>
+  <p class="hint">마음에 드는 걸 모두 골라 줘.</p>
+  <div class="chips" id="genreChips"></div>
+  <div class="nav"><button class="btn ghost" onclick="go('s-q1')">← 이전</button><button class="btn" onclick="go('s-q3')">다음 →</button></div>
+</section>
 
-  <!-- 학생증 -->
-  <section class="scr" id="sLevel">
-    <div class="head"><div class="t1">지금 아는 만큼 골라요</div><div class="t2" id="lvTitle">급수 고르기</div></div>
-    <div id="lvOpts">
-      <button class="opt" data-lv="8"><span class="ck"></span><span><b>8급 <span class="lvsub">처음 배워요</span></b><span class="small">한자 50자 · 한 글자로 주문</span></span></button>
-      <button class="opt" data-lv="7"><span class="ck"></span><span><b>7급 <span class="lvsub">조금 알아요</span></b><span class="small">한자 150자 · 두 글자 낱말로 주문</span></span></button>
-      <button class="opt" data-lv="6"><span class="ck"></span><span><b>6급 <span class="lvsub">꽤 알아요</span></b><span class="small">한자 300자 · 문제 준비 중</span></span></button>
-    </div>
-    <p class="small" id="lvNote" style="text-align:center;margin-top:10px">나중에 복도에서 바꿀 수 있어요</p>
-    <div class="spacer"></div>
-    <div style="display:flex;gap:10px">
-      <button class="btn ghost" id="lvBack" style="flex:1">이전</button>
-      <button class="btn gold" id="lvDone" style="flex:2">입학 완료</button>
-    </div>
-  </section>
-  <section class="scr" id="sCard">
-    <div class="head"><div class="t1">입학을 축하해요!</div><div class="t2">나의 학생증</div></div>
-    <div class="idcard" id="idCard"></div>
-    <p class="small center" style="margin-top:14px" id="idMsg"></p>
-    <div class="spacer"></div>
-    <button class="btn gold" id="bIn">학교 안으로 들어가기</button>
-  </section>
+<!-- 질문 3: 기분 -->
+<section class="screen" id="s-q3">
+  <div class="step-top"><button class="home" onclick="go('s-home')">🌙 밤하늘 책방</button><div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div>
+  <h2 class="q">책을 다 읽고 어떤 기분이면 좋겠어? 💫</h2>
+  <p class="hint">여러 개 골라도 돼.</p>
+  <div class="chips" id="moodChips"></div>
+  <div class="nav"><button class="btn ghost" onclick="go('s-q2')">← 이전</button><button class="btn" onclick="go('s-q4')">다음 →</button></div>
+</section>
 
-  <!-- 복도 -->
-  <section class="scr" id="sHall">
-    <div class="me" id="hMe"></div>
-    <div class="hall-title">1층 복도</div>
-    <p class="small">아직 공사 중인 곳이 많아요. 곧 하나씩 문이 열릴 거예요.</p>
-    <div class="rooms">
-      <button class="room open" id="goCafe"><div class="ic">🍛</div><b>급식실</b><span>배식 당번</span></button>
-      <div class="room"><div class="ic">📖</div><b>교실</b><span>공사 중</span></div>
-      <div class="room"><div class="ic">🏃</div><b>운동장</b><span>공사 중</span></div>
-      <div class="room"><div class="ic">📚</div><b>도서관</b><span>공사 중</span></div>
-    </div>
-    <div class="spacer"></div>
-    <div class="foot-links">
-      <button class="link" id="bShowCard">학생증 보기</button>
-      <button class="link" id="bLevel">급수 바꾸기</button>
-      <button class="link" id="bReset">처음부터 다시 입학하기</button>
-    </div>
-  </section>
+<!-- 질문 4: 수준 -->
+<section class="screen" id="s-q4">
+  <div class="step-top"><button class="home" onclick="go('s-home')">🌙 밤하늘 책방</button><div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div></div>
+  <h2 class="q">책 두께는 어느 정도가 좋아? 📏</h2>
+  <p class="hint">하나만 골라 줘.</p>
+  <div class="chips" id="levelChips"></div>
+  <div class="nav"><button class="btn ghost" onclick="go('s-q3')">← 이전</button><button class="btn" onclick="showResult()">🌠 추천 받기</button></div>
+</section>
 
-  <!-- 급식실 -->
-  <section class="scr" id="sCafe">
-    <div class="cbar">
-      <button class="icb" id="cBack" aria-label="복도로">←</button>
-      <h2>🍛 급식실</h2>
-      <button class="icb" id="cSnd" aria-label="소리 켜기 끄기">🔊</button>
-    </div>
-    <div class="cwrap">
-      <div class="stat"><span class="hearts" id="cHearts"></span><span id="cServed">배식 0명</span><span id="cTime">60초</span></div>
-      <div class="tbar"><i id="cBar"></i></div>
-      <div class="hallc">
-        <div class="bub" id="cBub"><span class="em">🍽️</span><span>줄을 서는 중...</span></div>
-        <div class="queue" id="cQueue"></div>
-        <div class="pat" id="cPat"><i id="cPatBar"></i></div>
-        <div class="countertop"></div>
-      </div>
-      <div class="plates" id="cPlates"></div>
+<!-- 결과 -->
+<section class="screen" id="s-result">
+  <div class="topbar"><button class="home" onclick="go('s-home')">🌙 밤하늘 책방</button></div>
+  <div class="result-head">
+    <h2>✨ 너만의 별자리 책 ✨</h2>
+    <p id="resultSub"></p>
+  </div>
+  <div class="grid" id="resultGrid"></div>
+  <div class="btns">
+    <button class="btn" onclick="showResult(true)">🔄 다른 책도 보여 줘</button>
+    <button class="btn ghost" onclick="startQuiz()">처음부터 다시</button>
+  </div>
+</section>
 
-      <div class="over on" id="cStart">
-        <div style="font-size:44px">🍛</div>
-        <div style="font-size:21px;font-weight:700;margin-top:6px">오늘의 배식 당번 <span class="lvtag" id="cLvTag"></span></div>
-        <div class="rules" id="cRules"></div>
-        <button class="btn gold" id="cGo">배식 시작</button>
-        <p class="small" style="margin-top:10px" id="cBestTxt"></p>
-      </div>
-      <div class="over" id="cEnd"></div>
-    </div>
-  </section>
+<!-- 책장 -->
+<section class="screen" id="s-shelf">
+  <div class="topbar"><button class="home" onclick="go('s-home')">🌙 밤하늘 책방</button><span id="shelfCount" style="color:var(--soft)"></span></div>
+  <h2 class="q" id="shelfTitle">📚 책장 구경하기</h2>
+  <div class="filter" id="shelfFilter"></div>
+  <div class="grid" id="shelfGrid"></div>
+</section>
+
+<p class="note">표지 정보: 카카오 책 검색<br>표지를 찾지 못한 책은 밤하늘 책방이 직접 그린 그림으로 보여 줘요.</p>
+</main>
+
+<!-- 책 상세 -->
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+  <div class="mbox" id="mbox"></div>
 </div>
 
-<div class="modal" id="mReset"><div class="box">
-  <p>지금 학생증이 사라지고 교문으로 돌아가요. 다시 입학할까요?</p>
-  <div class="row2"><button class="btn ghost" id="rNo">아니오</button><button class="btn gold" id="rYes">예</button></div>
-</div></div>
-
 <script>
-/* =========================================================
-   캐릭터
-   ========================================================= */
-const S='stroke="#241B38" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"';
-const blush='<ellipse cx="-19" cy="-128" rx="5" ry="3" fill="#F7A08E"/><ellipse cx="19" cy="-128" rx="5" ry="3" fill="#F7A08E"/>';
-const CH=[
-{id:'haeon',n:'해온',t:'활발한 운동부',c:'#F07A5A',hz:'火',hun:'불 화',
- look:'산호색 삐죽머리, 빨간 후드 점퍼, 반바지',good:'누구보다 빠르고 씩씩해요',bad:'급해서 가끔 덜렁대요',like:'운동장, 매운 떡볶이',
- svg:`<g ${S}><path d="M-14 -20 L-13 -4 L-5 -4 L-5 -20 Z M5 -20 L5 -4 L13 -4 L14 -20 Z" fill="#F8DCC6"/><path d="M-18 -6 L-2 -6 L-2 2 L-20 2 Z M2 -6 L18 -6 L20 2 L2 2 Z" fill="#F4F1EA"/><path d="M-24 -44 L24 -44 L26 -16 L4 -16 L0 -26 L-4 -16 L-26 -16 Z" fill="#3B4280"/><path d="M-30 -110 Q 0 -94 30 -110 Q 22 -122 0 -120 Q -22 -122 -30 -110 Z" fill="#B83A27"/><rect x="-8" y="-114" width="16" height="18" fill="#F8DCC6"/><path d="M-26 -104 Q -36 -74 -30 -40 L 30 -40 Q 36 -74 26 -104 Q 0 -94 -26 -104 Z" fill="#E0513B"/><line x1="0" y1="-98" x2="0" y2="-42" stroke-width="1.6"/><path d="M-18 -60 L-6 -60 L-6 -48 L-18 -48 Z M6 -60 L18 -60 L18 -48 L6 -48 Z" fill="#C8432F" stroke-width="1.6"/><path d="M-26 -102 Q -40 -80 -38 -58 L -30 -56 Q -30 -78 -20 -94 Z" fill="#E0513B"/><path d="M26 -102 Q 40 -86 44 -70 L 36 -66 Q 32 -80 20 -94 Z" fill="#E0513B"/><circle cx="-34" cy="-54" r="6" fill="#F8DCC6"/><line x1="42" y1="-66" x2="58" y2="-104"/><circle cx="42" cy="-66" r="6" fill="#F8DCC6"/><circle cx="61" cy="-114" r="13" fill="#FFE2D6"/><circle cx="0" cy="-144" r="36" fill="#F8DCC6"/><path d="M-38 -138 Q -42 -172 -26 -184 L -30 -198 L -12 -188 L -8 -204 L 4 -190 L 16 -202 L 18 -186 L 34 -192 L 30 -176 Q 42 -162 38 -138 Q 30 -158 16 -154 L 10 -166 L 0 -152 L -10 -164 L -18 -150 Q -30 -154 -38 -138 Z" fill="#F07A5A"/></g><text x="61" y="-109" text-anchor="middle" font-family="Noto Serif KR,serif" font-weight="900" font-size="15" fill="#B8342A">火</text><circle cx="-10" cy="-138" r="3.2" fill="#241B38"/><circle cx="10" cy="-138" r="3.2" fill="#241B38"/><path d="M-7 -127 Q 0 -119 7 -127 Z" fill="#fff" stroke="#241B38" stroke-width="1.8" stroke-linejoin="round"/><ellipse cx="-19" cy="-128" rx="5" ry="3" fill="#F7A08E"/><ellipse cx="19" cy="-128" rx="5" ry="3" fill="#F7A08E"/>`},
-{id:'mulgyeol',n:'물결',t:'차분한 반장',c:'#A9CFF5',hz:'水',hun:'물 수',
- look:'하늘색 긴 생머리, 베레모, 세일러 교복',good:'꼼꼼해서 실수가 적어요',bad:'걱정이 많아 결정이 느려요',like:'도서관, 비 오는 날',
- svg:`<g ${S}><path d="M-38 -142 Q -46 -82 -34 -62 L 34 -62 Q 46 -82 38 -142 Z" fill="#A9CFF5"/><rect x="-8" y="-114" width="16" height="18" fill="#F8DCC6"/><path d="M-12 -22 L-12 -4 L-4 -4 L-4 -22 Z M4 -22 L4 -4 L12 -4 L12 -22 Z" fill="#F8DCC6"/><path d="M-13 -14 L-3 -14 L-3 -4 L-13 -4 Z M3 -14 L13 -14 L13 -4 L3 -4 Z" fill="#F4F7FC"/><path d="M-16 -4 L-2 -4 L-2 2 L-18 2 Z M2 -4 L16 -4 L18 2 L2 2 Z" fill="#1F2A55"/><path d="M-26 -52 L26 -52 L36 -20 L-36 -20 Z" fill="#2E5FA8"/><path d="M-14 -52 L-18 -20 M0 -52 L0 -20 M14 -52 L18 -20" stroke-width="1.4"/><path d="M-24 -104 L24 -104 L28 -50 L-28 -50 Z" fill="#F4F7FC"/><path d="M-28 -106 L0 -80 L28 -106 L34 -90 L0 -68 L-34 -90 Z" fill="#2E5FA8"/><path d="M-31 -96 L0 -74 L31 -96" fill="none" stroke="#fff" stroke-width="1.6"/><path d="M-8 -76 L0 -70 L8 -76 L6 -62 L0 -66 L-6 -62 Z" fill="#6FC3FF" stroke-width="1.6"/><path d="M-24 -102 Q -36 -80 -34 -58 L -26 -56 Q -26 -78 -18 -94 Z" fill="#F4F7FC"/><path d="M24 -102 Q 38 -86 42 -70 L 34 -66 Q 30 -80 18 -94 Z" fill="#F4F7FC"/><circle cx="-30" cy="-54" r="6" fill="#F8DCC6"/><line x1="40" y1="-66" x2="56" y2="-106"/><circle cx="40" cy="-66" r="6" fill="#F8DCC6"/><circle cx="59" cy="-116" r="13" fill="#DDF0FF"/><circle cx="0" cy="-144" r="36" fill="#F8DCC6"/><path d="M-38 -136 Q -40 -186 0 -188 Q 40 -186 38 -136 Q 32 -152 22 -154 L 12 -148 L 0 -154 L -12 -148 L -22 -154 Q -32 -152 -38 -136 Z" fill="#A9CFF5"/><ellipse cx="4" cy="-184" rx="36" ry="12" fill="#2E86DE" transform="rotate(-10 4 -184)"/><circle cx="8" cy="-198" r="4" fill="#2E86DE"/></g><text x="59" y="-111" text-anchor="middle" font-family="Noto Serif KR,serif" font-weight="900" font-size="15" fill="#1F5FA8">水</text><circle cx="-10" cy="-136" r="3.2" fill="#241B38"/><circle cx="10" cy="-136" r="3.2" fill="#241B38"/><path d="M-3 -126 Q 0 -123 3 -126" fill="none" stroke="#241B38" stroke-width="1.8" stroke-linecap="round"/>${blush}<path d="M-30 -166 Q -37 -154 -30 -148 Q -23 -154 -30 -166 Z" fill="#5DB2FF" stroke="#241B38" stroke-width="1.4"/>`},
-{id:'saessak',n:'새싹',t:'느긋한 모범생',c:'#9ED99A',hz:'木',hun:'나무 목',
- look:'민트색 짧은 머리, 동그란 안경, 조끼와 나비넥타이',good:'다정하고 참을성이 강해요',bad:'느긋해서 지각을 잘해요',like:'식물 키우기, 낮잠',
- svg:`<g ${S}><rect x="-8" y="-114" width="16" height="16" fill="#F8DCC6"/><path d="M-18 -6 L-2 -6 L-2 2 L-20 2 Z M2 -6 L18 -6 L20 2 L2 2 Z" fill="#6B4A2E"/><path d="M-22 -44 L22 -44 L20 -6 L3 -6 L0 -30 L-3 -6 L-20 -6 Z" fill="#7A8A5E"/><path d="M-24 -104 L24 -104 L26 -42 L-26 -42 Z" fill="#F4F1EA"/><path d="M-24 -100 L-10 -100 L0 -76 L10 -100 L24 -100 L26 -44 L-26 -44 Z" fill="#3FAE5A"/><line x1="-24" y1="-100" x2="26" y2="-48" stroke="#8A5A2B" stroke-width="4"/><rect x="18" y="-56" width="20" height="16" rx="3" fill="#A06B3A" stroke-width="1.8"/><path d="M-24 -102 Q -36 -80 -34 -58 L -26 -56 Q -26 -78 -18 -94 Z" fill="#F4F1EA"/><path d="M24 -102 Q 38 -86 42 -70 L 34 -66 Q 30 -80 18 -94 Z" fill="#F4F1EA"/><circle cx="-30" cy="-54" r="6" fill="#F8DCC6"/><line x1="40" y1="-66" x2="56" y2="-106" stroke="#8A5A2B" stroke-width="3.4"/><circle cx="40" cy="-66" r="6" fill="#F8DCC6"/><circle cx="59" cy="-116" r="13" fill="#E4F7DA"/><circle cx="0" cy="-144" r="36" fill="#F8DCC6"/><path d="M-17 -106 L0 -96 L17 -106 L20 -98 L0 -86 L-20 -98 Z" fill="#F4F1EA"/><path d="M-7 -94 L0 -90 L7 -94 L7 -86 L0 -90 L-7 -86 Z" fill="#E9C46A" stroke-width="1.6"/><path d="M-38 -132 Q -44 -170 -18 -182 Q 10 -192 32 -174 Q 42 -162 38 -132 Q 34 -148 26 -152 Q 14 -148 2 -158 Q -2 -148 -14 -150 Q -22 -144 -28 -150 Q -34 -144 -38 -132 Z" fill="#9ED99A"/><path d="M-34 -166 Q 0 -196 36 -172 L 40 -162 Q 0 -180 -36 -158 Z" fill="#2F7A45"/><path d="M-36 -160 Q 0 -174 40 -162 L 52 -158 Q 0 -172 -38 -154 Z" fill="#2A6A3C"/><circle cx="-11" cy="-136" r="9" fill="none"/><circle cx="11" cy="-136" r="9" fill="none"/></g><text x="59" y="-111" text-anchor="middle" font-family="Noto Serif KR,serif" font-weight="900" font-size="15" fill="#2A7A3E">木</text><line x1="-2" y1="-137" x2="2" y2="-137" stroke="#241B38" stroke-width="2"/><circle cx="-11" cy="-136" r="2.8" fill="#241B38"/><circle cx="11" cy="-136" r="2.8" fill="#241B38"/><path d="M-4 -124 Q 0 -121 4 -124" fill="none" stroke="#241B38" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="-22" cy="-124" rx="4.5" ry="2.6" fill="#F7A08E"/><ellipse cx="22" cy="-124" rx="4.5" ry="2.6" fill="#F7A08E"/><path d="M18 -176 Q 28 -190 38 -180 Q 28 -170 18 -176 Z" fill="#5CCB6A" stroke="#241B38" stroke-width="1.4"/>`},
-{id:'dalbit',n:'달빛',t:'신비한 전학생',c:'#D8CCF7',hz:'月',hun:'달 월',
- look:'은보라 긴 머리, 뾰족 모자, 별 무늬 로브',good:'상상력이 풍부하고 직감이 좋아요',bad:'멍하니 딴생각을 자주 해요',like:'별 보기, 수수께끼',
- svg:`<g ${S}><path d="M-36 -142 Q -44 -82 -32 -66 L 32 -66 Q 44 -82 36 -142 Z" fill="#D8CCF7"/><rect x="-8" y="-114" width="16" height="18" fill="#F8DCC6"/><path d="M-16 -6 L-2 -6 L-2 2 L-18 2 Z M2 -6 L16 -6 L18 2 L2 2 Z" fill="#3A2F55"/><path d="M-22 -104 Q -30 -50 -30 -6 Q 0 0 30 -6 Q 30 -50 22 -104 Q 0 -96 -22 -104 Z" fill="#6D4BC7"/><path d="M-22 -102 Q -36 -80 -36 -58 L -26 -56 Q -26 -78 -16 -94 Z" fill="#6D4BC7"/><path d="M22 -102 Q 38 -86 42 -70 L 34 -66 Q 30 -80 16 -94 Z" fill="#6D4BC7"/><path d="M-12 -100 L0 -86 L12 -100" fill="none" stroke="#E9DFFF" stroke-width="2"/><circle cx="-31" cy="-54" r="6" fill="#F8DCC6"/><line x1="40" y1="-66" x2="56" y2="-106"/><circle cx="40" cy="-66" r="6" fill="#F8DCC6"/><circle cx="59" cy="-116" r="13" fill="#EFE6FF"/><circle cx="0" cy="-144" r="36" fill="#F8DCC6"/><path d="M-38 -136 Q -42 -188 4 -190 Q 42 -186 38 -136 Q 18 -164 -12 -154 Q -28 -148 -38 -136 Z" fill="#D8CCF7"/><ellipse cx="0" cy="-178" rx="40" ry="8" fill="#4E34A0"/><path d="M-24 -180 Q -6 -216 20 -228 Q 10 -200 26 -180 Z" fill="#4E34A0"/></g><text x="59" y="-111" text-anchor="middle" font-family="Noto Serif KR,serif" font-weight="900" font-size="15" fill="#6D3FD6">月</text><path d="M-14 -136 Q -10 -139 -6 -136" fill="none" stroke="#241B38" stroke-width="2.2" stroke-linecap="round"/><circle cx="10" cy="-136" r="3.2" fill="#241B38"/><path d="M-3 -126 Q 0 -123 3 -126" fill="none" stroke="#241B38" stroke-width="1.8" stroke-linecap="round"/>${blush}<circle cx="-2" cy="-196" r="6" fill="#FFE08A"/><circle cx="1" cy="-198" r="5" fill="#4E34A0"/><g fill="#FFE08A"><circle cx="-14" cy="-70" r="1.8"/><circle cx="12" cy="-44" r="1.8"/><circle cx="-8" cy="-24" r="1.8"/><circle cx="16" cy="-86" r="1.5"/><circle cx="18" cy="-16" r="1.5"/></g>`},
-];
-const drawChar=(c,label)=>`<svg viewBox="-80 -240 160 250" role="img" aria-label="${label||c.n}">${c.svg}</svg>`;
-
-/* =========================================================
-   도구
-   ========================================================= */
-const $=id=>document.getElementById(id);
-const mem={};
-const LS={
-  get(k){ try{ const v=localStorage.getItem(k); return v?JSON.parse(v):(mem[k]??null); }catch(e){ return mem[k]??null; } },
-  set(k,v){ mem[k]=v; try{ localStorage.setItem(k,JSON.stringify(v)); }catch(e){} },
-  del(k){ delete mem[k]; try{ localStorage.removeItem(k); }catch(e){} },
+// ── 장르, 기분, 수준 ──
+const GENRES = {
+  f:{n:'마법·판타지',e:'🪄',d:'마법사, 신비한 세계',c:['#5b3fa8','#2b1d63']},
+  m:{n:'미래 세계의 비밀',e:'🛸',d:'완벽해 보이는 세상 뒤의 진실',c:['#1f6f8b','#0f2a4a']},
+  d:{n:'추리·모험',e:'🔍',d:'수수께끼, 탐험, 탈출',c:['#b5562f','#4a1f25']},
+  s:{n:'우정·학교',e:'🎒',d:'친구, 반, 학교 이야기',c:['#e0789a','#6a2d5c']},
+  h:{n:'웃기고 재밌는',e:'😆',d:'깔깔 웃게 되는 이야기',c:['#f0a93b','#a3471f']},
+  g:{n:'감동·성장',e:'🌱',d:'마음이 쑥 자라는 이야기',c:['#3f9a6b','#16413a']},
+  a:{n:'동물 친구',e:'🐾',d:'동물이 주인공인 이야기',c:['#7d9a3a','#2f4419']},
+  y:{n:'역사·옛날',e:'🏯',d:'옛날 시대 이야기',c:['#9a6a3a','#3d2614']}
 };
-const nfc=t=>{ try{ return String(t).normalize('NFC'); }catch(e){ return String(t); } };
-const esc=s=>nfc(s??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
-// 받침에 따라 "으로/로"를 골라요 (ㄹ 받침은 "로")
-function ie(word){
-  const ch=nfc(word).trim().slice(-1), code=ch.charCodeAt(0)-0xAC00;
-  if(code<0||code>11171) return '이에요';
-  return code%28===0?'예요':'이에요';
-}
-function ro(word){
-  const ch=nfc(word).trim().slice(-1), code=ch.charCodeAt(0)-0xAC00;
-  if(code<0||code>11171) return '(으)로';
-  const jong=code%28;
-  return (jong===0||jong===8)?'로':'으로';
-}
-function show(id){ document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id)); window.scrollTo(0,0); }
+const MOODS = {
+  b:{n:'기분 좋고 신나게',e:'☀️',d:'밝고 유쾌한 책'},
+  t:{n:'두근두근 조마조마',e:'💓',d:'다음 장이 궁금한 책'},
+  k:{n:'곰곰이 생각하게',e:'🤔',d:'읽고 나서 생각이 많아지는 책'},
+  w:{n:'마음이 뭉클하게',e:'🥹',d:'따뜻하고 찡한 책'}
+};
+const LEVELS = {
+  1:{n:'술술 읽히는 책',e:'🍃',d:'초등학생이 읽기 편한 책'},
+  2:{n:'조금 도전해 볼래',e:'⛰️',d:'초등 고학년~중학생 책까지'},
+  3:{n:'두꺼운 책도 OK',e:'🏔️',d:'중학생 이상 책까지 모두'}
+};
 
-/* 큰 화면에서는 앱을 통째로 키워요 (휴대폰에서는 그대로) */
-function fitScreen(){
-  const w=window.innerWidth, h=window.innerHeight;
-  let z=1;
-  if(w>=700) z=Math.max(1, Math.min(h/820, w/520, 2.4));
-  document.documentElement.style.setProperty('--z', z.toFixed(3));
-}
-fitScreen(); window.addEventListener('resize',fitScreen);
+// ── 책장: [제목, 지은이, 장르, 기분, 수준, 줄거리, 그림] ──
+const RAW = [
+["기억 전달자","로이스 로리","mg","k",2,"아픔도 색깔도 없는 '완벽한' 마을. 열두 살 조너스는 마을의 모든 기억을 물려받는 일을 맡게 되고, 그 완벽함 뒤에 숨은 진실을 알게 돼요.","🍎"],
+["파랑","로이스 로리","mg","k",2,"《기억 전달자》 다음 이야기. 다리가 불편한 소녀 키라는 놀라운 수놓기 솜씨 덕분에 마을 어른들에게 불려 가고, 마을의 비밀을 하나씩 알아가요.","🧵"],
+["별을 헤아리며","로이스 로리","ygs","tw",2,"1943년 덴마크. 열 살 안네마리는 나치에게 쫓기는 유대인 친구 엘렌을 지키기 위해 용기를 내요.","⭐"],
+["페인트","이희영","mg","k",3,"나라가 아이를 키우는 미래. 열일곱 살 제누는 자신을 입양할 부모를 직접 면접 보며 '좋은 부모란 뭘까' 고민해요.","🎨"],
+["다윈 영의 악의 기원","박지리","md","k",3,"사는 구역에 따라 계급이 나뉜 미래 도시. 모범생 다윈은 아버지와 할아버지에게 얽힌 오래된 사건의 진실을 파헤치게 돼요.","🏛️"],
+["시티 오브 엠버","잔 뒤프라우","md","t",2,"전등 불빛에만 기대 사는 지하 도시 엠버. 불이 자꾸 꺼지자 리나와 둔은 오래전 남겨진 수수께끼 같은 안내문을 해독해요.","💡"],
+["헝거 게임","수잔 콜린스","md","t",3,"독재 국가 판엠에서 열리는 생존 경기. 동생 대신 참가한 캣니스가 살아남기 위해 싸워요. (싸우는 장면이 많아 중학생 이상 추천)","🏹"],
+["메이즈 러너","제임스 대시너","md","t",3,"기억을 잃은 채 거대한 미로 한가운데서 눈뜬 토머스. 소년들과 함께 미로의 비밀을 풀고 탈출하려 해요.","🌀"],
+["엔더의 게임","오슨 스콧 카드","md","tk",3,"외계 침공에 대비해 천재 아이들을 훈련하는 우주 전투 학교. 어린 엔더는 그곳에서 누구보다 뛰어난 지휘관이 되어 가요.","🚀"],
+["동물 농장","조지 오웰","ma","k",2,"동물들이 사람을 쫓아내고 모두가 평등한 농장을 만들지만, 돼지들이 점점 옛 주인처럼 변해 가요.","🐷"],
+["와일드 로봇","피터 브라운","mag","w",1,"무인도에 떨어진 로봇 로즈. 야생 동물들 사이에서 살아남는 법을 배우고, 아기 거위의 엄마가 되어요.","🤖"],
+["시간의 주름","매들렌 렝글","fmd","t",2,"사라진 과학자 아빠를 찾아 메그와 동생 찰스 월리스가 시공간을 '접어' 먼 행성으로 떠나요.","🌌"],
+["모모","미하엘 엔데","fg","k",2,"사람들의 시간을 몰래 훔치는 회색 신사들. 남의 이야기를 정말 잘 들어주는 소녀 모모가 시간을 되찾으러 나서요.","⏳"],
+["끝없는 이야기","미하엘 엔데","fd","t",2,"책을 몰래 읽던 바스티안은 어느새 책 속 환상의 나라 판타지엔을 구하는 주인공이 되어 버려요.","📖"],
+["해리 포터와 마법사의 돌","J.K. 롤링","fsd","t",1,"열한 살 생일, 해리는 자신이 마법사라는 걸 알고 호그와트 마법 학교에 입학해요.","⚡"],
+["사자와 마녀와 옷장","C.S. 루이스","fd","t",1,"《나니아 연대기》 이야기. 낡은 옷장 안으로 들어간 네 남매가 영원한 겨울에 갇힌 나라 나니아를 구하러 나서요.","❄️"],
+["호빗","J.R.R. 톨킨","fd","t",2,"집을 좋아하는 호빗 빌보가 난쟁이들과 함께 용에게 빼앗긴 보물을 찾으러 먼 길을 떠나요.","💍"],
+["퍼시 잭슨과 번개 도둑","릭 라이어던","fdh","tb",1,"사고뭉치 퍼시는 알고 보니 그리스 신의 아들! 사라진 제우스의 번개를 찾아 모험을 떠나요.","🌊"],
+["황금 나침반","필립 풀먼","fd","t",2,"모든 사람 곁에 동물 모습의 영혼 '데몬'이 있는 세계. 라이라는 사라진 친구를 찾아 북극으로 떠나요.","🧭"],
+["달러구트 꿈 백화점","이미예","fg","w",2,"잠든 사람들이 꿈을 사러 오는 신비한 백화점. 신입 직원 페니가 손님들의 꿈과 사연을 만나요.","🌙"],
+["이상한 과자 가게 전천당","히로시마 레이코","fd","t",1,"운 좋은 손님만 찾을 수 있는 과자 가게. 소원을 이뤄 주는 과자지만, 먹는 방법을 안 지키면 큰일이 나요!","🍬"],
+["어린 왕자","생텍쥐페리","fg","kw",1,"사막에 불시착한 비행사가 작은 별에서 온 어린 왕자를 만나, 정말 소중한 것이 무엇인지 이야기 나눠요.","🌹"],
+["시간 가게","이나영","fsg","k",1,"1등을 하고 싶은 윤아는 시간을 살 수 있는 신기한 가게를 찾아가요. 그런데 시간을 사려면 대가가 필요했어요.","⏰"],
+["마법의 시간여행","메리 폽 어즈번","fdy","tb",1,"숲속 나무 위 오두막의 책을 펼치면 그 시대로 쓩! 잭과 애니 남매의 시간 여행 시리즈예요.","🌳"],
+["미오, 나의 미오","아스트리드 린드그렌","fdg","tw",1,"외로운 소년 보세는 사실 머나먼 나라의 왕자 미오였어요. 친구 윰윰과 함께 무서운 기사 카토와 맞서요.","🐎"],
+["사자왕 형제의 모험","아스트리드 린드그렌","fdg","w",1,"형 요나탄과 동생 칼이 신비한 나라 낭기열라에서 다시 만나, 폭군에 맞서 싸워요.","🗡️"],
+["산적의 딸 로냐","아스트리드 린드그렌","fds","tb",1,"산적 두목의 딸 로냐는 원수 집안의 아들 비르크와 친구가 되어 숲에서 함께 살아가요.","🌲"],
+["고양이 전사들","에린 헌터","fad","t",1,"집고양이 러스티가 숲속 고양이 부족에 들어가 용감한 전사로 자라나요.","🐈"],
+["내 친구 꼬마 거인","로알드 달","fh","b",1,"한밤중에 소피를 데려간 거인은 알고 보니 아이들에게 좋은 꿈을 불어 넣어 주는 착한 거인이었어요.","🫧"],
+["마녀를 잡아라","로알드 달","fhd","tb",1,"아이들을 몽땅 없애려는 마녀들의 회의를 엿들은 소년이 할머니와 함께 마녀들에 맞서요.","🧙"],
+["찰리와 초콜릿 공장","로알드 달","fh","b",1,"황금 티켓을 얻은 가난한 소년 찰리가 윌리 웡카의 신기한 초콜릿 공장을 구경해요.","🍫"],
+["마틸다","로알드 달","hsf","b",1,"책을 사랑하는 천재 소녀 마틸다가 특별한 힘으로 무서운 교장 선생님을 혼내 줘요.","📚"],
+["이상한 나라의 앨리스","루이스 캐럴","fh","b",1,"시계를 든 흰 토끼를 따라 굴에 빠진 앨리스가 이상하고 엉뚱한 나라를 여행해요.","🐇"],
+["오즈의 마법사","L. 프랭크 바움","fd","b",1,"회오리바람에 날아간 도로시가 허수아비, 양철 나무꾼, 겁쟁이 사자와 함께 오즈를 찾아가요.","🌪️"],
+["피터 팬","J.M. 배리","fd","t",1,"영원히 자라지 않는 소년 피터 팬을 따라 웬디 남매가 네버랜드로 날아가요.","🧚"],
+["원더","R.J. 팔라시오","sg","w",1,"얼굴이 남들과 다르게 태어난 어기가 처음 학교에 다니며 친구와 용기를 얻어요.","🌟"],
+["프린들 주세요","앤드루 클레먼츠","sh","b",1,"장난꾸러기 닉이 펜을 '프린들'이라고 부르기 시작하자, 새 낱말이 온 동네로 퍼져 나가요.","🖊️"],
+["스타걸","제리 스피넬리","sg","k",2,"남들과 전혀 다른 전학생 스타걸. 처음엔 인기 스타였다가 '다르다'는 이유로 따돌림을 받게 돼요.","🌻"],
+["플립","웬들린 밴 드라닌","sgh","bw",2,"첫눈에 브라이스에게 반한 줄리와, 그런 줄리가 부담스러운 브라이스. 두 사람의 눈으로 번갈아 들려주는 이야기.","💛"],
+["체리새우: 비밀글입니다","황영미","sg","k",2,"친구 무리에 끼려고 애쓰던 중학생 다현이 진짜 친구와 '나다움'을 찾아가요.","🦐"],
+["완득이","김려령","sgh","bw",3,"싸움만 잘하던 고등학생 완득이가 독특한 담임 '똥주'와 킥복싱을 만나 조금씩 달라져요.","🥊"],
+["아몬드","손원평","gs","k",3,"감정을 잘 느끼지 못하는 소년 윤재가 거친 친구 곤이를 만나며 마음을 배워 가요. (조금 무거운 장면이 있어요)","🌰"],
+["소리 질러, 운동장","진형민","sh","b",1,"야구부에서 쫓겨난 아이들이 '막야구부'를 만들어 운동장을 지켜 내요.","⚾"],
+["기호 3번 안석뽕","진형민","sh","b",1,"얼떨결에 전교 어린이 회장 선거에 나간 석뽕이의 좌충우돌 선거 이야기.","🗳️"],
+["잘못 뽑은 반장","이은재","sh","b",1,"말썽꾸러기 이로운이 덜컥 반장이 되면서 벌어지는 웃기고 따뜻한 이야기.","🎖️"],
+["만복이네 떡집","김리리","fhs","b",1,"입만 열면 나쁜 말이 튀어나오는 만복이가 신기한 떡집의 떡을 먹고 변해 가요.","🍡"],
+["수일이와 수일이","김우경","fs","t",1,"손톱을 먹은 쥐가 수일이로 변신! 가짜 수일이에게 자리를 뺏긴 진짜 수일이의 이야기.","🐭"],
+["나쁜 어린이 표","황선미","sg","w",1,"선생님께 '나쁜 어린이 표'를 자꾸 받는 건우가 억울한 마음을 털어놓아요.","🎫"],
+["빨강 연필","신수현","fsg","k",1,"무엇이든 술술 써 주는 빨강 연필을 얻은 민호. 그런데 연필이 쓴 글이 진짜 내 글일까요?","✏️"],
+["짜장면 불어요!","이현","shg","b",2,"중국집 배달부 기삼이 형의 거침없는 입담이 빛나는, 웃기고도 짠한 이야기 모음.","🍜"],
+["윔피 키드","제프 키니","sh","b",1,"중학생 그레그의 그림일기! 형, 친구, 학교 때문에 매일 생기는 웃픈 사건들.","📓"],
+["꼬마 니콜라","르네 고시니","sh","b",1,"개구쟁이 니콜라와 친구들이 학교와 동네에서 벌이는 엉뚱한 소동들.","🎒"],
+["내 이름은 삐삐 롱스타킹","아스트리드 린드그렌","hd","b",1,"말도 번쩍 드는 세상에서 가장 힘센 소녀 삐삐의 제멋대로 신나는 하루하루.","🎀"],
+["고양이 해결사 깜냥","홍민정","ahd","b",1,"아파트에 나타난 고양이 깜냥이 경비 일을 하며 주민들의 문제를 척척 해결해요.","🐱"],
+["스무고개 탐정","허교범","ds","t",1,"질문 스무 번이면 범인을 찾아내는 소년 탐정과 친구들의 학교 추리 이야기.","🔎"],
+["에밀과 탐정들","에리히 캐스트너","ds","tb",1,"기차에서 돈을 도둑맞은 에밀이 베를린 아이들과 힘을 모아 도둑을 쫓아요.","🕵️"],
+["클로디아의 비밀","E.L. 코닉스버그","ds","t",1,"클로디아와 동생 제이미가 집을 나와 뉴욕의 큰 미술관에 숨어 살며 조각상의 비밀을 풀어요.","🗿"],
+["레모니 스니켓의 위험한 대결","레모니 스니켓","dh","t",2,"부모를 잃은 보들레어 세 남매가 재산을 노리는 올라프 백작에게서 꾀를 내 도망쳐요.","🕯️"],
+["셜록 홈즈: 주홍색 연구","아서 코난 도일","d","t",2,"명탐정 셜록 홈즈와 왓슨 박사가 처음 만나 함께 푸는 수수께끼 같은 사건.","🎩"],
+["괴도 뤼팽","모리스 르블랑","dh","t",2,"변장의 천재이자 신사 도둑 아르센 뤼팽의 기막힌 모험.","🎭"],
+["구덩이","루이스 새커","dhg","t",2,"억울하게 소년 캠프에 간 스탠리는 매일 구덩이를 파다가, 저주와 보물에 얽힌 비밀을 알게 돼요.","🕳️"],
+["웨이사이드 학교 별난 아이들","루이스 새커","shf","b",1,"30층짜리 이상한 학교, 꼭대기 반 아이들의 뒤죽박죽 웃긴 이야기.","🏫"],
+["손도끼","게리 폴슨","dg","t",2,"비행기 사고로 숲에 홀로 남은 브라이언이 손도끼 하나로 살아남아요.","🪓"],
+["15소년 표류기","쥘 베른","ds","t",1,"무인도에 떠밀려 온 열다섯 소년이 힘을 합쳐 2년 동안 살아남는 이야기.","🏝️"],
+["보물섬","로버트 루이스 스티븐슨","d","t",1,"보물 지도를 얻은 소년 짐이 해적 실버와 함께 보물섬으로 항해해요.","🏴‍☠️"],
+["톰 소여의 모험","마크 트웨인","dhs","bt",1,"장난꾸러기 톰이 친구 허크와 함께 강가 마을에서 신나는 모험을 벌여요.","🛶"],
+["80일간의 세계 일주","쥘 베른","dh","t",1,"80일 안에 세계를 한 바퀴 돌 수 있다는 내기를 건 포그 씨의 숨 가쁜 여행.","🎈"],
+["해저 2만 리","쥘 베른","dm","t",2,"신비한 잠수함 노틸러스호에 타게 된 사람들이 네모 선장과 바닷속을 여행해요.","🐙"],
+["마당을 나온 암탉","황선미","ag","w",1,"알을 품고 싶은 암탉 잎싹이 마당을 나와 아기 청둥오리를 키워요.","🐔"],
+["긴긴밤","루리","ag","w",1,"마지막 흰바위코뿔소 노든과 어린 펭귄이 바다를 찾아 함께 걸어가는 이야기.","🦏"],
+["푸른 사자 와니니","이현","adg","tw",1,"무리에서 쫓겨난 작은 암사자 와니니가 친구들과 초원에서 살아남으며 자라요.","🦁"],
+["샬롯의 거미줄","E.B. 화이트","asg","w",1,"잡아먹힐 위기의 돼지 윌버를 구하려고 거미 샬롯이 거미줄에 글자를 써요.","🕸️"],
+["화요일의 두꺼비","러셀 에릭슨","as","w",1,"올빼미에게 잡혀 화요일에 먹히게 된 두꺼비 워턴. 그런데 둘 사이에 우정이 싹터요.","🐸"],
+["꽃들에게 희망을","트리나 폴러스","ag","k",1,"남들을 따라 애벌레 기둥을 오르던 줄무늬 애벌레가 진짜 꿈을 찾아가요.","🐛"],
+["빨간 머리 앤","루시 모드 몽고메리","gsh","bw",1,"수다쟁이 상상꾸러기 앤이 초록 지붕 집에 살며 사랑받는 이야기.","🍓"],
+["작은 아씨들","루이자 메이 올컷","gs","w",2,"성격이 다 다른 네 자매 메그, 조, 베스, 에이미가 함께 자라는 이야기.","💌"],
+["비밀의 화원","프랜시스 호지슨 버넷","gd","w",1,"외로운 메리가 큰 저택에서 잠긴 정원을 발견하고, 친구들과 함께 정원을 되살려요.","🗝️"],
+["키다리 아저씨","진 웹스터","gh","bw",1,"주디가 자신을 대학에 보내 준 얼굴 모르는 후원자에게 편지를 쓰며 자라요.","✉️"],
+["나의 라임 오렌지나무","J.M. 바스콘셀로스","g","w",2,"가난한 집 다섯 살 장난꾸러기 제제가 라임 오렌지나무와 뽀르뚜가 아저씨에게 마음을 나눠요.","🍊"],
+["리버보이","팀 보울러","gf","wk",2,"할아버지와 함께 강가 마을에 간 제스가 신비한 소년을 만나며 이별을 배워 가요.","🏞️"],
+["몬스터 콜스","패트릭 네스","fg","wk",3,"아픈 엄마와 사는 코너에게 매일 밤 나무 괴물이 찾아와 이야기를 들려줘요.","🌑"],
+["하이디","요한나 슈피리","gs","bw",1,"알프스 할아버지와 사는 하이디가 친구 클라라와 함께하는 따뜻한 이야기.","🏔️"],
+["초정리 편지","배유안","yg","w",1,"석수장이 소년 장운이 눈이 아픈 할아버지에게 새 글자를 배우는데, 그 할아버지의 정체는…?","📜"],
+["책과 노니는 집","이영서","ygd","tw",1,"조선 시대에 책을 베껴 쓰는 소년 장이가 비밀스러운 책에 얽힌 사건을 겪어요.","🏮"],
+["안네의 일기","안네 프랑크","yg","kw",2,"나치를 피해 숨어 살던 열세 살 안네가 2년 넘게 쓴 진짜 일기.","📔"],
+["앵무새 죽이기","하퍼 리","ygs","k",3,"미국 남부의 작은 마을. 소녀 스카웃은 억울한 누명을 쓴 사람을 변호하는 아빠를 보며 정의를 배워요.","🐦"],
+["합체","박지리","shg","b",3,"키 작은 쌍둥이 합과 체가 키 크는 비법을 배우러 산으로 수련을 떠나요.","🏀"],
+["불량한 자전거 여행","김남중","dg","tw",2,"집을 나온 호진이가 삼촌의 자전거 여행단을 따라 길을 달리며 마음이 자라요.","🚲"]
+];
+const COVERS = {"0":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F615571%3Ftimestamp%3D20261024111022","1":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5446629%3Ftimestamp%3D20260429141735","2":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6598099%3Ftimestamp%3D20260915122440","3":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F4930111%3Ftimestamp%3D20261028114232","4":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F776654%3Ftimestamp%3D20260113110817","5":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1039873%3Ftimestamp%3D20221025155216","6":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F545649%3Ftimestamp%3D20251213110805","7":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1170760%3Ftimestamp%3D20230804152634","8":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1474348%3Ftimestamp%3D20241001114428","9":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540771%3Ftimestamp%3D20261020110946","10":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F4994242%3Ftimestamp%3D20260327115001","11":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1410980%3Ftimestamp%3D20211228194606","12":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F616146%3Ftimestamp%3D20241221113358","13":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F615633%3Ftimestamp%3D20261008110743","14":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6812119%3Ftimestamp%3D20250425204447","15":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F641964%3Ftimestamp%3D20240718113140","16":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5599178%3Ftimestamp%3D20260129142321","17":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1170818%3Ftimestamp%3D20220930204606","18":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1385687%3Ftimestamp%3D20190128070322","19":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5416922%3Ftimestamp%3D20260701140519","20":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6218367%3Ftimestamp%3D20261030121413","21":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F507587%3Ftimestamp%3D20251119111036","22":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F691707%3Ftimestamp%3D20260910111557","23":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F616245%3Ftimestamp%3D20190124011844","24":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F227886%3Ftimestamp%3D20251205134654","25":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F533305%3Ftimestamp%3D20260917111039","26":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F4806545%3Ftimestamp%3D20250701121854","27":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F520286%3Ftimestamp%3D20220904162553","28":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F644654%3Ftimestamp%3D20250606113129","29":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F3782320%3Ftimestamp%3D20260826111058","30":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F4872939%3Ftimestamp%3D20260123123906","31":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F3750903%3Ftimestamp%3D20260917111053","32":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F7339945%3Ftimestamp%3D20261030121620","33":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1333326%3Ftimestamp%3D20240122192825","34":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F643516%3Ftimestamp%3D20221025150430","35":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6525444%3Ftimestamp%3D20260319124436","36":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F992864%3Ftimestamp%3D20261031111340","37":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1304693%3Ftimestamp%3D20250809110115","38":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F857357%3Ftimestamp%3D20260401110954","39":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F4869344%3Ftimestamp%3D20260312124440","40":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F532555%3Ftimestamp%3D20251227110832","41":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F532619%3Ftimestamp%3D20231124191358","42":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F533074%3Ftimestamp%3D20260421110824","43":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F532849%3Ftimestamp%3D20260910111553","44":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F519429%3Ftimestamp%3D20251129110907","45":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F615502%3Ftimestamp%3D20260913110927","46":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1125260%3Ftimestamp%3D20260929111113","47":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6551176%3Ftimestamp%3D20260516121619","48":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F615767%3Ftimestamp%3D20260321110644","49":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F532999%3Ftimestamp%3D20260624111117","50":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F3522662%3Ftimestamp%3D20240105175530","51":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1025665%3Ftimestamp%3D20190126121355","52":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F644927%3Ftimestamp%3D20200404131148","53":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5329149%3Ftimestamp%3D20260430120715","54":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F616604%3Ftimestamp%3D20260511110655","55":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F640821%3Ftimestamp%3D20250924110506","56":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F616155%3Ftimestamp%3D20240618113614","58":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F348303%3Ftimestamp%3D20260613110704","59":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5596782%3Ftimestamp%3D20230627164533","60":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F533701%3Ftimestamp%3D20260601111306","62":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F994268%3Ftimestamp%3D20260517111319","63":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6538487%3Ftimestamp%3D20261017121527","64":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F351183%3Ftimestamp%3D20240702113436","65":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F540969%3Ftimestamp%3D20260808110842","66":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F388454%3Ftimestamp%3D20240122201521","67":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1010645%3Ftimestamp%3D20251024110256","68":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F992873%3Ftimestamp%3D20260421110857","69":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5589770%3Ftimestamp%3D20260313123852","70":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F533078%3Ftimestamp%3D20260807121229","71":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F3938431%3Ftimestamp%3D20260510113333","72":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F776990%3Ftimestamp%3D20260910111602","73":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F647468%3Ftimestamp%3D20261030111022","74":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F5905331%3Ftimestamp%3D20250710142132","75":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1443191%3Ftimestamp%3D20220929015039","76":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F596901%3Ftimestamp%3D20221108012056","77":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F4895474%3Ftimestamp%3D20220901163402","78":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F1011622%3Ftimestamp%3D20260307110833","79":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6627351%3Ftimestamp%3D20260827124514","80":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F349715%3Ftimestamp%3D20260826111015","81":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F7300930%3Ftimestamp%3D20260909124432","82":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F534100%3Ftimestamp%3D20260409110626","83":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F690338%3Ftimestamp%3D20260207110832","84":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6498071%3Ftimestamp%3D20250802143051","85":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F507101%3Ftimestamp%3D20260228111030","86":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F776462%3Ftimestamp%3D20261030111031","87":"https://search1.kakaocdn.net/thumb/R120x174.q85/?fname=http%3A%2F%2Ft1.daumcdn.net%2Flbook%2Fimage%2F6802754%3Ftimestamp%3D20260923144648"};
+const BOOKS = RAW.map((r,i)=>({id:i,t:r[0],a:r[1],g:r[2].split(''),m:r[3].split(''),l:r[4],s:r[5],e:r[6]}));
 
-/* 별 */
-(function(){ let h=''; for(let i=0;i<70;i++){ const s=Math.random()<.15?2.6:1.6;
-  h+=`<i style="left:${(Math.random()*100).toFixed(1)}%;top:${(Math.random()*100).toFixed(1)}%;width:${s}px;height:${s}px;animation-delay:${(Math.random()*4).toFixed(2)}s"></i>`; }
-  $('stars').innerHTML=h; })();
+// 책장에 없지만 종류를 알려 줄 수 있는 책
+const KNOWN = {"멋진신세계":"mk","1984":"mk","다이버전트":"mdt","해리포터":"fsdt","나니아연대기":"fdt","우리가빛의속도로갈수없다면":"mk","반지의제왕":"fdt","셜록홈즈":"dt","위저드베이커리":"fk"};
 
-/* =========================================================
-   교문 그림
-   ========================================================= */
-$('gateArt').innerHTML=`
-<svg viewBox="0 0 360 300" role="img" aria-label="은하수가 흐르는 밤하늘 아래 銀河水 현판이 걸린 학교 교문">
-  <path d="M-10 120 Q 120 40 370 10 L 370 60 Q 140 80 -10 170 Z" fill="#2B3280" opacity=".55"/>
-  <g fill="#FFF6DC" opacity=".8">
-    ${Array.from({length:40},()=>{const t=Math.random();const x=-10+t*380;const y=150-t*125+(Math.random()-.5)*55;return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(Math.random()*1.2+.4).toFixed(1)}"/>`;}).join('')}
-  </g>
-  <path d="M40 300 L40 170 L90 130 L140 170 L140 120 L180 84 L220 120 L220 170 L270 130 L320 170 L320 300 Z" fill="#1E2463"/>
-  <g fill="#E9C46A" opacity=".85">
-    <rect x="64" y="200" width="14" height="20" rx="7"/><rect x="102" y="200" width="14" height="20" rx="7"/>
-    <rect x="160" y="140" width="14" height="20" rx="7"/><rect x="186" y="140" width="14" height="20" rx="7"/>
-    <rect x="244" y="200" width="14" height="20" rx="7"/><rect x="282" y="200" width="14" height="20" rx="7"/>
-  </g>
-  <circle cx="180" cy="110" r="6" fill="#E9C46A"/>
-  <rect x="58" y="176" width="26" height="124" fill="#2C3474" stroke="#3E478F" stroke-width="2"/>
-  <rect x="276" y="176" width="26" height="124" fill="#2C3474" stroke="#3E478F" stroke-width="2"/>
-  <circle cx="71" cy="170" r="10" fill="#E9C46A"/><circle cx="289" cy="170" r="10" fill="#E9C46A"/>
-  <path d="M58 196 Q 180 150 302 196 L302 210 Q 180 166 58 210 Z" fill="#2C3474" stroke="#3E478F" stroke-width="2"/>
-  <rect x="118" y="148" width="124" height="46" rx="6" fill="#3A2A20" stroke="#E9C46A" stroke-width="2.5"/>
-  <text x="180" y="182" text-anchor="middle" font-family="Noto Serif KR,serif" font-weight="900" font-size="30" fill="#E9C46A" letter-spacing="6">銀河水</text>
-  <path d="M84 300 L84 236 Q 180 206 276 236 L276 300" fill="#12163A"/>
-  <path d="M0 290 Q 180 276 360 290 L360 300 L0 300 Z" fill="#232A66"/>
-</svg>`;
+// ── 상태 ──
+let favs=[], misses=[], selG=new Set(), selM=new Set(), selL=2, shown=new Set(), likes=new Set();
+try{ likes=new Set(JSON.parse(localStorage.getItem('starLikes')||'[]')); }catch(e){}
+function saveLikes(){ try{localStorage.setItem('starLikes',JSON.stringify([...likes]))}catch(e){} }
 
-/* =========================================================
-   흐름
-   ========================================================= */
-let pick=0, useMine=false;
-let ST=LS.get('mirinae_v1');   // {char, name, date}
-
-$('bEnter').onclick=()=>{ paintPick(); show('sPick'); };
-
-/* 친구 고르기 */
-function paintPick(){
-  const c=CH[pick];
-  $('pPic').innerHTML=drawChar(c);
-  $('pName').textContent=c.n;
-  $('pTag').textContent=c.t; $('pTag').style.color=c.c;
-  $('pCard').innerHTML=`
-    <div class="row"><b>생김새</b><span>${c.look}</span></div>
-    <div class="row"><b>장점</b><span>${c.good}</span></div>
-    <div class="row"><b>단점</b><span>${c.bad}</span></div>
-    <div class="row"><b>좋아해요</b><span>${c.like}</span></div>
-    <div class="row"><b>첫 주문</b><span><span class="hz" style="font-size:18px">${c.hz}</span> ${c.hun}</span></div>`;
-  $('pDots').innerHTML=CH.map((_,k)=>`<i class="${k===pick?'on':''}"></i>`).join('');
-  $('bChoose').textContent=`${c.n}${ro(c.n)} 입학하기`;
-}
-$('bPrev').onclick=()=>{ pick=(pick+CH.length-1)%CH.length; paintPick(); };
-$('bNext').onclick=()=>{ pick=(pick+1)%CH.length; paintPick(); };
-// 손가락으로 밀어서 넘기기
-(function(){ let x0=null;
-  $('pPic').addEventListener('pointerdown',e=>{ x0=e.clientX; });
-  $('pPic').addEventListener('pointerup',e=>{ if(x0===null) return; const d=e.clientX-x0; x0=null;
-    if(Math.abs(d)>40){ pick=(pick+(d<0?1:CH.length-1))%CH.length; paintPick(); } });
+// ── 별 배경 ──
+(function(){
+  const s=document.getElementById('stars');
+  for(let i=0;i<140;i++){
+    const d=document.createElement('div');d.className='star';
+    const z=Math.random()*2.2+.6;
+    d.style.cssText=`width:${z}px;height:${z}px;left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${Math.random()*3}s;animation-duration:${2+Math.random()*3}s`;
+    s.appendChild(d);
+  }
+  const sh=document.createElement('div');sh.className='shoot';sh.style.cssText='top:12%;left:80%';s.appendChild(sh);
 })();
-$('bChoose').onclick=()=>{ useMine=false; paintName(); show('sName'); };
 
-/* 이름 정하기 */
-function paintName(){
-  const c=CH[pick];
-  $('nPic').innerHTML=drawChar(c);
-  $('oKeepT').textContent=`"${c.n}" 그대로 쓸래요`;
-  $('oKeep').classList.toggle('on',!useMine);
-  $('oMine').classList.toggle('on',useMine);
-  $('nInput').style.display=useMine?'block':'none';
-  $('nErr').textContent='';
+// ── 화면 이동 ──
+function go(id){
+  document.querySelectorAll('.screen').forEach(x=>x.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
-$('oKeep').onclick=()=>{ useMine=false; paintName(); };
-$('oMine').onclick=()=>{ useMine=true; paintName(); setTimeout(()=>$('nInput').focus(),50); };
-$('nInput').addEventListener('input',()=>{ $('nErr').textContent=''; });
-$('bBackPick').onclick=()=>{ paintPick(); show('sPick'); };
-$('bDone').onclick=()=>{
-  const c=CH[pick];
-  let name=c.n;
-  if(useMine){
-    name=[...nfc($('nInput').value).trim()].slice(0,8).join('');
-    if(!name){ $('nErr').textContent='이름을 적어주세요.'; $('nInput').focus(); return; }
+function startQuiz(){ shown.clear(); go('s-q1'); setTimeout(()=>document.getElementById('favIn').focus(),300); }
+
+// ── 선택 칩 ──
+function chips(el,obj,set,single){
+  const box=document.getElementById(el);box.innerHTML='';
+  Object.entries(obj).forEach(([k,v])=>{
+    const b=document.createElement('button');b.className='chip';
+    b.innerHTML=`<span class="em">${v.e}</span><b>${v.n}</b><span>${v.d}</span>`;
+    const isSel=()=>single?String(selL)===k:set.has(k);
+    if(isSel())b.classList.add('sel');
+    b.onclick=()=>{
+      if(single){selL=+k;box.querySelectorAll('.chip').forEach(c=>c.classList.remove('sel'));b.classList.add('sel');}
+      else{set.has(k)?set.delete(k):set.add(k);b.classList.toggle('sel');}
+    };
+    box.appendChild(b);
+  });
+}
+chips('genreChips',GENRES,selG);
+chips('moodChips',MOODS,selM);
+chips('levelChips',LEVELS,null,true);
+
+// ── 좋아하는 책 입력 ──
+const norm=s=>s.replace(/[\s:·,!?《》\-]/g,'').toLowerCase();
+function findBook(q){
+  const n=norm(q); if(!n)return null;
+  return BOOKS.find(b=>norm(b.t)===n) || BOOKS.find(b=>norm(b.t).includes(n)||n.includes(norm(b.t)));
+}
+function suggest(){
+  const q=norm(document.getElementById('favIn').value);const box=document.getElementById('sug');box.innerHTML='';
+  if(q.length<1)return;
+  BOOKS.filter(b=>norm(b.t).includes(q)||norm(b.a).includes(q)).slice(0,5).forEach(b=>{
+    const btn=document.createElement('button');btn.textContent=`${b.e} ${b.t} · ${b.a}`;
+    btn.onclick=()=>addFav(b.t);box.appendChild(btn);
+  });
+}
+function addFav(q){
+  q=(q||'').trim(); if(!q)return;
+  const b=findBook(q);
+  if(b){ if(!favs.includes(b.id))favs.push(b.id); }
+  else if(!misses.includes(q)) misses.push(q);
+  document.getElementById('favIn').value='';document.getElementById('sug').innerHTML='';
+  drawFavs();
+}
+function drawFavs(){
+  const box=document.getElementById('favTags');box.innerHTML='';
+  favs.forEach(id=>{const b=BOOKS[id];const t=document.createElement('span');t.className='tag';
+    t.innerHTML=`${b.e} ${b.t}<button aria-label="빼기">✕</button>`;t.querySelector('button').onclick=()=>{favs=favs.filter(x=>x!==id);drawFavs();};box.appendChild(t);});
+  misses.forEach(q=>{const t=document.createElement('span');t.className='tag miss';
+    const k=KNOWN[norm(q)];
+    t.innerHTML=`${q} <small>${k?'· 책장엔 없지만 비슷한 종류로 찾을게!':'· 아직 책장에 없는 책이야'}</small><button aria-label="빼기">✕</button>`;
+    t.querySelector('button').onclick=()=>{misses=misses.filter(x=>x!==q);drawFavs();};box.appendChild(t);});
+}
+
+// ── 추천 계산 ──
+function score(b){
+  let sc=0, why=[];
+  const fg={},fm={},fa=new Set();
+  favs.forEach(id=>{const f=BOOKS[id];f.g.forEach(x=>fg[x]=(fg[x]||0)+1);f.m.forEach(x=>fm[x]=(fm[x]||0)+1);fa.add(f.a);});
+  misses.forEach(q=>{const k=KNOWN[norm(q)];if(k)k.split('').forEach(x=>{if(GENRES[x])fg[x]=(fg[x]||0)+1;if(MOODS[x])fm[x]=(fm[x]||0)+1;});});
+  const gHit=b.g.filter(x=>selG.has(x)); sc+=gHit.length*3;
+  if(gHit.length)why.push(`네가 좋아하는 <b>${gHit.map(x=>GENRES[x].n).join(', ')}</b> 이야기야.`);
+  const mHit=b.m.filter(x=>selM.has(x)); sc+=mHit.length*2;
+  if(mHit.length)why.push(`읽고 나면 <b>${MOODS[mHit[0]].n}</b> 될 거야.`);
+  let fs=0; b.g.forEach(x=>fs+=(fg[x]||0)*2.5); b.m.forEach(x=>fs+=(fm[x]||0)*1.5); sc+=fs;
+  if(fs>0&&(favs.length||misses.length)){
+    const names=[...favs.map(id=>BOOKS[id].t),...misses.filter(q=>KNOWN[norm(q)])];
+    if(names.length)why.push(`《${names[0]}》${names.length>1?' 같은 책들':''}이랑 닮은 점이 있어.`);
   }
-  NEWST={char:c.id,name};
-  openLevel(false);
-};
-
-/* 급수 고르기 (입학할 때, 또는 복도에서 바꿀 때) */
-let NEWST=null, lvPick='8', lvChange=false;
-function paintLevel(){ document.querySelectorAll('#lvOpts .opt').forEach(o=>o.classList.toggle('on',o.dataset.lv===lvPick)); }
-function openLevel(change){
-  lvChange=change;
-  lvPick=change?myLevel():'8';
-  $('lvTitle').textContent=change?'급수 바꾸기':'급수 고르기';
-  $('lvNote').textContent=change?'급식실 최고 기록은 급수마다 따로 남아요':'나중에 복도에서 바꿀 수 있어요';
-  $('lvBack').textContent=change?'취소':'이전';
-  $('lvDone').textContent=change?'바꾸기':'입학 완료';
-  paintLevel(); show('sLevel');
+  if(fa.has(b.a)){sc+=3;why.push(`좋아하는 책과 <b>같은 작가</b>(${b.a})의 책이야!`);}
+  return {sc,why};
 }
-document.querySelectorAll('#lvOpts .opt').forEach(o=>o.onclick=()=>{ lvPick=o.dataset.lv; paintLevel(); });
-$('lvBack').onclick=()=>{ if(lvChange){ paintHall(); show('sHall'); } else show('sName'); };
-$('lvDone').onclick=()=>{
-  if(lvChange){ ST.level=lvPick; LS.set('mirinae_v1',ST); paintHall(); show('sHall'); return; }
-  const d=new Date();
-  ST={...NEWST, level:lvPick, date:`${d.getFullYear()}년 ${d.getMonth()+1}월 ${d.getDate()}일`};
-  LS.set('mirinae_v1',ST);
-  paintCard(true); show('sCard');
-};
+function showResult(more){
+  if(!more)shown.clear();
+  let list=BOOKS.filter(b=>b.l<=selL && !favs.includes(b.id)).map(b=>({b,...score(b)}));
+  list.forEach(x=>x.sc+=Math.random()*1.2); // 비슷한 점수끼리는 살짝 섞기
+  list.sort((x,y)=>y.sc-x.sc);
+  let pick=list.filter(x=>!shown.has(x.b.id)).slice(0,6);
+  if(pick.length<6){shown.clear();pick=list.slice(0,6);}
+  pick.forEach(x=>shown.add(x.b.id));
+  window._why={};pick.forEach(x=>window._why[x.b.id]=x.why);
+  const parts=[];
+  if(selG.size)parts.push([...selG].map(x=>GENRES[x].n).join(' · '));
+  if(selM.size)parts.push([...selM].map(x=>MOODS[x].n).join(' · '));
+  document.getElementById('resultSub').innerHTML=(parts.length?`<b>${parts.join(' / ')}</b><br>`:'')+'별을 하나 눌러서 줄거리를 읽어 봐 🌠';
+  const g=document.getElementById('resultGrid');g.innerHTML='';
+  pick.forEach((x,i)=>g.appendChild(bookEl(x.b,i+1)));
+  go('s-result');
+}
 
-/* 학생증 */
-function curChar(){ return CH.find(x=>x.id===ST.char)||CH[0]; }
-function cardHTML(){
-  const c=curChar();
-  return `
-    <div class="idtop"><b>미리내 마법학교 학생증</b><span class="hz">銀河水</span></div>
-    <div class="idbody">
-      <div class="idphoto">${drawChar(c,ST.name)}</div>
-      <div class="idinfo">
-        <span class="k">이름</span><span class="v">${esc(ST.name)}</span>
-        <span class="k">학년 · 급수</span><span class="v">1학년 · ${myLevel()}급</span>
+// ── 표지 그리기 ──
+function seed(n){let x=Math.sin(n*99.1)*10000;return x-Math.floor(x);}
+function coverHTML(b,big){
+  const c=GENRES[b.g[0]].c; let sp='';
+  for(let i=0;i<14;i++)sp+=`<i class="sp" style="left:${seed(b.id*31+i)*100}%;top:${seed(b.id*17+i*3)*100}%;opacity:${.3+seed(i+b.id)*.6}"></i>`;
+  return `<div class="cover" style="background:linear-gradient(160deg,${c[0]},${c[1]})">${sp}
+    <div class="ce" style="${big?'font-size:60px':''}">${b.e}</div><div class="ct">${b.t}</div><div class="ca">${b.a}</div>
+    ${COVERS[b.id]?`<img class="real" src="${COVERS[b.id]}" alt="${b.t} 표지" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`:''}</div>`;
+}
+function bookEl(b,rank){
+  const d=document.createElement('div');d.className='book';
+  d.innerHTML=`<div style="position:relative">${rank?`<span class="rank">★${rank}</span>`:''}${coverHTML(b)}</div>
+    <div class="t">${b.t}</div><div class="a">${b.a}</div>`;
+  d.onclick=()=>openModal(b.id);return d;
+}
+
+// ── 상세 창 ──
+function openModal(id){
+  const b=BOOKS[id]; const why=(window._why&&window._why[id])||[];
+  const url='https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=Book&SearchWord='+encodeURIComponent(b.t+' '+b.a);
+  document.getElementById('mbox').innerHTML=`
+    <button class="close" onclick="closeModal()" aria-label="닫기">✕</button>
+    <div class="mc">${coverHTML(b,true)}</div>
+    <div>
+      <h3>${b.t}</h3><div class="au">${b.a} · ${LEVELS[b.l].n}</div>
+      <p class="sum">${b.s}</p>
+      ${why.length?`<div class="why">🌟 ${why.join('<br>🌟 ')}</div>`:''}
+      <div class="pills">${b.g.map(x=>`<span class="pill">${GENRES[x].e} ${GENRES[x].n}</span>`).join('')}${b.m.map(x=>`<span class="pill">${MOODS[x].e} ${MOODS[x].n}</span>`).join('')}</div>
+      <div class="mact">
+        <button class="heart ${likes.has(id)?'on':''}" id="heartBtn">${likes.has(id)?'♥ 찜했어':'♡ 찜하기'}</button>
+        <a href="${url}" target="_blank" rel="noopener">📕 서점에서 더 보기</a>
       </div>
-    </div>
-    <div class="idfoot"><span>입학일 ${ST.date}</span><span>${c.t}</span></div>`;
+    </div>`;
+  document.getElementById('heartBtn').onclick=e=>{
+    likes.has(id)?likes.delete(id):likes.add(id);saveLikes();
+    e.target.classList.toggle('on',likes.has(id));e.target.textContent=likes.has(id)?'♥ 찜했어':'♡ 찜하기';
+  };
+  document.getElementById('modal').classList.add('on');
 }
-function paintCard(first){
-  $('idCard').innerHTML=cardHTML();
-  $('idMsg').textContent = first
-    ? `${ST.name}님, 교문의 銀河水 세 글자를 모두 배우면 교문이 빛난대요!`
-    : '학생증을 잘 간직해요.';
-}
-$('bIn').onclick=()=>{ paintHall(); show('sHall'); };
+function closeModal(){document.getElementById('modal').classList.remove('on');}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
 
-/* 복도 */
-function paintHall(){
-  const c=curChar();
-  $('hMe').innerHTML=`<span class="face">${drawChar(c)}</span><span><b>${esc(ST.name)}</b><span>1학년 · ${myLevel()}급</span></span>`;
-}
-$('bLevel').onclick=()=>openLevel(true);
-$('bShowCard').onclick=()=>{ paintCard(false); show('sCard'); };
-$('bReset').onclick=()=>$('mReset').classList.add('on');
-$('rNo').onclick=()=>$('mReset').classList.remove('on');
-$('rYes').onclick=()=>{ $('mReset').classList.remove('on'); LS.del('mirinae_v1'); ST=null; pick=0; show('sGate'); };
-
-/* =========================================================
-   🍛 급식실 — 배식 당번
-   ========================================================= */
-// 한자 10자 (뜻과 음)
-const HZ={火:'불 화',水:'물 수',木:'나무 목',金:'쇠 금',土:'흙 토',日:'날 일',月:'달 월',山:'메 산',白:'흰 백',靑:'푸를 청'};
-// 메뉴 50가지: 한자마다 5개. kw = 빨간 글씨로 보일 핵심 낱말
-const MENU=[
-  ['火','불꽃 드래곤 함박스테이크','🍖','불꽃','불꽃은 불이니까'],
-  ['火','불타는 용암 떡볶이','🌶️','불타는','불타는 건 불이 붙은 거니까'],
-  ['火','불새 날개 치킨','🍗','불새','불새는 불로 된 새니까'],
-  ['火','불씨 마법 군고구마','🍠','불씨','불씨는 작은 불이니까'],
-  ['火','모닥불 캠프 소시지','🌭','모닥불','모닥불도 불이니까'],
-  ['水','인어공주의 샘물 에이드','🥤','샘물','샘물은 물이니까'],
-  ['水','물방울 요정 푸딩','🍮','물방울','물방울은 물이니까'],
-  ['水','물의 정령 냉면','🍜','물','물은 그대로 물이니까'],
-  ['水','빗물 요정 소다','🧃','빗물','빗물은 하늘에서 내린 물이니까'],
-  ['水','호수 물빛 수정떡','🍡','물빛','물빛은 물의 빛깔이니까'],
-  ['木','요정 숲 나뭇잎 샐러드','🥗','나뭇잎','나뭇잎은 나무에서 나니까'],
-  ['木','나무 요정 도토리묵','🌰','나무','나무는 그대로 나무니까'],
-  ['木','고목나무 정령의 버섯 수프','🍲','고목나무','고목나무는 오래된 나무니까'],
-  ['木','나무껍질 초코 롤케이크','🍫','나무껍질','나무껍질은 나무의 겉이니까'],
-  ['木','나무 열매 파이','🥧','나무 열매','나무 열매는 나무에서 열리니까'],
-  ['金','황금 드래곤 알 푸딩','🍮','황금','황금도 쇠붙이의 하나라서'],
-  ['金','금화 동전 쿠키','🍪','금화','금화는 금으로 만든 돈이라서'],
-  ['金','금덩이 치즈 케이크','🧀','금덩이','금덩이는 금 덩어리라서'],
-  ['金','금빛 달걀 볶음밥','🍚','금빛','금빛은 금의 빛깔이라서'],
-  ['金','금가루 뿌린 호떡','🥞','금가루','금가루는 금을 곱게 간 가루라서'],
-  ['土','두더지네 흙 초코케이크','🍰','흙','흙은 그대로 흙이니까'],
-  ['土','흙 속 보물 감자전','🥔','흙 속','감자는 흙 속에서 자라니까'],
-  ['土','흙냄새 고구마 맛탕','🍠','흙냄새','흙냄새는 흙에서 나는 냄새라서'],
-  ['土','진흙 골렘 초코 푸딩','🍮','진흙','진흙은 물에 젖은 흙이라서'],
-  ['土','흙더미 땅콩 쿠키','🥜','흙더미','흙더미는 흙이 쌓인 거라서'],
-  ['日','아침 햇살 오므라이스','🍳','햇살','햇살은 해의 빛이고, 日은 해를 본뜬 글자라서'],
-  ['日','해님 달걀 프라이','🍳','해님','해님은 해고, 日은 해를 본뜬 글자라서'],
-  ['日','햇빛 요정 레모네이드','🍋','햇빛','햇빛은 해의 빛이고, 日은 해를 본뜬 글자라서'],
-  ['日','해돋이 호박죽','🥣','해돋이','해돋이는 해가 뜨는 거고, 日은 해를 본뜬 글자라서'],
-  ['日','한낮 해바라기 씨앗 빵','🌻','해바라기','해바라기는 해를 따라 도는 꽃이고, 日은 해를 본뜬 글자라서'],
-  ['月','초승달 크루아상','🥐','초승달','초승달은 달이니까'],
-  ['月','보름달 찹쌀떡','🍡','보름달','보름달은 둥근 달이니까'],
-  ['月','달토끼 송편','🐇','달토끼','달토끼는 달에 사는 토끼라서'],
-  ['月','반달 요정 만두','🥟','반달','반달은 반쪽 달이니까'],
-  ['月','달빛 우유 푸딩','🍮','달빛','달빛은 달의 빛이니까'],
-  ['山','눈 덮인 설산 빙수','🍧','설산','설산은 눈 덮인 산이고, 메는 산의 옛말이라서'],
-  ['山','산꼭대기 구름 케이크','🎂','산꼭대기','산꼭대기는 산의 맨 위고, 메는 산의 옛말이라서'],
-  ['山','산신령의 나물 비빔밥','🍚','산신령','산신령은 산을 지키는 신령이고, 메는 산의 옛말이라서'],
-  ['山','뾰족산 주먹밥','🍙','뾰족산','뾰족산은 뾰족한 산이고, 메는 산의 옛말이라서'],
-  ['山','산속 도깨비 도토리전','🥞','산속','산속은 산의 안쪽이고, 메는 산의 옛말이라서'],
-  ['白','흰 구름 우유','🥛','흰','흰 구름은 하얀색이니까'],
-  ['白','새하얀 눈사람 떡','⛄','새하얀','새하얀 건 아주 흰 거니까'],
-  ['白','흰 토끼 경단','🍡','흰','흰 토끼는 하얀 토끼니까'],
-  ['白','하얀 백조 슈크림','🦢','하얀','하얀 건 흰색이니까'],
-  ['白','흰 눈송이 크림 수프','🥣','흰','흰 눈송이는 하얀색이니까'],
-  ['靑','푸른 요정 젤리','🍬','푸른','푸른색이니까'],
-  ['靑','푸른 바다 소다','🥤','푸른','푸른 바다는 푸른색이니까'],
-  ['靑','푸른 숲 시금치 파스타','🍝','푸른','푸른 숲은 푸른색이니까'],
-  ['靑','푸른 달 블루베리 머핀','🧁','푸른','푸른 달은 푸른색이니까'],
-  ['靑','푸른 포도 요정 에이드','🍇','푸른','푸른 포도는 푸른색이니까'],
-].map(([hz,dish,em,kw,why],i)=>({id:i,hz,hun:HZ[hz],dish,em,kw,why}));
-// 메뉴 이름 속 핵심 낱말을 표시해요
-const dishHTML=m=>m.dish.replace(m.kw,`<span class="kw">${m.kw}</span>`);
-const shuf=a=>{ a=[...a]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
-// 받침이 있으면 "이랑", 없으면 "랑"
-function rang(word){
-  const ch=nfc(word).trim().slice(-1), code=ch.charCodeAt(0)-0xAC00;
-  if(code<0||code>11171) return '랑';
-  return code%28===0?'랑':'이랑';
-}
-// 급수별 한자 (한국어문회 기준). [한자, 뜻과 음]
-const HANJA8='校 학교 교|敎 가르칠 교|九 아홉 구|國 나라 국|軍 군사 군|金 쇠 금|南 남녘 남|女 계집 녀|年 해 년|大 큰 대|東 동녘 동|六 여섯 륙|萬 일만 만|母 어미 모|木 나무 목|門 문 문|民 백성 민|白 흰 백|父 아비 부|北 북녘 북|四 넉 사|山 메 산|三 석 삼|生 날 생|西 서녘 서|先 먼저 선|小 작을 소|水 물 수|室 집 실|十 열 십|五 다섯 오|王 임금 왕|外 바깥 외|月 달 월|二 두 이|人 사람 인|日 날 일|一 한 일|長 긴 장|弟 아우 제|中 가운데 중|靑 푸를 청|寸 마디 촌|七 일곱 칠|土 흙 토|八 여덟 팔|學 배울 학|韓 한국 한|兄 형 형|火 불 화';
-const HANJA7='家 집 가|間 사이 간|江 강 강|車 수레 차|工 장인 공|空 빌 공|記 기록할 기|氣 기운 기|男 사내 남|內 안 내|農 농사 농|答 대답 답|道 길 도|動 움직일 동|力 힘 력|立 설 립|每 매양 매|名 이름 명|物 물건 물|方 모 방|不 아닐 불|事 일 사|上 윗 상|姓 성 성|世 인간 세|手 손 수|市 저자 시|時 때 시|食 밥 식|安 편안 안|午 낮 오|右 오른 우|自 스스로 자|子 아들 자|場 마당 장|電 번개 전|前 앞 전|全 온전 전|正 바를 정|足 발 족|左 왼 좌|直 곧을 직|平 평평할 평|下 아래 하|漢 한수 한|海 바다 해|話 말씀 화|活 살 활|孝 효도 효|後 뒤 후|歌 노래 가|口 입 구|旗 기 기|同 한가지 동|洞 골 동|冬 겨울 동|登 오를 등|來 올 래|老 늙을 로|里 마을 리|林 수풀 림|面 낯 면|命 목숨 명|問 물을 문|文 글월 문|百 일백 백|夫 지아비 부|算 셈 산|色 빛 색|夕 저녁 석|少 적을 소|所 바 소|數 셈 수|植 심을 식|心 마음 심|語 말씀 어|然 그럴 연|有 있을 유|育 기를 육|邑 고을 읍|入 들 입|字 글자 자|祖 할아비 조|主 주인 주|住 살 주|重 무거울 중|地 땅 지|紙 종이 지|千 일천 천|天 하늘 천|川 내 천|草 풀 초|村 마을 촌|秋 가을 추|春 봄 춘|出 날 출|便 편할 편|夏 여름 하|花 꽃 화|休 쉴 휴';
-const toMap=s=>Object.fromEntries(s.split('|').map(x=>[x[0],x.slice(2)]));
-const HUN8=toMap(HANJA8), HUN7=toMap(HANJA7);
-// 7급 두 글자 낱말 메뉴: [낱말, 한자, 메뉴 이름, 그림]
-const WORDS7=[
- ['화산','火山','화산 용암 피자','🍕'],['농가','農家','농가 텃밭 비빔밥','🥗'],['시간','時間','시간 여행자 샌드위치','🥪'],
- ['한강','漢江','한강 달빛 라면','🍜'],['전차','電車','마법 전차 도시락','🍱'],['공장','工場','초콜릿 공장 쿠키','🍪'],
- ['공중','空中','공중에 뜬 솜사탕','🍭'],['일기','日記','일기장 모양 와플','🧇'],['인기','人氣','인기 만점 떡꼬치','🍢'],
- ['남녀','男女','남녀 모두 좋아하는 김밥','🍙'],['실내','室內','실내 정원 샐러드','🥗'],['정답','正答','정답 맞힌 날 쿠키','🍪'],
- ['수도','水道','수도꼭지 레모네이드','🍋'],['동물','動物','동물 모양 비스킷','🐻'],['화력','火力','센 화력 불고기','🥩'],
- ['국립','國立','국립 마법 도서관 머핀','🧁'],['매일','每日','매일 먹고 싶은 도넛','🍩'],['명물','名物','학교 명물 떡볶이','🌶️'],
- ['사방','四方','사방에 향기 퍼지는 수프','🍲'],['부족','不足','부족함 없는 곱빼기 짜장면','🍝'],['식사','食事','마법사의 든든한 식사 도시락','🍱'],
- ['천상','天上','천상의 맛 케이크','🍰'],['성명','姓名','성명을 새긴 이름표 쿠키','🍪'],['세상','世上','세상에서 제일 큰 빙수','🍧'],
- ['가수','歌手','가수 요정의 꿀물','🍯'],['시장','市場','시장표 호떡','🥞'],['평안','平安','평안한 밤 우유','🥛'],
- ['오전','午前','오전 간식 요거트','🥣'],['좌우','左右','좌우 반반 피자','🍕'],['자연','自然','자연 그대로 과일 샐러드','🍓'],
- ['왕자','王子','왕자님의 딸기 타르트','🍓'],['전화','電話','전화로 주문한 치킨','🍗'],['전국','全國','전국 일등 만두','🥟'],
- ['정직','正直','정직한 농부의 찐감자','🥔'],['지하','地下','지하 동굴 버섯 볶음','🍄'],['동해','東海','동해 바다 오징어 튀김','🦑'],
- ['생활','生活','기숙사 생활 컵라면','🍜'],['효자','孝子','효자 아들의 약밥','🍚'],['오후','午後','오후 세 시 핫케이크','🥞'],
- ['입구','入口','입구에서 파는 츄러스','🥖'],['국기','國旗','국기 꽂은 오므라이스','🍳'],['동생','同生','동생이 좋아하는 푸딩','🍮'],
- ['동구','洞口','동구 밖 과수원 사과','🍎'],['입동','立冬','입동 날 먹는 군밤','🌰'],['등산','登山','등산 가서 먹는 김밥','🍙'],
- ['내년','來年','내년에도 먹고 싶은 떡국','🥣'],['노인','老人','노인 마법사의 호박죽','🥣'],['천리','千里','천리마의 당근 주스','🥕'],
- ['산림','山林','산림 요정 버섯 수프','🍄'],['수면','水面','잔잔한 수면 젤리','🍮'],['생명','生命','생명의 물약 주스','🧃'],
- ['문답','問答','문답 퀴즈 쿠키','🍪'],['문자','文字','문자 모양 비스킷','🍪'],['백년','百年','백년 묵은 된장찌개','🍲'],
- ['농부','農夫','농부 아저씨의 옥수수','🌽'],['산수','算數','산수 시험 합격 떡','🍡'],['오색','五色','오색 무지개 경단','🍡'],
- ['추석','秋夕','추석 보름달 송편','🍡'],['소년','少年','소년 마법사의 핫도그','🌭'],['주소','住所','주소 없는 비밀 가게 빵','🥐'],
- ['식목','植木','식목일 새싹 비빔밥','🥗'],['중심','中心','중심에 크림 가득 빵','🍞'],['국어','國語','국어 선생님의 김밥','🍙'],
- ['유명','有名','유명한 마법 호떡','🥞'],['교육','敎育','교육 받은 요정 셰프의 파스타','🍝'],['읍내','邑內','읍내 장터 국밥','🍲'],
- ['조상','祖上','조상님 전통 약과','🍪'],['주인','主人','가게 주인 추천 떡볶이','🌶️'],['중력','重力','중력을 이기는 둥둥 젤리','🍮'],
- ['백지','白紙','백지처럼 하얀 우유 푸딩','🥛'],['산천','山川','산천어 소금구이','🐟'],['화초','花草','화초 꽃잎 샐러드','🌸'],
- ['농촌','農村','농촌 할머니 비빔밥','🍚'],['입춘','立春','입춘 봄나물 전','🥬'],['출구','出口','출구 앞 아이스크림','🍦'],
- ['편지','便紙','편지 봉투 모양 만두','🥟'],['입하','立夏','입하 날 수박 화채','🍉'],['휴일','休日','휴일 브런치 팬케이크','🥞'],
- ['형제','兄弟','형제가 나눠 먹는 피자','🍕'],['부모','父母','부모님께 드리는 떡','🍡'],['대문','大門','대문 모양 와플','🧇'],
-];
-
-
-const HUNALL={...HUN8,...HUN7};
-MENU.forEach(m=>{ m.type='dish'; m.hzs=[m.hz]; });
-const W7=WORDS7.map(([kw,hz,dish,em],i)=>({id:'w'+i,type:'word',kw,hzs:[...hz],dish,em}));
-// 음 (두음법칙으로 바뀌는 소리도 같이 봐요)
-const DU={'녀':'여','년':'연','륙':'육','력':'역','립':'입','래':'내','로':'노','리':'이','림':'임'};
-const eumOf=h=>{ const e=(HUNALL[h]||'').slice(-1); return [e,DU[e]].filter(Boolean); };
-// 받침이 있으면 "은", 없으면 "는"
-function eun(word){
-  const ch=nfc(word).trim().slice(-1), code=ch.charCodeAt(0)-0xAC00;
-  if(code<0||code>11171) return '은(는)';
-  return code%28===0?'는':'은';
-}
-// 카드 섞기처럼 뽑아요: 한 바퀴 다 나오기 전에는 같은 메뉴가 다시 나오지 않아요
-const BAGS={};
-function drawFrom(name,list,avoidHz){
-  const ok=it=>!it.hzs.some(h=>avoidHz.includes(h));
-  if(!BAGS[name]||!BAGS[name].length) BAGS[name]=shuf(list);
-  const bag=BAGS[name];
-  let k=bag.findIndex(ok);
-  if(k<0){ const fresh=shuf(list).filter(x=>!bag.includes(x)); k=fresh.findIndex(ok); if(k>=0) return fresh[k]; return bag.shift(); }
-  return bag.splice(k,1)[0];
-}
-function myLevel(){ return (ST&&ST.level)||'8'; }
-// 주문 만들기: 8급은 메뉴 1~2개, 7급·6급은 두 글자 낱말 메뉴 (가끔 8급 복습 메뉴)
-function makeOrder(served,avoid){
-  if(myLevel()==='8'){
-    const n=orderSize(served), items=[];
-    for(let k=0;k<n;k++) items.push(drawFrom('m8',MENU,[...avoid,...items.flatMap(m=>m.hzs)]));
-    return items;
+// ── 책장 ──
+let shelfG='all';
+function openShelf(){window._why={};shelfG='all';document.getElementById('shelfTitle').textContent='📚 책장 구경하기';drawShelf();go('s-shelf');}
+function drawShelf(onlyLikes){
+  const f=document.getElementById('shelfFilter');f.innerHTML='';
+  if(!onlyLikes){
+    [['all',{e:'✨',n:'전체'}],...Object.entries(GENRES)].forEach(([k,v])=>{
+      const b=document.createElement('button');b.textContent=`${v.e} ${v.n}`;if(k===shelfG)b.classList.add('sel');
+      b.onclick=()=>{shelfG=k;drawShelf();};f.appendChild(b);});
   }
-  return [Math.random()<.7 ? drawFrom('w7',W7,avoid) : drawFrom('m8',MENU,avoid)];
+  let list=onlyLikes?BOOKS.filter(b=>likes.has(b.id)):BOOKS.filter(b=>shelfG==='all'||b.g.includes(shelfG));
+  document.getElementById('shelfCount').textContent=`${list.length}권`;
+  const g=document.getElementById('shelfGrid');g.innerHTML='';
+  if(!list.length)g.innerHTML='<div class="empty">아직 찜한 책이 없어. 마음에 드는 책을 찾으면 ♡를 눌러 봐!</div>';
+  list.forEach(b=>g.appendChild(bookEl(b)));
 }
-function orderSize(n){ if(n<3) return 1; if(n<8) return Math.random()<.6?2:1; return 2; }
-let CF=null, soundOn=LS.get('mirinae_sound')!==false;
-
-let AC=null;
-function beep(type){
-  if(!soundOn) return;
-  try{
-    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
-    if(AC.state==='suspended') AC.resume();
-    const now=AC.currentTime;
-    const t=(f,s,d,v=.05,w='sine')=>{ const o=AC.createOscillator(),g=AC.createGain(); o.type=w; o.frequency.value=f;
-      g.gain.setValueAtTime(0,now+s); g.gain.linearRampToValueAtTime(v,now+s+.02); g.gain.exponentialRampToValueAtTime(.0001,now+s+d);
-      o.connect(g).connect(AC.destination); o.start(now+s); o.stop(now+s+d+.05); };
-    if(type==='ok'){ t(880,0,.18); t(1320,.07,.22,.035); }
-    if(type==='no'){ t(240,0,.22,.05,'triangle'); }
-    if(type==='mad'){ t(300,0,.15,.05,'triangle'); t(200,.14,.25,.05,'triangle'); }
-    if(type==='end'){ [523,659,784,1047].forEach((f,i)=>t(f,i*.1,.35,.04)); }
-  }catch(e){}
-}
-function paintSnd(){ $('cSnd').textContent=soundOn?'🔊':'🔇'; }
-$('cSnd').onclick=()=>{ soundOn=!soundOn; LS.set('mirinae_sound',soundOn); paintSnd(); };
-
-function openCafe(){
-  stopCafe();
-  $('cStart').classList.add('on'); $('cEnd').classList.remove('on');
-  const best=(LS.get(bestKey())||0);
-  $('cBestTxt').textContent= best?`${myLevel()}급 최고 기록 ${best}명`:'';
-  const lv=myLevel();
-  $('cRules').innerHTML = lv==='8'
-    ? `학생이 마법 메뉴를 한두 개 주문해요.<br>메뉴에 들어간 <b>한자</b>를 찾아 반찬통을 모두 눌러주세요.<br>틀린 한자를 누르거나 너무 늦으면 ❤️이 하나 줄어요.<br>점심시간은 <b>60초</b>! 몇 명에게 줄 수 있을까요?`
-    : `${lv}급 배식이에요. 메뉴 속 <b>두 글자 낱말</b>을 보고<br>그 낱말의 <b>한자 두 개</b>를 모두 찾아 눌러주세요.<br>8급 복습 메뉴도 가끔 나와요.<br>틀린 한자를 누르거나 너무 늦으면 ❤️이 하나 줄어요.${lv==='6'?'<br><span class="small">6급 문제는 준비 중이라 지금은 7급 문제가 나와요.</span>':''}`;
-  $('cLvTag').textContent=lv+'급';
-  $('cHearts').textContent='❤️❤️❤️'; $('cServed').textContent='배식 0명'; $('cTime').textContent='60초';
-  $('cBar').style.width='100%';
-  $('cBub').className='bub'; $('cBub').innerHTML='<span class="em">🍽️</span><span>학생들이 줄을 서고 있어요</span>';
-  $('cQueue').innerHTML=''; $('cPlates').innerHTML=''; $('cPatBar').style.width='100%';
-  paintSnd(); show('sCafe');
-}
-$('goCafe').onclick=openCafe;
-$('cBack').onclick=()=>{ stopCafe(); paintHall(); show('sHall'); };
-
-function bestKey(){ return myLevel()==='8'?'mirinae_cafe_best':'mirinae_cafe_best_'+myLevel(); }
-function stopCafe(){ if(CF){ cancelAnimationFrame(CF.raf); CF=null; } }
-
-const VAR=[
-  {base:'haeon',   sw:{'#F07A5A':'#6B4A2E','#E0513B':'#3FA7A0','#B83A27':'#2E7F7A','#C8432F':'#338F89'}},
-  {base:'haeon',   sw:{'#F07A5A':'#2B2548','#E0513B':'#E9A23B','#B83A27':'#B87A1E','#C8432F':'#C98A2A'}},
-  {base:'mulgyeol',sw:{'#A9CFF5':'#F6C177','#2E86DE':'#E0513B','#2E5FA8':'#8A3F5A'}},
-  {base:'mulgyeol',sw:{'#A9CFF5':'#3A2B25','#2E86DE':'#3FAE5A','#2E5FA8':'#2F6A48'}},
-  {base:'saessak', sw:{'#9ED99A':'#3A2B25','#3FAE5A':'#E9A23B','#2F7A45':'#8A5A2B','#2A6A3C':'#6B4A2E'}},
-  {base:'saessak', sw:{'#9ED99A':'#F6C177','#3FAE5A':'#6D4BC7','#2F7A45':'#4E34A0','#2A6A3C':'#3E2A86'}},
-  {base:'dalbit',  sw:{'#D8CCF7':'#F4B6C8','#6D4BC7':'#2E86DE','#4E34A0':'#1F4E8C'}},
-  {base:'dalbit',  sw:{'#D8CCF7':'#6B4A2E','#6D4BC7':'#E0513B','#4E34A0':'#9A2E22'}},
-];
-const CLASSMATES=VAR.map((v,k)=>{
-  const b=CH.find(c=>c.id===v.base);
-  let svg=b.svg.replace(/<text[^>]*>[^<]*<\/text>/,'');   // 지팡이 한자는 빼요
-  for(const [a,z] of Object.entries(v.sw)) svg=svg.split(a).join(z);
-  return {id:'mate'+k,n:'친구',svg};
-});
-function newStudent(){
-  const mine=ST&&ST.char;
-  const pool=CH.filter(c=>c.id!==mine).concat(CLASSMATES);
-  const last=CF&&CF.queue&&CF.queue.length?CF.queue[CF.queue.length-1].c.id:null;
-  let c; do{ c=pool[Math.floor(Math.random()*pool.length)]; }while(c.id===last && pool.length>1);
-  return {c};   // 주문은 맨 앞에 섰을 때 정해요
-}
-function startCafe(){
-  $('cStart').classList.remove('on');
-  CF={time:60, hearts:3, served:0, log:[], queue:[], reveal:new Set(), prevHz:[],
-      pat:0, patMax:7, last:performance.now(), raf:0, lock:false};
-  for(let k=0;k<4;k++) CF.queue.push(newStudent());
-  nextOrder();
-  CF.raf=requestAnimationFrame(tick);
-}
-$('cGo').onclick=startCafe;
-
-function patienceFor(n){ return Math.max(4.2, 7.5-n*0.2); }  // 처음 7.5초 → 최소 4.2초
-// 뜻과 음: 10명까지 보이고, 20명까지 흐리게, 그다음 숨겨요. 이번 판에 틀린 한자는 계속 보여요
-function hunClass(hz){
-  if(CF.reveal.has(hz) || CF.served<10) return 'f';
-  return CF.served<20 ? 'f dim' : 'f hide';
-}
-function nextOrder(){
-  const front=CF.queue[0];
-  const items=makeOrder(CF.served, CF.prevHz);
-  front.items=items; front.got=items.map(it=>it.hzs.map(()=>false));
-  CF.prevHz=items.flatMap(it=>it.hzs);
-  const taps=CF.prevHz.length;
-  CF.patMax=patienceFor(CF.served)*(taps>1?1.6:1); CF.pat=CF.patMax;
-  paintQueue(); paintOrder();
-  const need=[...new Set(CF.prevHz)];
-  const syl=new Set(items.flatMap(it=>it.type==='word'?[...it.kw]:eumOf(it.hz)));
-  const pool=myLevel()==='8'?Object.keys(HZ):Object.keys(HUNALL);
-  // 헷갈리지 않게, 주문 속 소리와 같은 소리의 한자는 빼요
-  const others=shuf(pool.filter(h=>!need.includes(h) && !eumOf(h).some(e=>syl.has(e)))).slice(0,6-need.length);
-  const six=shuf([...need,...others]);
-  $('cPlates').innerHTML=six.map(h=>`<button class="plate" data-h="${h}"><div class="h">${h}</div><div class="${hunClass(h)}">${HUNALL[h]}</div></button>`).join('');
-  $('cPlates').querySelectorAll('.plate').forEach(b=>b.onclick=()=>serve(b));
-  CF.lock=false;
-}
-// 메뉴 이름 속 핵심 낱말: 낱말 메뉴는 찾은 글자가 초록색이 돼요
-function itemHTML(it,got){
-  if(it.type==='dish'){
-    const all=got.every(x=>x);
-    return `<span class="${all?'got':''}">${all?'<b class="chk">✓</b>':''}${dishHTML(it)}</span>`;
-  }
-  const all=got.every(x=>x);
-  const kw=`<span class="kw">${[...it.kw].map((s,i)=>`<span class="${got[i]?'sy':''}">${s}</span>`).join('')}</span>`;
-  return `<span class="${all?'got':''}">${all?'<b class="chk">✓</b>':''}${it.dish.replace(it.kw,kw)}</span>`;
-}
-function paintOrder(){
-  const s=CF.queue[0], it=s.items;
-  const txt=it.length===1 ? `${itemHTML(it[0],s.got[0])} 주세요!` : `${itemHTML(it[0],s.got[0])}${rang(it[0].dish)} ${itemHTML(it[1],s.got[1])} 주세요!`;
-  $('cBub').className='bub';
-  $('cBub').innerHTML=`<span class="em${it.length>1?' two':''}">${it.map(m=>m.em).join('')}</span><span>${txt}</span>`;
-}
-function connHTML(it){
-  if(it.type==='dish') return `${it.kw} = <span class="hz">${it.hz}</span> ${it.hun}`;
-  return `${it.kw} = <span class="hz">${it.hzs.join('')}</span> ${it.hzs.map(h=>HUNALL[h]).join(' + ')}`;
-}
-function paintQueue(){
-  const cls=['front','q1','q2','q3'];
-  $('cQueue').innerHTML=CF.queue.slice(0,4).map((s,i)=>`<div class="stu ${cls[i]}" ${i===0?'id="cFront"':''}>${drawChar(s.c)}</div>`).join('');
-}
-function serve(b){
-  if(!CF || CF.lock) return;
-  const s=CF.queue[0], h=b.dataset.h;
-  let hit=null;
-  s.items.forEach((it,i)=>it.hzs.forEach((x,j)=>{ if(!hit && x===h && !s.got[i][j]) hit=[i,j]; }));
-  if(hit){
-    s.got[hit[0]][hit[1]]=true; b.classList.add('ok'); b.disabled=true; beep('ok');
-    if(s.got.every(g=>g.every(x=>x))){
-      // 다 담았어요: 친구가 인사하고 떠나요
-      CF.lock=true; CF.served++; s.items.forEach(m=>CF.log.push(m));
-      $('cServed').textContent=`배식 ${CF.served}명`;
-      $('cBub').className='bub happy';
-      $('cBub').innerHTML=`<span class="em">😋</span><span>고마워요!${s.items.map(m=>`<span class="conn">${connHTML(m)}</span>`).join('')}</span>`;
-      const f=$('cFront'); if(f) f.classList.add('leave');
-      setTimeout(()=>{ if(!CF) return; CF.queue.shift(); CF.queue.push(newStudent()); nextOrder(); },s.items.length>1||s.items[0].type==='word'?1300:900);
-    }else paintOrder();
-  }else{
-    b.classList.add('no'); beep('no'); b.disabled=true;
-    // 아직 못 찾은 한자들
-    const left=[]; s.items.forEach((it,i)=>it.hzs.forEach((x,j)=>{ if(!s.got[i][j]) left.push({it,j,hz:x}); }));
-    const L=left[0], it=L.it;
-    const msg= it.type==='dish'
-      ? `${it.why} <span class="hz">${it.hz}</span> ${it.hun}${ie(it.hun)}`
-      : `${it.kw}의 '${it.kw[L.j]}'${eun(it.kw[L.j])} <span class="hz">${L.hz}</span> ${HUNALL[L.hz]}${ie(HUNALL[L.hz])}`;
-    // 정답 한자와 방금 누른 한자는 이번 판 동안 뜻과 음을 다시 보여줘요
-    left.forEach(x=>CF.reveal.add(x.hz)); CF.reveal.add(h);
-    $('cPlates').querySelectorAll('.plate').forEach(p=>{ const f=p.querySelector('.f'); if(f) f.className=hunClass(p.dataset.h); });
-    left.forEach(x=>{ const r=$('cPlates').querySelector(`.plate[data-h="${x.hz}"]`); if(r){ r.classList.remove('hint'); void r.offsetWidth; r.classList.add('hint'); } });
-    loseHeart(`앗, 그건 아니에요!<span class="conn">${msg}</span>`);
-  }
-}
-function loseHeart(msg){
-  CF.hearts--;
-  $('cHearts').textContent='❤️'.repeat(Math.max(0,CF.hearts))+'🤍'.repeat(3-Math.max(0,CF.hearts));
-  const f=$('cFront'); if(f){ f.classList.remove('mad'); void f.offsetWidth; f.classList.add('mad'); }
-  if(msg){
-    const front=CF.queue[0];
-    $('cBub').className='bub sad';
-    $('cBub').innerHTML=`<span class="em">😣</span><span>${msg}</span>`;
-    setTimeout(()=>{ if(!CF||CF.lock||CF.queue[0]!==front) return; paintOrder(); },1800);
-  }
-  if(CF.hearts<=0) endCafe('하트를 모두 잃었어요');
-}
-function tick(t){
-  if(!CF) return;
-  const dt=Math.min(.1,(t-CF.last)/1000); CF.last=t;
-  CF.time-=dt;
-  if(!CF.lock) CF.pat-=dt;
-  const tl=Math.max(0,CF.time);
-  $('cTime').textContent=Math.ceil(tl)+'초';
-  $('cBar').style.width=(tl/60*100)+'%';
-  $('cBar').classList.toggle('low',tl<=10);
-  const pr=Math.max(0,CF.pat/CF.patMax);
-  $('cPatBar').style.width=(pr*100)+'%';
-  $('cPatBar').classList.toggle('low',pr<.35);
-  if(CF.time<=0){ endCafe('점심시간이 끝났어요'); return; }
-  if(CF.pat<=0 && !CF.lock){
-    CF.lock=true; beep('mad');
-    $('cBub').className='bub sad';
-    $('cBub').innerHTML=`<span class="em">😤</span><span>너무 오래 걸려요! 그냥 갈래요</span>`;
-    const f=$('cFront'); if(f) f.classList.add('leave');
-    loseHeart();
-    if(!CF) return;
-    setTimeout(()=>{ if(!CF) return; CF.queue.shift(); CF.queue.push(newStudent()); nextOrder(); },700);
-  }
-  CF.raf=requestAnimationFrame(tick);
-}
-function endCafe(why){
-  if(!CF) return;
-  const n=CF.served, log=CF.log;
-  cancelAnimationFrame(CF.raf); CF=null;
-  const bk=bestKey(); const best=LS.get(bk)||0;
-  const rec=n>best; if(rec) LS.set(bk,n);
-  beep('end');
-  // 오늘 배식한 메뉴 (중복 없이)
-  const seen={}; const uniq=log.filter(m=>seen[m.id]?false:(seen[m.id]=true));
-  $('cEnd').innerHTML=`
-    <div class="small">${why}</div>
-    <div class="big-n" style="margin-top:6px">${n}명</div>
-    <div style="margin-top:4px">${rec?'🎉 새 기록이에요!':`최고 기록 ${Math.max(best,n)}명`}</div>
-    ${uniq.length?`<div class="small" style="margin-top:14px;align-self:flex-start">오늘 배식한 메뉴</div>
-    <div class="review">${uniq.map(m=>`<div><span class="hz">${m.hzs.join('')}</span><span><b style="font-weight:500">${m.kw}</b> = ${m.hzs.map(h=>HUNALL[h]).join(' + ')}<br><span class="small">${m.dish}</span></span></div>`).join('')}</div>`:'<div style="height:18px"></div>'}
-    <div class="row2x"><button class="btn ghost" id="cHall">복도로</button><button class="btn gold" id="cAgain">한 번 더</button></div>`;
-  $('cEnd').classList.add('on');
-  $('cAgain').onclick=()=>{ $('cEnd').classList.remove('on'); startCafe(); };
-  $('cHall').onclick=()=>{ paintHall(); show('sHall'); };
-}
-
-/* 시작: 이미 입학했다면 복도로 */
-if(ST && ST.char){ pick=Math.max(0,CH.findIndex(x=>x.id===ST.char)); paintHall(); show('sHall'); }
+function openLikes(){window._why={};document.getElementById('shelfTitle').textContent='♡ 내가 찜한 책';drawShelf(true);go('s-shelf');}
 </script>
 </body>
 </html>
