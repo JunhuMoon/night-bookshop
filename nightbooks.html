@@ -200,7 +200,7 @@ input::placeholder{color:#8e93c4}
 .searchbar input{flex:1;min-width:0;font-size:16px;padding:12px 16px}
 .searchbar button{font-size:18px;width:50px;border-radius:14px;border:1.5px solid var(--line);background:rgba(255,255,255,.08);color:var(--text);cursor:pointer}
 .searchbar.inshelf{margin:0 0 16px;max-width:none}
-.menu3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:440px;margin:18px auto 0}
+.menu3{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;max-width:440px;margin:18px auto 0}
 .menu3 button{position:relative;background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:14px 6px;color:var(--text);cursor:pointer;font-family:'Gowun Batang',serif;font-size:16px;display:flex;flex-direction:column;align-items:center;gap:4px;transition:border-color .15s}
 .menu3 button:hover{border-color:rgba(var(--goldrgb),.6)}
 .menu3 .mi{font-size:26px}
@@ -214,6 +214,53 @@ input::placeholder{color:#8e93c4}
 .shoot-next{color:var(--soft);font-size:14px;margin-top:10px}
 .mact .nopebtn.on{background:rgba(255,255,255,.12);border-color:var(--soft)}
 .book.noped{opacity:.4}
+
+html[data-theme="light"]{--text:#1f2340;--soft:#5b6180;--card:rgba(30,40,90,.05);--line:rgba(30,40,90,.16);--star:#7a86b8}
+html[data-theme="light"] body{background:linear-gradient(180deg,#fbfcff 0%,#eef1fa 60%,#e4e8f5 100%) fixed}
+html[data-theme="light"] #stars{opacity:.35}
+html[data-theme="light"] .shoot{display:none}
+html[data-theme="light"] .hero h1,html[data-theme="light"] .result-head h2{text-shadow:none}
+html[data-theme="light"] .moon{filter:none}
+html[data-theme="light"] input[type=text]{background:#fff;color:var(--text)}
+html[data-theme="light"] input::placeholder{color:#9aa0bf}
+html[data-theme="light"] .sug button,html[data-theme="light"] .searchbar button,html[data-theme="light"] .icons button,html[data-theme="light"] .pill{background:#fff;color:var(--text)}
+html[data-theme="light"] .menu3 button,html[data-theme="light"] .chip,html[data-theme="light"] .greet{background:#fff}
+html[data-theme="light"] .chip.sel{background:rgba(var(--goldrgb),.14)}
+html[data-theme="light"] .btn.ghost{background:#fff}
+html[data-theme="light"] #setBtn,html[data-theme="light"] #langBtn{background:#fff}
+html[data-theme="light"] .mbox{background:#fff;border-color:var(--line);box-shadow:0 20px 60px rgba(20,30,80,.18)}
+html[data-theme="light"] .modal{background:rgba(30,40,90,.35)}
+html[data-theme="light"] .rstars button{color:rgba(30,40,90,.2)}
+html[data-theme="light"] .readbox,html[data-theme="light"] .fitbox{background:#f6f7fc}
+html[data-theme="light"] .why{background:rgba(var(--goldrgb),.1)}
+html[data-theme="light"] #sky{background:#141842}
+html[data-theme="light"] .tag.miss{background:#fff}
+html[data-theme="light"] .cover{box-shadow:0 8px 20px rgba(20,30,80,.2)}
+html[data-theme="light"] .readmark{background:rgba(255,255,255,.92);color:#8a5a00}
+html[data-theme="light"] #toast{background:#fff;color:var(--text)}
+html[data-theme="light"] .stampcard{background:#fff}
+
+.stamprog{display:flex;align-items:center;gap:12px;margin:4px 0 20px}
+.stamprog .bar{flex:1;height:8px;border-radius:9px;background:var(--line);overflow:hidden}
+.stamprog .bar i{display:block;height:100%;width:0;background:var(--gold);transition:width .6s}
+.stamprog b{font-family:'Gowun Batang',serif;color:var(--gold);white-space:nowrap}
+.stampgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px}
+.stampcard{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:14px 10px 12px;text-align:center;cursor:default}
+.stampcard svg{width:92px;height:92px;display:block;margin:0 auto 8px}
+.stampcard.got svg{transform:rotate(-6deg);filter:drop-shadow(0 4px 10px rgba(0,0,0,.25))}
+.stampcard.locked svg{opacity:.35}
+.stampcard b{display:block;font-family:'Gowun Batang',serif;font-size:15px}
+.stampcard .who{display:block;font-size:12px;color:var(--gold);margin-top:2px}
+.stampcard small{display:block;color:var(--soft);font-size:12px;margin-top:6px;line-height:1.45}
+.stampcard .prog{font-size:12px;color:var(--soft);margin-top:4px}
+.stampcard.got{border-color:rgba(var(--goldrgb),.55)}
+#toast{position:fixed;left:50%;bottom:24px;transform:translate(-50%,40px);opacity:0;pointer-events:none;z-index:30;display:flex;align-items:center;gap:12px;
+  padding:10px 18px 10px 10px;border-radius:18px;background:rgba(20,24,66,.96);border:1.5px solid var(--gold);color:var(--text);transition:all .4s;max-width:92vw;cursor:pointer}
+#toast.on{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#toast svg{width:58px;height:58px;flex:none;animation:stampIn .6s cubic-bezier(.2,1.6,.4,1)}
+#toast b{display:block;font-family:'Gowun Batang',serif;color:var(--gold)}
+#toast span{font-size:14px}
+@keyframes stampIn{from{transform:scale(2.2) rotate(-20deg);opacity:0}to{transform:scale(1) rotate(-6deg);opacity:1}}
 </style>
 </head>
 <body>
@@ -239,6 +286,7 @@ input::placeholder{color:#8e93c4}
       <button onclick="shootingStar()"><span class="mi">🌠</span><span data-i18n="shootBtn">오늘의 책</span></button>
       <button onclick="openShelf()"><span class="mi">📚</span><span data-i18n="shelfBtn">전체 책장</span></button>
       <button onclick="openLib()"><span class="mi">🗂️</span><span data-i18n="libBtn">내 서재</span><span id="libCount" class="cnt"></span></button>
+      <button onclick="openStamps()"><span class="mi">⭐</span><span data-i18n="stampBtn">별 도장</span><span id="stampCount" class="cnt"></span></button>
     </div>
   </div>
 </section>
@@ -349,16 +397,21 @@ input::placeholder{color:#8e93c4}
   <div class="pf-del" id="pfDelWrap"><button onclick="deleteProfile()" id="pfDel" data-i18n="pfDel">프로필 지우기</button></div>
 </section>
 
+<!-- 별 도장 -->
+<section class="screen" id="s-stamps">
+  <div class="step-top"><button class="home" onclick="go('s-home')">🌙 밤하늘 책방</button></div>
+  <h2 class="q"><span data-i18n="stampTitle">⭐ 별 도장</span></h2>
+  <p class="hint"><span data-i18n="stampHint">책방을 이용하면 별 친구들이 도장을 찍어 줘요.</span></p>
+  <div class="stamprog"><div class="bar"><i id="stampBar"></i></div><b id="stampSum"></b></div>
+  <div class="stampgrid" id="stampGrid"></div>
+</section>
+
 <!-- 설정 -->
 <section class="screen" id="s-settings">
   <div class="step-top"><button class="home" onclick="go('s-home')">🌙 밤하늘 책방</button></div>
   <h2 class="q"><span data-i18n="settingsTitle">⚙️ 설정</span></h2>
   <div class="pf-label" data-i18n="setTheme">화면 테마</div>
   <div class="chips small" id="themeChips"></div>
-  <div class="pf-label" data-i18n="setMusic">배경음악</div>
-  <div class="chips small" id="musicChips"></div>
-  <div class="volrow"><span data-i18n="setVol">음량</span><input type="range" id="volIn" min="0" max="100" step="1" oninput="setVol(this.value)"><span id="volOut"></span></div>
-  <div class="pf-safe" data-i18n="musicHint">배경음악은 밤하늘 책방이 직접 만든 소리예요.</div>
   <div class="pf-label" data-i18n="setLang">언어</div>
   <div class="chips small" id="langSetChips"></div>
   <div class="nav"><span></span><button class="btn" onclick="go('s-home')"><span data-i18n="done">완료</span></button></div>
@@ -377,6 +430,7 @@ input::placeholder{color:#8e93c4}
 </section>
 
 </main>
+<div id="toast" role="status" aria-live="polite" onclick="openStamps()"></div>
 
 <!-- 책 상세 -->
 <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
@@ -586,7 +640,7 @@ const BOOKS = RAW.map((r,i)=>({id:i,t:r[0],a:r[1],g:r[2].split(''),m:r[3].split(
 
 // ── 언어 (한국어 / English) ──
 const EN_BOOKS = [["The Giver", "Lois Lowry", "In a 'perfect' town with no pain and no colors, twelve-year-old Jonas is chosen to receive all of the community's memories, and discovers the truth hidden behind that perfection."], ["Gathering Blue", "Lois Lowry", "The second book after The Giver. Kira, a girl with a twisted leg, is summoned by the village leaders for her amazing embroidery skills, and slowly uncovers the village's secrets."], ["Number the Stars", "Lois Lowry", "Denmark, 1943. Ten-year-old Annemarie finds the courage to protect her Jewish friend Ellen from the Nazis."], ["Paint", "Lee Hee-young", "In a future where the government raises children, seventeen-year-old Jenu interviews the parents who want to adopt him, and wonders what makes a good parent."], ["The Origin of Evil in Darwin Young", "Park Ji-ri", "In a future city where people are ranked by the district they live in, model student Darwin digs into an old incident involving his father and grandfather."], ["The City of Ember", "Jeanne DuPrau", "In Ember, an underground city that depends only on its lamps, the lights keep going out. Lina and Doon try to decode a mysterious set of instructions left long ago."], ["The Hunger Games", "Suzanne Collins", "In the nation of Panem, a cruel survival contest is held every year. Katniss volunteers in her sister's place and fights to stay alive. (Lots of fighting, recommended for middle school and up)"], ["The Maze Runner", "James Dashner", "Thomas wakes up with no memory in the middle of a giant maze. Together with the other boys, he tries to solve its secrets and escape."], ["Ender's Game", "Orson Scott Card", "At a space battle school that trains gifted children to fight an alien invasion, young Ender becomes the best commander of all."], ["Animal Farm", "George Orwell", "The animals chase away the farmer to build a farm where everyone is equal, but the pigs slowly start acting just like the old owner."], ["The Wild Robot", "Peter Brown", "Roz the robot lands on a wild island. She learns to survive among the animals and becomes the mother of an orphaned gosling."], ["A Wrinkle in Time", "Madeleine L'Engle", "To find their missing scientist father, Meg and her little brother Charles Wallace 'fold' space and time and travel to a faraway planet."], ["Momo", "Michael Ende", "The Men in Grey are secretly stealing people's time. Momo, a girl who is wonderful at listening, sets out to bring the time back."], ["The Neverending Story", "Michael Ende", "Bastian secretly reads a mysterious book, and before he knows it he becomes the hero who must save Fantastica, the land inside the story."], ["Harry Potter and the Philosopher's Stone", "J.K. Rowling", "On his eleventh birthday, Harry learns that he is a wizard and starts school at Hogwarts School of Witchcraft and Wizardry."], ["The Lion, the Witch and the Wardrobe", "C.S. Lewis", "From The Chronicles of Narnia. Four siblings step through an old wardrobe and set out to save Narnia, a land trapped in endless winter."], ["The Hobbit", "J.R.R. Tolkien", "Bilbo, a hobbit who loves staying home, sets off on a long journey with a band of dwarves to win back treasure stolen by a dragon."], ["Percy Jackson and the Lightning Thief", "Rick Riordan", "Troublemaker Percy turns out to be the son of a Greek god! He goes on an adventure to find Zeus's missing lightning bolt."], ["The Golden Compass", "Philip Pullman", "In a world where every person has an animal-shaped soul called a daemon, Lyra travels to the far North to find her missing friend."], ["The Dallergut Dream Department Store", "Lee Mi-ye", "A magical department store where sleeping people come to buy dreams. New employee Penny meets the customers and their stories."], ["Zenitendo: The Mysterious Candy Shop", "Reiko Hiroshima", "A candy shop that only lucky customers can find. Its sweets make wishes come true, but if you don't follow the instructions, big trouble follows!"], ["The Little Prince", "Antoine de Saint-Exupéry", "A pilot stranded in the desert meets a little prince from a tiny planet, and they talk about what really matters in life."], ["The Time Shop", "Lee Na-young", "Yuna wants to be number one, so she visits a strange shop where you can buy time. But buying time comes with a price."], ["Magic Tree House", "Mary Pope Osborne", "Open a book in the tree house in the woods and you travel to that time! The time-travel series of siblings Jack and Annie."], ["Mio, My Son", "Astrid Lindgren", "Lonely Bo is actually Mio, the prince of a faraway land. With his friend Jum-Jum, he faces the terrible Sir Kato."], ["The Brothers Lionheart", "Astrid Lindgren", "Brothers Jonathan and Karl meet again in the magical land of Nangiyala and fight against a tyrant."], ["Ronia, the Robber's Daughter", "Astrid Lindgren", "Ronia, the daughter of a robber chief, becomes friends with Birk, the son of a rival clan, and they live together in the forest."], ["Warriors: Into the Wild", "Erin Hunter", "Rusty, a house cat, joins a clan of forest cats and grows into a brave warrior."], ["The BFG", "Roald Dahl", "The giant who takes Sophie away in the middle of the night turns out to be a kind giant who blows good dreams to children."], ["The Witches", "Roald Dahl", "A boy overhears a meeting of witches who want to get rid of all children, and teams up with his grandmother to stop them."], ["Charlie and the Chocolate Factory", "Roald Dahl", "Poor Charlie finds a golden ticket and gets to tour Willy Wonka's amazing chocolate factory."], ["Matilda", "Roald Dahl", "Matilda, a genius girl who loves books, uses her special powers to teach the scary headmistress a lesson."], ["Alice's Adventures in Wonderland", "Lewis Carroll", "Alice follows a white rabbit with a pocket watch down a hole and travels through a strange and silly land."], ["The Wonderful Wizard of Oz", "L. Frank Baum", "Blown away by a tornado, Dorothy travels to find the Wizard of Oz with the Scarecrow, the Tin Woodman, and the Cowardly Lion."], ["Peter Pan", "J.M. Barrie", "Wendy and her brothers fly to Neverland with Peter Pan, the boy who never grows up."], ["Wonder", "R.J. Palacio", "Auggie, who was born with a face that looks different, goes to school for the first time and finds friends and courage."], ["Frindle", "Andrew Clements", "When prankster Nick starts calling a pen a 'frindle', the new word spreads all over town."], ["Stargirl", "Jerry Spinelli", "Stargirl is a new student unlike anyone else. At first she is the most popular girl in school, then she is left out for being 'different'."], ["Flipped", "Wendelin Van Draanen", "Juli falls for Bryce at first sight, and Bryce isn't sure what to do about it. The story is told by both of them, taking turns."], ["Cherry Shrimp: Secret Post", "Hwang Young-mi", "Middle schooler Dahyun tries hard to fit into a group of friends, and finds real friends and her true self along the way."], ["Wandeuk", "Kim Ryeo-ryeong", "Wandeuk, a high schooler who is only good at fighting, slowly changes after meeting his quirky homeroom teacher and kickboxing."], ["Almond", "Sohn Won-pyung", "Yunjae, a boy who can hardly feel emotions, learns about the heart after meeting a rough boy named Gon. (Some heavy scenes)"], ["Shout, Playground!", "Jin Hyung-min", "Kids kicked off the baseball team start their own 'anything-goes baseball club' to protect the playground."], ["Candidate No. 3, Ahn Seok-ppong", "Jin Hyung-min", "Seok-ppong suddenly finds himself running for student president, and the election turns into a funny adventure."], ["The Wrong Class President", "Lee Eun-jae", "Troublemaker Ro-un suddenly becomes class president, and a funny, warm story begins."], ["Manbok's Rice Cake Shop", "Kim Ri-ri", "Manbok, who says mean things whenever he opens his mouth, starts to change after eating rice cakes from a magical shop."], ["Suil and Suil", "Kim Woo-kyung", "A mouse eats Suil's fingernail and turns into Suil! The real Suil has to win his life back from the fake one."], ["The Bad Kid Card", "Hwang Sun-mi", "Geonu keeps getting 'bad kid cards' from his teacher, and finally shares how unfair it all feels."], ["The Red Pencil", "Shin Su-hyun", "Minho gets a red pencil that writes anything for him. But is the writing really his own?"], ["The Noodles Are Getting Soggy!", "Lee Hyun", "Short stories full of laughs and heart, starring Gisam, a delivery guy at a Chinese restaurant who never stops talking."], ["Diary of a Wimpy Kid", "Jeff Kinney", "Middle schooler Greg's illustrated diary! Funny and painful things happen every day because of his brother, his friends, and school."], ["Little Nicholas", "René Goscinny", "The silly troubles that mischievous Nicholas and his friends cause at school and around the neighborhood."], ["Pippi Longstocking", "Astrid Lindgren", "The wild and fun days of Pippi, the strongest girl in the world, who can lift a horse with one hand."], ["Kkamnyang the Cat Detective", "Hong Min-jeong", "Kkamnyang, a cat who shows up at an apartment, works as a security guard and solves the residents' problems one by one."], ["Twenty Questions Detective", "Heo Kyo-beom", "A school mystery about a boy detective and his friends who can find the culprit with just twenty questions."], ["Emil and the Detectives", "Erich Kästner", "After his money is stolen on a train, Emil teams up with the kids of Berlin to chase down the thief."], ["From the Mixed-up Files of Mrs. Basil E. Frankweiler", "E.L. Konigsburg", "Claudia and her brother Jamie run away and secretly live in a big New York museum, where they solve the mystery of a statue."], ["A Series of Unfortunate Events", "Lemony Snicket", "The three Baudelaire orphans keep outsmarting the evil Count Olaf, who is after their fortune."], ["Sherlock Holmes: A Study in Scarlet", "Arthur Conan Doyle", "Detective Sherlock Holmes and Dr. Watson meet for the first time and solve a puzzling case together."], ["Arsène Lupin, Gentleman Thief", "Maurice Leblanc", "The amazing adventures of Arsène Lupin, a master of disguise and a gentleman thief."], ["Holes", "Louis Sachar", "Stanley is sent to a boys' camp for something he didn't do. While digging holes every day, he uncovers a secret about a curse and a treasure."], ["Sideways Stories from Wayside School", "Louis Sachar", "Funny, mixed-up stories about the kids in the top-floor class of a strange 30-story school."], ["Hatchet", "Gary Paulsen", "After a plane crash, Brian is left alone in the wilderness and survives with nothing but a hatchet."], ["Two Years' Vacation", "Jules Verne", "Fifteen boys wash up on a deserted island and work together to survive for two years."], ["Treasure Island", "Robert Louis Stevenson", "Young Jim finds a treasure map and sails to Treasure Island with the pirate Long John Silver."], ["The Adventures of Tom Sawyer", "Mark Twain", "Mischievous Tom and his friend Huck have exciting adventures in a town by the river."], ["Around the World in Eighty Days", "Jules Verne", "Mr. Fogg makes a bet that he can travel around the world in eighty days, and the race begins!"], ["Twenty Thousand Leagues Under the Sea", "Jules Verne", "People who end up aboard the mysterious submarine Nautilus travel under the sea with Captain Nemo."], ["The Hen Who Dreamed She Could Fly", "Hwang Sun-mi", "Sprout, a hen who longs to hatch an egg, leaves the farmyard and raises a baby wild duck."], ["The Long, Long Night", "Ruri", "Noden, the last white rhinoceros, and a young penguin walk together to find the sea."], ["Wanini the Blue Lion", "Lee Hyun", "Wanini, a small lioness kicked out of her pride, grows up surviving on the savanna with her friends."], ["Charlotte's Web", "E.B. White", "To save Wilbur the pig from being eaten, Charlotte the spider writes words in her web."], ["A Toad for Tuesday", "Russell E. Erickson", "Warton the toad is caught by an owl who plans to eat him on Tuesday. But a friendship begins to grow between them."], ["Hope for the Flowers", "Trina Paulus", "A striped caterpillar who was climbing a pillar of caterpillars like everyone else sets out to find his real dream."], ["Anne of Green Gables", "L.M. Montgomery", "Chatty, imaginative Anne comes to live at Green Gables and becomes deeply loved."], ["Little Women", "Louisa May Alcott", "Four very different sisters, Meg, Jo, Beth, and Amy, grow up together."], ["The Secret Garden", "Frances Hodgson Burnett", "Lonely Mary finds a locked garden at a big manor house and brings it back to life with her friends."], ["Daddy-Long-Legs", "Jean Webster", "Judy grows up writing letters to the unknown benefactor who sent her to college."], ["My Sweet Orange Tree", "José Mauro de Vasconcelos", "Zezé, a mischievous five-year-old from a poor family, shares his heart with a sweet orange tree and his friend Portuga."], ["River Boy", "Tim Bowler", "Jess travels to a riverside village with her grandfather, meets a mysterious boy, and learns about saying goodbye."], ["A Monster Calls", "Patrick Ness", "Every night, a tree monster visits Conor, who lives with his sick mother, to tell him stories."], ["Heidi", "Johanna Spyri", "A warm story about Heidi, who lives with her grandfather in the Alps, and her friend Clara."], ["The Letter from Chojeong-ri", "Bae Yu-an", "Jangun, a young stonemason, learns a new alphabet from an old man with sore eyes. Who could that old man be...?"], ["The House Where Books Play", "Lee Young-seo", "In the Joseon era, Jang-i, a boy who copies books by hand, gets caught up in a case about a secret book."], ["The Diary of a Young Girl", "Anne Frank", "The real diary that thirteen-year-old Anne wrote for more than two years while hiding from the Nazis."], ["To Kill a Mockingbird", "Harper Lee", "In a small Southern town, young Scout learns about justice by watching her father defend a man who was wrongly accused."], ["Hapche", "Park Ji-ri", "Short twins Hap and Che head to the mountains to learn the secret of growing taller."], ["The Rebel Bike Trip", "Kim Nam-joong", "Hojin runs away from home and joins his uncle's bike tour, growing up along the road."], ["Brave New World", "Aldous Huxley", "In a future where people are made in factories and raised to be happy with their place, John, who grew up outside this world, asks what real happiness is. (Some adult content, recommended for high school and up)"], ["1984", "George Orwell", "In a country where 'Big Brother' watches everyone, Winston, who rewrites records for a living, secretly keeps a diary to hold on to the truth."], ["Fahrenheit 451", "Ray Bradbury", "In a future where owning books is forbidden, firemen burn them. Fireman Montag begins to wonder what is inside them."], ["Divergent", "Veronica Roth", "In a city where people are split into five factions by personality, Tris doesn't fit any of them and must hide a dangerous secret during training."], ["Messenger", "Lois Lowry", "The third book in The Giver series. Matty carries messages through the forest between villages, but when his welcoming village decides to close its doors, he sets out."], ["Son", "Lois Lowry", "The final book in The Giver series. Claire, who once had the job of giving birth, travels very far to find the son she lost."], ["The Wild Robot Escapes", "Peter Brown", "The sequel to The Wild Robot. Roz is taken to a farm and dreams of escaping to return to her son Brightbill on the island."], ["The Martian", "Andy Weir", "Astronaut Watney is left alone on Mars. He grows potatoes, fixes machines, and keeps his sense of humor while trying to survive."], ["Project Hail Mary", "Andy Weir", "Science teacher Grace wakes up on a spaceship with no memory. While searching for a way to save the dying sun, he meets an unexpected friend."], ["The Time Machine", "H.G. Wells", "A scientist who built a time machine travels 800,000 years into the future and discovers the secret of a humanity split in two."], ["The War of the Worlds", "H.G. Wells", "One day, Martians land in England and attack with giant machines. Can people survive?"], ["Frankenstein", "Mary Shelley", "A young scientist named Frankenstein creates a living being, but the creature, left all alone, comes to be called a monster."], ["The Shop That Sells Time", "Kim Sun-young", "High schooler Onjo opens 'The Shop That Sells Time' online, and while helping people with their requests, runs into unexpected events."], ["And Then There Were None", "Agatha Christie", "Ten people invited to a lonely island disappear one by one, just like in a nursery rhyme. The culprit is among them! (Scary scenes, recommended for middle school and up)"], ["Murder on the Orient Express", "Agatha Christie", "A crime happens on a train stuck in the snow. Great detective Hercule Poirot finds the truth among the passengers."], ["Sherlock Holmes: The Hound of the Baskervilles", "Arthur Conan Doyle", "A manor where a legendary, terrifying hound is said to appear. Holmes and Watson uncover the secret hidden on the foggy moor."], ["The Westing Game", "Ellen Raskin", "A millionaire leaves a strange will! Sixteen heirs pair up to take on a game of riddles."], ["Strange Case of Dr Jekyll and Mr Hyde", "Robert Louis Stevenson", "The scary Mr. Hyde keeps visiting the home of the respected Dr. Jekyll. What secret connects the two?"], ["Lord of the Flies", "William Golding", "After a plane crash, a group of boys is stranded on a deserted island. At first they make rules, but things slowly turn frightening. (Heavy scenes, recommended for middle school and up)"], ["The Count of Monte Cristo", "Alexandre Dumas", "Edmond Dantès, wrongly thrown in prison, escapes, finds a hidden treasure, and returns to face the people who betrayed him."], ["The Three Musketeers", "Alexandre Dumas", "Country boy d'Artagnan goes to Paris, befriends three musketeers, and goes on an adventure to protect the queen."], ["The Fellowship of the Ring", "J.R.R. Tolkien", "Frodo the hobbit sets out on a long journey with his companions to destroy the One Ring before it plunges the world into darkness."], ["Miss Peregrine's Home for Peculiar Children", "Ransom Riggs", "Following his grandfather's strange old stories, Jacob travels to an island and finds a house of children with special powers."], ["Journey to the Center of the Earth", "Jules Verne", "Professor Lidenbrock and his nephew decode an old cipher and climb down a volcano into the world beneath the ground."], ["Adventures of Huckleberry Finn", "Mark Twain", "Huck runs away from home and floats down the Mississippi River on a raft with Jim, who has escaped to find his freedom."], ["Robinson Crusoe", "Daniel Defoe", "Shipwrecked and alone on a deserted island, Robinson builds a home, grows crops, and survives for 28 years."], ["Gulliver's Travels", "Jonathan Swift", "After shipwrecks, Gulliver visits amazing lands, including a land of thumb-sized people and a land of giants."], ["The Jungle Book", "Rudyard Kipling", "Mowgli, a boy raised by wolves in the jungle, stands up to the tiger Shere Khan with Baloo the bear and Bagheera the panther."], ["The Tale of Hong Gildong", "Heo Gyun", "Born to a lower-ranked mother and treated unfairly, Hong Gildong learns magic and leads a band of heroes who help people in need."], ["Fantastic Mr Fox", "Roald Dahl", "Three mean farmers want to catch Mr. Fox, who keeps stealing their chickens and ducks. Mr. Fox digs tunnels and comes up with a brilliant plan."], ["The Twits", "Roald Dahl", "A dirty, grumpy couple whose hobby is playing nasty tricks on each other. But a monkey family and some birds fight back!"], ["The Fox Who Ate Books", "Franziska Biermann", "Mr. Fox eats books with salt and pepper! He eats so many books that he ends up writing one himself."], ["The 13-Storey Treehouse", "Andy Griffiths", "Andy and Terry live in a 13-story treehouse with a bowling alley, a shark tank, and a lemonade fountain! Their deadline is coming, but trouble keeps popping up."], ["The Day Without Nagging", "Anne-Marie Norden", "Tired of being nagged, Pusel gets his parents to agree to 'one day with no nagging' and spends the day however he likes."], ["How to Use a Mom", "Kim Sung-jin", "Hyunsu, who has no mom, buys a 'living toy mom' at a toy store. But it turns out this mom comes with instructions to learn."], ["The Real Thief", "William Steig", "Gawain the goose guards the king's treasure house. When treasure keeps disappearing, he is blamed and sent away. Who is the real thief?"], ["A Christmas Carol", "Charles Dickens", "On Christmas Eve, three ghosts visit the miser Scrooge and show him his past, present, and future."], ["The Best Short Stories of O. Henry", "O. Henry", "Warm short stories with surprise endings, like 'The Last Leaf' and 'The Gift of the Magi'."], ["You Are a Sky Lily Too", "Lee Geum-yi", "Mir, Bau, and Sohee meet in a country village. Each child carries their own hurt, and they become a source of strength for one another."], ["Life at Nine", "Wi Ki-chul", "Nine-year-old Yeomin moves to a hillside neighborhood and learns about 'life' by watching his neighbors and friends."], ["The Children of Goengiburimal", "Kim Jung-mi", "In Goengiburimal, a poor neighborhood in Incheon, twins Sukja and Sukhee and brothers Dongsu and Dongjun lean on each other to get by."], ["Big Sister Mongsil", "Kwon Jeong-saeng", "Through war and poverty, Mongsil carries her little sister on her back and bravely keeps going."], ["Our Twisted Hero", "Yi Mun-yol", "After moving to a country school, Byeongtae stands up to Seokdae, the class leader who rules the class however he wants."], ["Demian", "Hermann Hesse", "An ordinary boy named Sinclair meets his mysterious friend Demian and goes searching for his 'true self'."], ["The Catcher in the Rye", "J.D. Salinger", "Sixteen-year-old Holden, kicked out of school, wanders around New York and looks at the adult world."], ["Beneath the Wheel", "Hermann Hesse", "Hans, who carries the whole town's hopes and only studies, enters a seminary and slowly wears himself out."], ["Jonathan Livingston Seagull", "Richard Bach", "The story of Jonathan, a seagull who dreams of flying higher and faster instead of just looking for food."], ["The Old Man and the Sea", "Ernest Hemingway", "Old fisherman Santiago battles a giant marlin for days in the middle of the sea."], ["Sophie's World", "Jostein Gaarder", "Fourteen-year-old Sophie gets a strange letter asking, 'Who are you?' Following the letters, she learns the history of philosophy step by step."], ["Justice: What's the Right Thing to Do?", "Michael Sandel", "Lectures on justice that ask 'what is right?' using questions about runaway trains, taxes, the army, and more."], ["Sapiens", "Yuval Noah Harari", "The big picture of human history: how Homo sapiens, once an unimportant animal, came to rule the Earth."], ["Guns, Germs, and Steel", "Jared Diamond", "Why did people from some continents conquer others? This book explains the differences between civilizations through geography and environment."], ["Factfulness", "Hans Rosling", "The world is getting better than you think! It uses numbers and data to show how wrong we often are about the world."], ["The Selfish Gene", "Richard Dawkins", "It explains life and behavior in a new way: living things are 'survival machines' built by genes to pass themselves on."], ["Cosmos", "Carl Sagan", "From the birth of stars to the origin of life, a science classic that tells the story of the universe and the humans in it."], ["Silent Spring", "Rachel Carson", "The book that revealed how pesticides affect birds, insects, and people, and started the environmental movement."], ["Twelve Footsteps", "Jeong Jae-seung", "Twelve talks by a brain scientist that explore how humans think, through topics like choice, play, and creativity."], ["The Courage to Be Disliked", "Ichiro Kishimi & Fumitake Koga", "A conversation between a troubled young man and a philosopher about the courage to live as yourself instead of worrying about what others think."], ["Man's Search for Meaning", "Viktor E. Frankl", "A psychiatrist who survived the Nazi camps explains that we can find meaning in life even in the hardest moments."], ["The Apology of Socrates", "Plato", "Standing trial, Socrates boldly defends his life and philosophy, saying, 'I know that I know nothing.'"], ["Meditations", "Marcus Aurelius", "Notes a Roman emperor wrote to himself on the battlefield: thoughts on controlling anger and living today well."], ["Walden", "Henry David Thoreau", "A record of two years living alone in a cabin in the woods by a pond, exploring a life with only what you really need."], ["How Should We Live?", "Yoo Si-min", "What makes a good life? Talking about work, play, love, and solidarity, the author explores how to live as yourself."], ["Wide and Shallow Knowledge for Smart Conversations", "Chae Sa-jang", "It ties history, economics, politics, society, and ethics into one thread and draws a basic map for understanding the world."], ["Philosophy as a Weapon for Life", "Shu Yamaguchi", "It takes the ideas of difficult philosophers and introduces them one by one as tools you can use in your life today."], ["The Stranger", "Albert Camus", "Meursault doesn't even cry at his mother's funeral. Through a man who doesn't fit society's rules, the book shows the absurdity of life."], ["The Metamorphosis", "Franz Kafka", "Gregor wakes up one morning to find he has turned into a giant bug. How will his family treat him?"], ["The Alchemist", "Paulo Coelho", "Santiago, a shepherd boy, crosses the desert to find the treasure from his dream, and at the end of his journey learns what the real treasure is."], ["Siddhartha", "Hermann Hesse", "The story of young Siddhartha, who leaves home in search of true enlightenment and finds the wisdom of life by a river."], ["The Prince", "Niccolò Machiavelli", "What must a leader do to protect the country? An old classic about politics that looks at reality instead of ideals."], ["What Is Studying?", "Kim Young-min", "Studying isn't about test scores. It's about the power to think. The book gently explains how to question, read, and write."]];
-const I18N = {ko:{"pfAge": "나이대", "pfEng": "영어 실력 (선택)", "origGrade": "영어 수준: {g}", "gradeBand": "미국 {a}~{b}학년 정도", "gradeHigh": "미국 고등학생 이상", "gradeAdult": "어른 수준", "origNote": "※ 미국 학년은 독서 지수(AR·렉사일 등)를 참고한 대략적인 값이에요.", "fitAge": "📖 {n}님 나이에 한국어로 읽으면", "fitEng": "📗 {n}님 영어 실력으로 원서를 읽으면", "you": "나", "fit1": "🟢 쉬워요", "fit2": "✨ 딱 맞아요", "fit3": "💪 조금 어려워요", "fit4": "🔥 많이 어려워요", "fitNeed": "💡 프로필에 나이대를 넣으면 난이도를 알려 드려요.", "fitNeedEng": "💡 프로필에 영어 실력을 넣으면 원서 난이도를 알려 드려요.", "orig": "영어 원서", "origLv1": "쉬움", "origLv2": "보통", "origLv3": "어려움", "origInfo": "원래 영어로 쓰인 책이야. 영어 원서로도 읽을 수 있어!", "origLink": "📗 원서 찾아보기", "origFilter": "📗 영어 원서", "origLevel": "영어 난이도", "pfTitle": "🌟 내 프로필", "pfNick": "별명", "pfPh": "예) 별빛소녀", "pfSafe": "🔒 실명 대신 별명을 써 주세요. 프로필은 이 기기에만 저장돼요.", "pfStar": "나의 별 모양", "pfColor": "별빛 색깔", "cancel": "취소", "save": "💾 저장", "pfDel": "프로필 삭제", "pfDelSure": "한 번 더 누르면 삭제돼요.", "pfNeed": "별명을 입력해 주세요.", "hello": "{n}님, 어서 오세요!", "helloSub": "오늘은 어떤 책을 찾아볼까요?", "edit": "✏️ 수정", "newGreet": "프로필을 만들면 별명으로 불러 드려요.", "newBtn": "🌟 만들기", "resTitleN": "✨ {n}님의 별자리 책 ✨", "shootMsgN": "✨ {n}님을 위한 오늘의 책 ✨", "ph": "예) 기억 전달자, 로이스 로리", "remove": "빼기", "missKnown": "· 책장에는 없지만 비슷한 책을 찾아 드려요", "missNone": "· 아직 책장에 없는 책이에요", "ratedNote": "📖 별점을 준 책 {n}권도 추천에 반영해요", "tapHint": "책을 누르면 줄거리를 볼 수 있어요.", "me": "나", "match": "추천도", "matchBig": "💫 추천도", "readQ": "📖 읽은 책인가요? 별점을 남겨 주세요.", "close": "닫기", "starN": "별 {n}개", "liked": "♥ 찜함", "like": "♡ 찜하기", "store": "📕 서점에서 보기", "unread": "읽은 책에서 빼기", "rate1": "😢 아쉬운 책이었군요. 비슷한 책은 덜 추천할게요.", "rate2": "🙁 조금 아쉬웠군요.", "rate3": "🙂 무난한 책이었군요.", "rate4": "😊 재미있었군요! 비슷한 책을 더 찾아 드릴게요.", "rate5": "🤩 최고의 책이었군요! 비슷한 책을 많이 추천해 드릴게요.", "all": "전체", "count": "{n}권", "cover": "표지", "shelfTitle": "📚 전체 책장", "likesTitle": "♡ 찜한 책", "readTitle": "📖 읽은 책", "emptyRead": "아직 별점을 준 책이 없어요. 책을 누르고 ★을 눌러 보세요.<br>별점을 남길수록 추천이 정확해져요.", "emptyLike": "아직 찜한 책이 없어요. 마음에 드는 책에서 ♡를 눌러 보세요.", "shootMsg": "✨ 오늘의 책 ✨", "whyG": "좋아하는 <b>{g}</b> 분야의 책이에요.", "whyM": "<b>{m}</b> 해 주는 책이에요.", "whyF": "비슷한 책: 《{t}》{more}", "whyFmore": " 외", "whyA": "좋아하는 책과 <b>같은 지은이</b>({a})의 책이에요.", "whyR": "비슷한 책: 별점 {s}을 준 《{t}》", "title": "밤하늘 책방", "langBtn": "🌐 English", "langLabel": "언어 바꾸기", "appName": "밤하늘 책방", "intro": "밤하늘의 별을 이어 별자리를 만들듯,<br>좋아하는 것들을 이어 <b>꼭 맞는 책</b>을 찾아 드려요.", "start": "✨ 책 추천받기", "shootBtn": "오늘의 책", "shelfBtn": "전체 책장", "libBtn": "내 서재", "q1": "재미있게 읽은 책이 있나요?", "q1h": "제목이나 지은이를 입력하면 비슷한 책을 찾아 드려요. 여러 권 넣어도 되고, 건너뛰어도 괜찮아요.", "add": "추가", "toHome": "← 처음으로", "next": "다음 →", "prev": "← 이전", "q2": "어떤 이야기를 좋아하나요?", "q2h": "마음에 드는 것을 모두 골라 주세요.", "q3": "다 읽고 나서 어떤 기분이면 좋을까요?", "q3h": "여러 개 골라도 괜찮아요.", "q4": "누가 읽을 책인가요?", "q4h": "읽는 사람의 나이에 맞는 책 위주로 골라 드려요.", "q5": "어떤 책으로 읽을까요?", "q5h": "영어 원서를 고르면 영어 실력에 맞는 원서를 추천해 드려요.", "q5Eng": "영어 실력을 골라 주세요.", "getRec": "🌠 추천받기", "resTitle": "✨ 나만의 별자리 책 ✨", "vCards": "📚 카드로 보기", "vSky": "🌌 별자리로 보기", "skyhint": "가운데 별이 <b>나</b>예요. 별이 클수록 나와 잘 맞는 책이고, 선으로 이어진 책끼리는 서로 닮았어요. 별을 눌러 보세요.", "more": "🔄 다른 책 보기", "restart": "처음부터 다시", "again": "🌠 한 번 더 뽑기", "home2": "처음으로", "libTitle": "🗂️ 내 서재", "whyE2": "영어 실력에 <b>딱 맞는</b> 원서예요.", "whyE3": "조금 도전해 볼 만한 원서예요.", "whyE1": "가볍게 술술 읽을 수 있는 원서예요.", "searchPh": "책 제목이나 지은이로 검색", "searchTitle": "🔍 검색 결과", "searchNone": "검색 결과가 없어요. 다른 단어로 찾아보세요.", "langKo": "📖 한국어 책", "langKoD": "우리 책과 번역서 모두", "langEn": "📗 영어 원서", "langEnD": "원래 영어로 쓰인 책을 원서로", "coverCredit": "표지: 카카오 책 검색", "tabLikes": "♡ 찜한 책", "tabRead": "📖 읽은 책", "settingsTitle": "⚙️ 설정", "setTheme": "화면 테마", "setMusic": "배경음악", "setVol": "음량", "setLang": "언어", "done": "완료", "musicHint": "배경음악은 밤하늘 책방이 직접 만든 소리예요. 음악은 화면을 한 번 누른 뒤에 시작돼요.", "th_night": "밤하늘", "th_dawn": "새벽노을", "th_aurora": "오로라", "th_moon": "보름달", "mu_none": "끄기", "mu_box": "별빛 오르골", "mu_pad": "잔잔한 밤", "mu_rain": "창밖의 빗소리", "nope": "🚫 관심 없음", "noped": "↩︎ 관심 없음 취소", "tabNope": "🚫 관심 없음", "emptyNope": "관심 없음으로 표시한 책이 없어요.", "dailyNext": "내일 새로운 책이 찾아와요 · {t} 남음", "hm": "{h}시간 {m}분"}, en:{"pfAge": "Age group", "pfEng": "English level (optional)", "origGrade": "English level: {g}", "gradeBand": "about US grade {a}–{b}", "gradeHigh": "US high school and up", "gradeAdult": "adult level", "origNote": "※ US grade levels are estimates based on reading measures like AR and Lexile.", "fitAge": "📖 Reading in Korean at {n}'s age", "fitEng": "📗 Reading the original with {n}'s English", "you": "you", "fit1": "🟢 Easy read", "fit2": "✨ Just right", "fit3": "💪 A bit of a challenge", "fit4": "🔥 Very hard", "fitNeed": "💡 Add your age group to your profile and I'll tell you how hard this book is for you!", "fitNeedEng": "💡 Add your English level to your profile and I'll tell you how hard the original is!", "orig": "English original", "origLv1": "Easy", "origLv2": "Medium", "origLv3": "Hard", "origInfo": "This book was first written in English, so you can read the original!", "origLink": "📗 Find the original", "origFilter": "📗 English originals", "origLevel": "English level", "pfTitle": "🌟 My Profile", "pfNick": "Nickname", "pfPh": "e.g. Stargazer", "pfSafe": "🔒 Use a nickname, not your real name! Your profile is saved only on this device.", "pfStar": "My star", "pfColor": "Starlight color", "cancel": "Cancel", "save": "💾 Save", "pfDel": "Delete profile", "pfDelSure": "Are you sure? Press once more to delete.", "pfNeed": "Please type a nickname with at least one letter!", "hello": "Welcome, {n}!", "helloSub": "What book shall we look for today?", "edit": "✏️ Edit", "newGreet": "Make a profile and I'll call you by your nickname!", "newBtn": "🌟 Create", "resTitleN": "✨ {n}'s Constellation of Books ✨", "shootMsgN": "✨ {n}'s Book of the Day ✨", "appName": "Night Sky Bookshop", "start": "✨ Get recommendations", "shootBtn": "Book of the Day", "shelfBtn": "All books", "readBtn": "📖 Books I've read", "likeBtn": "♡ Saved books", "intro": "Just like connecting stars to make a constellation,<br>I'll connect the things you love to find <b>the perfect book</b> for you.", "q1": "Is there a book you really enjoyed? 📖", "q1h": "Type a title and I'll find similar books. You can add several, or just skip this step!", "add": "Add", "toHome": "← Home", "next": "Next →", "prev": "← Back", "q2": "What kind of stories do you like? 🌟", "q2h": "Pick as many as you like.", "q3": "How do you want to feel after reading? 💫", "q3h": "You can pick more than one.", "q4": "Who is the book for? 📏", "q4h": "I'll pick books that fit the reader's age.", "getRec": "🌠 Get my books", "resTitle": "✨ Your Constellation of Books ✨", "vCards": "📚 Card view", "vSky": "🌌 Constellation view", "skyhint": "The star in the middle is <b>you</b>. The bigger the star, the better the match! Books connected by lines are similar to each other. Tap a star ✨", "more": "🔄 Show other books", "restart": "Start over", "again": "🌠 Draw again", "home2": "Home", "shelfTitle": "📚 All books", "likesTitle": "♡ My saved books", "readTitle": "📖 Books I've read", "note": "Cover info: Kakao Book Search<br>Books without a cover found show a night-sky picture drawn by Night Sky Bookshop.", "ph": "e.g. The Giver, Lois Lowry", "remove": "Remove", "missKnown": "· Not on the shelf, but I'll find similar kinds!", "missNone": "· This book isn't on the shelf yet", "ratedNote": "📖 I'll also use the {n} books you rated!", "tapHint": "Tap a book to read its summary 🌠", "me": "Me", "match": "Match", "matchBig": "💫 Match", "readQ": "📖 Have you read this book? Tap to rate it!", "close": "Close", "starN": "{n} stars", "liked": "♥ Saved", "like": "♡ Save", "store": "📕 See more at the bookstore", "unread": "Remove from books I've read", "rate1": "😢 Not for you. I'll recommend fewer books like this.", "rate2": "🙁 A little disappointing.", "rate3": "🙂 It was okay.", "rate4": "😊 You liked it! I'll find more books like this.", "rate5": "🤩 You loved it! I'll find lots of books like this.", "all": "All", "count": "{n} books", "cover": "cover", "emptyRead": "You haven't rated any books yet. Tap a book and press the ★ at the bottom!<br>The more you rate, the smarter my picks get. 🌟", "emptyLike": "You haven't saved any books yet. When you find one you like, press ♡!", "shootMsg": "✨ Book of the Day ✨", "whyG": "It's from <b>{g}</b>, a genre you like.", "whyM": "A book that leaves you <b>{m}</b>.", "whyF": "Similar to: <i>{t}</i>{more}", "whyFmore": " and more", "whyA": "It's by <b>the same author</b> ({a}) as a book you like!", "whyR": "Similar to: <i>{t}</i>, which you rated {s}", "title": "Night Sky Bookshop", "langBtn": "🌐 한국어", "langLabel": "Change language", "libBtn": "My Library", "q5": "How do you want to read it?", "q5h": "Choose English originals to get books that fit your English level.", "q5Eng": "Choose your English level.", "libTitle": "🗂️ My Library", "whyE2": "It's <b>just right</b> for your English level.", "whyE3": "A good challenge for your English.", "whyE1": "An easy, relaxing read in English.", "searchPh": "Search by title or author", "searchTitle": "🔍 Search results", "searchNone": "No results. Try different words.", "langKo": "📖 Korean books", "langKoD": "Korean books and translations", "langEn": "📗 English originals", "langEnD": "Books first written in English", "coverCredit": "Cover: Kakao Book Search", "tabLikes": "♡ Saved", "tabRead": "📖 Read", "settingsTitle": "⚙️ Settings", "setTheme": "Theme", "setMusic": "Background music", "setVol": "Volume", "setLang": "Language", "done": "Done", "musicHint": "The music is made right inside Night Sky Bookshop. It starts after you tap the screen once.", "th_night": "Night sky", "th_dawn": "Dawn", "th_aurora": "Aurora", "th_moon": "Full moon", "mu_none": "Off", "mu_box": "Starlight music box", "mu_pad": "Quiet night", "mu_rain": "Rain outside", "nope": "🚫 Not interested", "noped": "↩︎ Undo not interested", "tabNope": "🚫 Not interested", "emptyNope": "You haven't marked any books as not interested.", "dailyNext": "A new book arrives tomorrow · {t} left", "hm": "{h}h {m}m"}};
+const I18N = {ko:{"pfAge": "나이대", "pfEng": "영어 실력 (선택)", "origGrade": "영어 수준: {g}", "gradeBand": "미국 {a}~{b}학년 정도", "gradeHigh": "미국 고등학생 이상", "gradeAdult": "어른 수준", "origNote": "※ 미국 학년은 독서 지수(AR·렉사일 등)를 참고한 대략적인 값이에요.", "fitAge": "📖 {n}님 나이에 한국어로 읽으면", "fitEng": "📗 {n}님 영어 실력으로 원서를 읽으면", "you": "나", "fit1": "🟢 쉬워요", "fit2": "✨ 딱 맞아요", "fit3": "💪 조금 어려워요", "fit4": "🔥 많이 어려워요", "fitNeed": "💡 프로필에 나이대를 넣으면 난이도를 알려 드려요.", "fitNeedEng": "💡 프로필에 영어 실력을 넣으면 원서 난이도를 알려 드려요.", "orig": "영어 원서", "origLv1": "쉬움", "origLv2": "보통", "origLv3": "어려움", "origInfo": "원래 영어로 쓰인 책이야. 영어 원서로도 읽을 수 있어!", "origLink": "📗 원서 찾아보기", "origFilter": "📗 영어 원서", "origLevel": "영어 난이도", "pfTitle": "🌟 내 프로필", "pfNick": "별명", "pfPh": "예) 별빛소녀", "pfSafe": "🔒 실명 대신 별명을 써 주세요. 프로필은 이 기기에만 저장돼요.", "pfStar": "나의 별 모양", "pfColor": "별빛 색깔", "cancel": "취소", "save": "💾 저장", "pfDel": "프로필 삭제", "pfDelSure": "한 번 더 누르면 프로필과 내 서재, 별 도장 기록이 모두 삭제돼요.", "pfNeed": "별명을 입력해 주세요.", "hello": "{n}님, 어서 오세요!", "helloSub": "오늘은 어떤 책을 찾아볼까요?", "edit": "✏️ 수정", "newGreet": "프로필을 만들면 별명으로 불러 드려요.", "newBtn": "🌟 만들기", "resTitleN": "✨ {n}님의 별자리 책 ✨", "shootMsgN": "✨ {n}님을 위한 오늘의 책 ✨", "ph": "예) 기억 전달자, 로이스 로리", "remove": "빼기", "missKnown": "· 책장에는 없지만 비슷한 책을 찾아 드려요", "missNone": "· 아직 책장에 없는 책이에요", "ratedNote": "📖 별점을 준 책 {n}권도 추천에 반영해요", "tapHint": "책을 누르면 줄거리를 볼 수 있어요.", "me": "나", "match": "추천도", "matchBig": "💫 추천도", "readQ": "📖 읽은 책인가요? 별점을 남겨 주세요.", "close": "닫기", "starN": "별 {n}개", "liked": "♥ 찜함", "like": "♡ 찜하기", "store": "📕 서점에서 보기", "unread": "읽은 책에서 빼기", "rate1": "😢 아쉬운 책이었군요. 비슷한 책은 덜 추천할게요.", "rate2": "🙁 조금 아쉬웠군요.", "rate3": "🙂 무난한 책이었군요.", "rate4": "😊 재미있었군요! 비슷한 책을 더 찾아 드릴게요.", "rate5": "🤩 최고의 책이었군요! 비슷한 책을 많이 추천해 드릴게요.", "all": "전체", "count": "{n}권", "cover": "표지", "shelfTitle": "📚 전체 책장", "likesTitle": "♡ 찜한 책", "readTitle": "📖 읽은 책", "emptyRead": "아직 별점을 준 책이 없어요. 책을 누르고 ★을 눌러 보세요.<br>별점을 남길수록 추천이 정확해져요.", "emptyLike": "아직 찜한 책이 없어요. 마음에 드는 책에서 ♡를 눌러 보세요.", "shootMsg": "✨ 오늘의 책 ✨", "whyG": "좋아하는 <b>{g}</b> 분야의 책이에요.", "whyM": "<b>{m}</b> 해 주는 책이에요.", "whyF": "비슷한 책: 《{t}》{more}", "whyFmore": " 외", "whyA": "좋아하는 책과 <b>같은 지은이</b>({a})의 책이에요.", "whyR": "비슷한 책: 별점 {s}을 준 《{t}》", "title": "밤하늘 책방", "langBtn": "🌐 English", "langLabel": "언어 바꾸기", "appName": "밤하늘 책방", "intro": "밤하늘의 별을 이어 별자리를 만들듯,<br>좋아하는 것들을 이어 <b>꼭 맞는 책</b>을 찾아 드려요.", "start": "✨ 책 추천받기", "shootBtn": "오늘의 책", "shelfBtn": "전체 책장", "libBtn": "내 서재", "q1": "재미있게 읽은 책이 있나요?", "q1h": "제목이나 지은이를 입력하면 비슷한 책을 찾아 드려요. 여러 권 넣어도 되고, 건너뛰어도 괜찮아요.", "add": "추가", "toHome": "← 처음으로", "next": "다음 →", "prev": "← 이전", "q2": "어떤 이야기를 좋아하나요?", "q2h": "마음에 드는 것을 모두 골라 주세요.", "q3": "다 읽고 나서 어떤 기분이면 좋을까요?", "q3h": "여러 개 골라도 괜찮아요.", "q4": "누가 읽을 책인가요?", "q4h": "읽는 사람의 나이에 맞는 책 위주로 골라 드려요.", "q5": "어떤 책으로 읽을까요?", "q5h": "영어 원서를 고르면 영어 실력에 맞는 원서를 추천해 드려요.", "q5Eng": "영어 실력을 골라 주세요.", "getRec": "🌠 추천받기", "resTitle": "✨ 나만의 별자리 책 ✨", "vCards": "📚 카드로 보기", "vSky": "🌌 별자리로 보기", "skyhint": "가운데 별이 <b>나</b>예요. 별이 클수록 나와 잘 맞는 책이고, 선으로 이어진 책끼리는 서로 닮았어요. 별을 눌러 보세요.", "more": "🔄 다른 책 보기", "restart": "처음부터 다시", "again": "🌠 한 번 더 뽑기", "home2": "처음으로", "libTitle": "🗂️ 내 서재", "whyE2": "영어 실력에 <b>딱 맞는</b> 원서예요.", "whyE3": "조금 도전해 볼 만한 원서예요.", "whyE1": "가볍게 술술 읽을 수 있는 원서예요.", "searchPh": "책 제목이나 지은이로 검색", "searchTitle": "🔍 검색 결과", "searchNone": "검색 결과가 없어요. 다른 단어로 찾아보세요.", "langKo": "📖 한국어 책", "langKoD": "우리 책과 번역서 모두", "langEn": "📗 영어 원서", "langEnD": "원래 영어로 쓰인 책을 원서로", "coverCredit": "표지: 카카오 책 검색", "tabLikes": "♡ 찜한 책", "tabRead": "📖 읽은 책", "settingsTitle": "⚙️ 설정", "setTheme": "화면 테마", "setLang": "언어", "done": "완료", "nope": "🚫 관심 없음", "noped": "↩︎ 관심 없음 취소", "tabNope": "🚫 관심 없음", "emptyNope": "관심 없음으로 표시한 책이 없어요.", "dailyNext": "내일 새로운 책이 찾아와요 · {t} 남음", "hm": "{h}시간 {m}분", "th_dark": "다크", "th_light": "화이트", "stampBtn": "별 도장", "stampTitle": "⭐ 별 도장", "stampHint": "책방을 이용하면 별 친구들이 도장을 찍어 줘요.", "stampSum": "{n} / {t}개", "stampNew": "새 별 도장을 받았어요!", "stampLocked": "아직 못 받았어요", "stampGot": "{d}에 받았어요"}, en:{"pfAge": "Age group", "pfEng": "English level (optional)", "origGrade": "English level: {g}", "gradeBand": "about US grade {a}–{b}", "gradeHigh": "US high school and up", "gradeAdult": "adult level", "origNote": "※ US grade levels are estimates based on reading measures like AR and Lexile.", "fitAge": "📖 Reading in Korean at {n}'s age", "fitEng": "📗 Reading the original with {n}'s English", "you": "you", "fit1": "🟢 Easy read", "fit2": "✨ Just right", "fit3": "💪 A bit of a challenge", "fit4": "🔥 Very hard", "fitNeed": "💡 Add your age group to your profile and I'll tell you how hard this book is for you!", "fitNeedEng": "💡 Add your English level to your profile and I'll tell you how hard the original is!", "orig": "English original", "origLv1": "Easy", "origLv2": "Medium", "origLv3": "Hard", "origInfo": "This book was first written in English, so you can read the original!", "origLink": "📗 Find the original", "origFilter": "📗 English originals", "origLevel": "English level", "pfTitle": "🌟 My Profile", "pfNick": "Nickname", "pfPh": "e.g. Stargazer", "pfSafe": "🔒 Use a nickname, not your real name! Your profile is saved only on this device.", "pfStar": "My star", "pfColor": "Starlight color", "cancel": "Cancel", "save": "💾 Save", "pfDel": "Delete profile", "pfDelSure": "Press once more to delete your profile, library, and stamps.", "pfNeed": "Please type a nickname with at least one letter!", "hello": "Welcome, {n}!", "helloSub": "What book shall we look for today?", "edit": "✏️ Edit", "newGreet": "Make a profile and I'll call you by your nickname!", "newBtn": "🌟 Create", "resTitleN": "✨ {n}'s Constellation of Books ✨", "shootMsgN": "✨ {n}'s Book of the Day ✨", "appName": "Night Sky Bookshop", "start": "✨ Get recommendations", "shootBtn": "Book of the Day", "shelfBtn": "All books", "readBtn": "📖 Books I've read", "likeBtn": "♡ Saved books", "intro": "Just like connecting stars to make a constellation,<br>I'll connect the things you love to find <b>the perfect book</b> for you.", "q1": "Is there a book you really enjoyed? 📖", "q1h": "Type a title and I'll find similar books. You can add several, or just skip this step!", "add": "Add", "toHome": "← Home", "next": "Next →", "prev": "← Back", "q2": "What kind of stories do you like? 🌟", "q2h": "Pick as many as you like.", "q3": "How do you want to feel after reading? 💫", "q3h": "You can pick more than one.", "q4": "Who is the book for? 📏", "q4h": "I'll pick books that fit the reader's age.", "getRec": "🌠 Get my books", "resTitle": "✨ Your Constellation of Books ✨", "vCards": "📚 Card view", "vSky": "🌌 Constellation view", "skyhint": "The star in the middle is <b>you</b>. The bigger the star, the better the match! Books connected by lines are similar to each other. Tap a star ✨", "more": "🔄 Show other books", "restart": "Start over", "again": "🌠 Draw again", "home2": "Home", "shelfTitle": "📚 All books", "likesTitle": "♡ My saved books", "readTitle": "📖 Books I've read", "note": "Cover info: Kakao Book Search<br>Books without a cover found show a night-sky picture drawn by Night Sky Bookshop.", "ph": "e.g. The Giver, Lois Lowry", "remove": "Remove", "missKnown": "· Not on the shelf, but I'll find similar kinds!", "missNone": "· This book isn't on the shelf yet", "ratedNote": "📖 I'll also use the {n} books you rated!", "tapHint": "Tap a book to read its summary 🌠", "me": "Me", "match": "Match", "matchBig": "💫 Match", "readQ": "📖 Have you read this book? Tap to rate it!", "close": "Close", "starN": "{n} stars", "liked": "♥ Saved", "like": "♡ Save", "store": "📕 See more at the bookstore", "unread": "Remove from books I've read", "rate1": "😢 Not for you. I'll recommend fewer books like this.", "rate2": "🙁 A little disappointing.", "rate3": "🙂 It was okay.", "rate4": "😊 You liked it! I'll find more books like this.", "rate5": "🤩 You loved it! I'll find lots of books like this.", "all": "All", "count": "{n} books", "cover": "cover", "emptyRead": "You haven't rated any books yet. Tap a book and press the ★ at the bottom!<br>The more you rate, the smarter my picks get. 🌟", "emptyLike": "You haven't saved any books yet. When you find one you like, press ♡!", "shootMsg": "✨ Book of the Day ✨", "whyG": "It's from <b>{g}</b>, a genre you like.", "whyM": "A book that leaves you <b>{m}</b>.", "whyF": "Similar to: <i>{t}</i>{more}", "whyFmore": " and more", "whyA": "It's by <b>the same author</b> ({a}) as a book you like!", "whyR": "Similar to: <i>{t}</i>, which you rated {s}", "title": "Night Sky Bookshop", "langBtn": "🌐 한국어", "langLabel": "Change language", "libBtn": "My Library", "q5": "How do you want to read it?", "q5h": "Choose English originals to get books that fit your English level.", "q5Eng": "Choose your English level.", "libTitle": "🗂️ My Library", "whyE2": "It's <b>just right</b> for your English level.", "whyE3": "A good challenge for your English.", "whyE1": "An easy, relaxing read in English.", "searchPh": "Search by title or author", "searchTitle": "🔍 Search results", "searchNone": "No results. Try different words.", "langKo": "📖 Korean books", "langKoD": "Korean books and translations", "langEn": "📗 English originals", "langEnD": "Books first written in English", "coverCredit": "Cover: Kakao Book Search", "tabLikes": "♡ Saved", "tabRead": "📖 Read", "settingsTitle": "⚙️ Settings", "setTheme": "Theme", "setLang": "Language", "done": "Done", "nope": "🚫 Not interested", "noped": "↩︎ Undo not interested", "tabNope": "🚫 Not interested", "emptyNope": "You haven't marked any books as not interested.", "dailyNext": "A new book arrives tomorrow · {t} left", "hm": "{h}h {m}m", "th_dark": "Dark", "th_light": "White", "stampBtn": "Stamps", "stampTitle": "⭐ Star Stamps", "stampHint": "Use the bookshop and the star friends will stamp your card.", "stampSum": "{n} / {t}", "stampNew": "You got a new star stamp!", "stampLocked": "Not yet", "stampGot": "Got it on {d}"}};
 const GEN_EN={"f": ["Magic & Fantasy", "Wizards and magical worlds"], "m": ["Secrets of Future Worlds", "The truth behind a 'perfect' world"], "d": ["Mystery & Adventure", "Puzzles, exploring, escaping"], "s": ["Friends & School", "Friends, classes, school life"], "h": ["Funny & Fun", "Stories that make you laugh out loud"], "g": ["Heartwarming & Growing Up", "Stories that help your heart grow"], "a": ["Animal Friends", "Stories starring animals"], "y": ["History & Long Ago", "Stories from times past"], "p": ["Philosophy & Big Questions", "Questions about yourself, life, and happiness"], "i": ["Humanities & Society", "How people and the world work"], "c": ["Popular Science", "Mysteries of space, life, and the brain"]}, MOOD_EN={"b": ["Happy & cheerful", "Bright, fun books", "happy and cheerful"], "t": ["Thrilling & suspenseful", "Can't wait for the next page", "on the edge of your seat"], "k": ["Thoughtful", "Books that leave you thinking", "deep in thought"], "w": ["Touched & warm", "Warm, heart-tugging books", "warm and touched"]}, LEV_EN={"1": "Elementary school", "2": "Upper elementary to middle school", "3": "Middle to high school", "4": "Adults"}, READ_EN={"1": ["Elementary schooler", "Easy, flowing reads"], "2": ["Middle schooler", "Up to a bit of a challenge"], "3": ["High schooler", "Teen classics and books that make you think"], "4": ["Grown-up", "Philosophy, humanities, and adult classics"]};
 const KO_STATIC={};
 let LANG='ko';
@@ -772,6 +826,7 @@ function matchStars(list){
   });
 }
 function showResult(more){
+  if(!more){ bump('rec'); if(selBL==='en')award('orig'); }
   if(!more)shown.clear();
   const list=rankList(); matchStars(list);
   let pick=list.filter(x=>!shown.has(x.b.id)).slice(0,6);
@@ -799,7 +854,7 @@ function setView(v){
   document.getElementById('skyWrap').style.display=v==='sky'?'':'none';
   document.getElementById('vCards').classList.toggle('sel',v==='cards');
   document.getElementById('vSky').classList.toggle('sel',v==='sky');
-  if(v==='sky')drawConstellation();
+  if(v==='sky'){drawConstellation(); award('sky');}
 }
 
 // ── 별자리 지도 ──
@@ -871,6 +926,7 @@ function bookEl(b,rank){
 // ── 상세 창 ──
 function openModal(id){
   id=+id;
+  { const bk=BOOKS[id]; let ch=false; bk.g.forEach(x=>{if(!stats.genres.includes(x)){stats.genres.push(x);ch=true;}}); if(ch){saveStamps();checkStamps();} }
   const b=BOOKS[id]; const why=window._why[id]||[]; const m=window._match[id];
   const url=LANG==='en'?'https://www.goodreads.com/search?q='+encodeURIComponent(b.t+' '+b.a):'https://www.aladin.co.kr/search/wsearchresult.aspx?SearchTarget=Book&SearchWord='+encodeURIComponent(b.t+' '+b.a);
   document.getElementById('mbox').innerHTML=`
@@ -900,7 +956,7 @@ function openModal(id){
     e.target.classList.toggle('on',nope.has(id));e.target.textContent=nope.has(id)?T('noped'):T('nope');
   };
   document.getElementById('heartBtn').onclick=e=>{
-    likes.has(id)?likes.delete(id):likes.add(id);saveLikes();
+    likes.has(id)?likes.delete(id):likes.add(id);saveLikes();checkStamps();
     e.target.classList.toggle('on',likes.has(id));e.target.textContent=likes.has(id)?T('liked'):T('like');
   };
   const paint=()=>{
@@ -910,7 +966,7 @@ function openModal(id){
     document.getElementById('rmsg').innerHTML=r?`${msg} <button class="undo" id="undoRead">${T('unread')}</button>`:'';
     const u=document.getElementById('undoRead'); if(u)u.onclick=()=>{delete read[id];saveRead();paint();};
   };
-  document.querySelectorAll('#rstars button').forEach(btn=>btn.onclick=()=>{read[id]=+btn.dataset.n;saveRead();paint();});
+  document.querySelectorAll('#rstars button').forEach(btn=>btn.onclick=()=>{read[id]=+btn.dataset.n;saveRead();paint();checkStamps();});
   paint();
   document.getElementById('modal').classList.add('on');
 }
@@ -1006,6 +1062,8 @@ function shootingStar(){
   document.getElementById('shootAgain').style.display='none';
   go('s-shoot');
   const pick=dailyPick();
+  const tk=todayKey(); if(!stats.days.includes(tk)){stats.days.push(tk);saveStamps();}
+  setTimeout(checkStamps,1800);
   setTimeout(()=>{
     stage.innerHTML='<div class="burst"></div>';
     window._shootPick=pick.id; const el=bookEl(pick); el.classList.add('pop');
@@ -1056,6 +1114,7 @@ function searchBooks(q){
 let lastQ='';
 function doSearch(q,live){
   q=(q||'').trim(); lastQ=q;
+  if(q)award('search');
   if(!q){ if(shelfMode==='search'){openShelf();} return; }
   window._why={};window._match={};
   shelfMode='search';
@@ -1137,25 +1196,155 @@ function saveProfile(){
   profile={...pfDraft};
   try{localStorage.setItem('starProfile',JSON.stringify(profile))}catch(e){}
   if(profile.age&&AGES[profile.age]){selL=AGES[profile.age].r;chips('levelChips',READERS,null,true);}
-  drawGreet(); go('s-home');
+  drawGreet(); award('profile'); go('s-home');
 }
 function deleteProfile(){
   if(!pfDelArm){pfDelArm=true;document.getElementById('pfDel').textContent=T('pfDelSure');return;}
-  profile=null; try{localStorage.removeItem('starProfile')}catch(e){}
-  drawGreet(); go('s-home');
+  profile=null; likes=new Set(); read={}; nope=new Set();
+  stamps={}; stats=freshStats();
+  try{['starProfile','starLikes','starRead','starNope','starDaily','starStamps','starStats'].forEach(k=>localStorage.removeItem(k));}catch(e){}
+  lastPick=[]; shown.clear(); favs=[]; misses=[]; window._why={}; window._match={};
+  drawGreet(); drawFavs(); updateHomeCounts(); drawStampBar(); go('s-home');
 }
 
-// ── 설정 (테마 · 배경음악 · 언어) ──
+
+// ── 별 도장 ──
+// 도장마다 모양(frame)과 캐릭터(ch)가 달라요
+const STAMPS=[
+ {id:'rec1', f:'circle', c:'#f4b942', ch:'sparkle', ko:['반짝이','첫 추천','책을 처음 추천받으면'], en:['Twinkle','First pick','Get your first recommendation'], v:()=>stats.rec, goal:1},
+ {id:'rec5', f:'scallop',c:'#f08a5d', ch:'lantern', ko:['초롱이','추천 5번','책을 5번 추천받으면'], en:['Lanterny','5 picks','Get recommendations 5 times'], v:()=>stats.rec, goal:5},
+ {id:'rec10',f:'hex',    c:'#7b6cf6', ch:'galaxy',  ko:['은하','추천 10번','책을 10번 추천받으면'], en:['Galaxy','10 picks','Get recommendations 10 times'], v:()=>stats.rec, goal:10},
+ {id:'lib1', f:'square', c:'#4fb39a', ch:'bookworm',ko:['책벌레 꼬물이','첫 책 담기','내 서재에 책을 1권 담으면'], en:['Wiggle the Bookworm','First book saved','Put 1 book in your library'], v:libSize, goal:1},
+ {id:'lib5', f:'octa',   c:'#8a6d4b', ch:'owl',     ko:['부엉 박사','서재 5권','내 서재에 책을 5권 담으면'], en:['Dr. Hoot','5 books saved','Put 5 books in your library'], v:libSize, goal:5},
+ {id:'lib10',f:'flower', c:'#e98ab8', ch:'rabbit',  ko:['달토끼 토리','서재 10권','내 서재에 책을 10권 담으면'], en:['Tori the Moon Rabbit','10 books saved','Put 10 books in your library'], v:libSize, goal:10},
+ {id:'day3', f:'diamond',c:'#5aa9e6', ch:'meteor',  ko:['별똥이','오늘의 책 3일','오늘의 책을 서로 다른 3일 동안 보면'], en:['Zoomy the Meteor','3 days of books','Open the Book of the Day on 3 different days'], v:()=>stats.days.length, goal:3},
+ {id:'day7', f:'star8',  c:'#e7c03a', ch:'polaris', ko:['북극성 폴라','오늘의 책 7일','오늘의 책을 서로 다른 7일 동안 보면'], en:['Polly the North Star','7 days of books','Open the Book of the Day on 7 different days'], v:()=>stats.days.length, goal:7},
+ {id:'rate1',f:'drop',   c:'#9b7be0', ch:'fairy',   ko:['별점 요정 피피','첫 별점','읽은 책에 처음 별점을 주면'], en:['Pipi the Rating Fairy','First rating','Rate a book you read'], v:()=>Object.keys(read).length, goal:1},
+ {id:'rate5',f:'shield', c:'#3d8bd4', ch:'scholar', ko:['책 선생님 별','별점 5권','책 5권에 별점을 주면'], en:['Professor Star','5 ratings','Rate 5 books'], v:()=>Object.keys(read).length, goal:5},
+ {id:'search',f:'ticket',c:'#d9734e', ch:'detective',ko:['돋보기 탐정','첫 검색','책을 처음 검색하면'], en:['Detective Lens','First search','Search for a book'], v:()=>stats.search, goal:1},
+ {id:'orig', f:'circle', c:'#2fa37a', ch:'parrot',  ko:['앵무새 헬로','첫 원서 추천','영어 원서로 추천받으면'], en:['Hello the Parrot','First English pick','Get English original recommendations'], v:()=>stats.orig, goal:1},
+ {id:'lang', f:'scallop',c:'#4b7bd8', ch:'globe',   ko:['지구별 글로비','영어로 둘러보기','화면을 영어로 바꿔 보면'], en:['Globby','Try English','Switch the screen to English'], v:()=>stats.lang, goal:1},
+ {id:'sky',  f:'hex',    c:'#3b3f8f', ch:'telescope',ko:['망원경 루미','별자리 지도','추천 결과를 별자리로 보면'], en:['Lumi the Telescope','Constellation map','View your results as a constellation'], v:()=>stats.sky, goal:1},
+ {id:'genre5',f:'flower',c:'#5cc0c7', ch:'rainbow', ko:['무지개 구름','분야 탐험가','서로 다른 분야의 책 5가지를 구경하면'], en:['Rainbow Cloud','Genre explorer','Look at books from 5 different genres'], v:()=>stats.genres.length, goal:5},
+ {id:'profile',f:'square',c:'#c77dd6', ch:'butterfly',ko:['나비별 나나','내 프로필','프로필을 만들면'], en:['Nana the Butterfly','My profile','Create your profile'], v:()=>profile?1:0, goal:1},
+ {id:'theme',f:'diamond',c:'#7d8aa8', ch:'sunmoon', ko:['해달이','테마 바꾸기','화면 테마를 바꿔 보면'], en:['Sunny-Moon','New look','Change the screen theme'], v:()=>stats.theme, goal:1},
+ {id:'night',f:'octa',   c:'#2e3a7a', ch:'firefly', ko:['반딧불 반디','밤의 손님','밤 9시 이후에 책방에 오면'], en:['Bandi the Firefly','Night visitor','Visit the bookshop after 9 p.m.'], v:()=>stats.night, goal:1},
+ {id:'all',  f:'star8',  c:'#f2c94c', ch:'crown',   ko:['별자리 왕관','별자리 완성','다른 별 도장을 모두 모으면'], en:['Constellation Crown','All stars','Collect every other star stamp'], v:()=>STAMPS.filter(x=>x.id!=='all'&&stamps[x.id]).length, goal:18},
+];
+function freshStats(){return {rec:0,days:[],orig:0,lang:0,sky:0,search:0,theme:0,night:0,genres:[]};}
+let stats=freshStats(), stamps={};
+try{ stats=Object.assign(freshStats(),JSON.parse(localStorage.getItem('starStats')||'{}')); }catch(e){}
+try{ stamps=JSON.parse(localStorage.getItem('starStamps')||'{}')||{}; }catch(e){}
+function saveStamps(){ try{localStorage.setItem('starStats',JSON.stringify(stats));localStorage.setItem('starStamps',JSON.stringify(stamps));}catch(e){} }
+function libSize(){return new Set([...likes].map(String).concat(Object.keys(read))).size;}
+function bump(k,n){ stats[k]=(stats[k]||0)+(n||1); saveStamps(); checkStamps(); }
+function award(k){ if(k==='theme'||k==='lang'||k==='sky'||k==='search'||k==='orig'||k==='night'){ if(!stats[k]){stats[k]=1;saveStamps();} } checkStamps(); }
+function stampName(st){return (LANG==='en'?st.en:st.ko);}
+function checkStamps(){
+  const h=new Date().getHours(); if(h>=21&&!stats.night){stats.night=1;saveStamps();}
+  const fresh=[];
+  STAMPS.forEach(st=>{ if(!stamps[st.id] && st.v()>=st.goal){ stamps[st.id]=todayKey(); fresh.push(st);} });
+  if(fresh.length){ saveStamps(); fresh.forEach(st=>toastStamp(st)); const all=STAMPS.find(x=>x.id==='all'); if(!stamps.all&&all.v()>=all.goal){stamps.all=todayKey();saveStamps();toastStamp(all);} }
+  drawStampBar();
+}
+let toastQ=[],toastOn=false;
+function toastStamp(st){toastQ.push(st); if(!toastOn)nextToast();}
+function nextToast(){
+  const st=toastQ.shift(), el=document.getElementById('toast'); if(!st){toastOn=false;el.classList.remove('on');return;}
+  toastOn=true; const n=stampName(st);
+  el.innerHTML=stampSVG(st,true)+`<div><b>${T('stampNew')}</b><span>${n[0]} · ${n[1]}</span></div>`;
+  el.classList.add('on');
+  setTimeout(()=>{el.classList.remove('on'); setTimeout(nextToast,450);},3200);
+}
+function drawStampBar(){
+  const n=STAMPS.filter(x=>stamps[x.id]).length, el=document.getElementById('stampCount'); if(el)el.textContent=n?n:'';
+  if(document.getElementById('s-stamps').classList.contains('on'))drawStamps();
+}
+function openStamps(){checkStamps();drawStamps();go('s-stamps');}
+function drawStamps(){
+  const n=STAMPS.filter(x=>stamps[x.id]).length;
+  document.getElementById('stampSum').textContent=T('stampSum',{n,t:STAMPS.length});
+  document.getElementById('stampBar').style.width=(n/STAMPS.length*100)+'%';
+  const g=document.getElementById('stampGrid'); g.innerHTML='';
+  STAMPS.forEach(st=>{
+    const got=!!stamps[st.id], nm=stampName(st), cur=Math.min(st.v(),st.goal);
+    const d=document.createElement('div'); d.className='stampcard '+(got?'got':'locked');
+    d.innerHTML=stampSVG(st,got)+`<b>${nm[1]}</b><span class="who">${got?nm[0]:'？'}</span><small>${nm[2]}</small>`+
+      `<div class="prog">${got?T('stampGot',{d:stamps[st.id]}):(st.goal>1?cur+' / '+st.goal:T('stampLocked'))}</div>`;
+    g.appendChild(d);
+  });
+}
+// 도장 테두리 모양
+function framePath(f){
+  const P=(pts)=>'M'+pts.map(p=>p.map(v=>v.toFixed(1)).join(',')).join('L')+'Z';
+  const poly=(n,r,rot=0)=>{const a=[];for(let i=0;i<n;i++){const t=rot+i*2*Math.PI/n;a.push([50+r*Math.cos(t),50+r*Math.sin(t)]);}return P(a);};
+  const starP=(n,r1,r2)=>{const a=[];for(let i=0;i<n*2;i++){const t=-Math.PI/2+i*Math.PI/n,r=i%2?r2:r1;a.push([50+r*Math.cos(t),50+r*Math.sin(t)]);}return P(a);};
+  switch(f){
+    case 'circle': return 'M50,4A46,46 0 1,1 49.9,4Z';
+    case 'scallop':{let d='';for(let i=0;i<16;i++){const t=i*2*Math.PI/16;d+=`M${50+40*Math.cos(t)},${50+40*Math.sin(t)}m-7,0a7,7 0 1,0 14,0a7,7 0 1,0 -14,0`;}return d+'M50,10A40,40 0 1,1 49.9,10Z';}
+    case 'hex': return poly(6,47,Math.PI/6);
+    case 'octa': return poly(8,47,Math.PI/8);
+    case 'square': return 'M16,6H84Q94,6 94,16V84Q94,94 84,94H16Q6,94 6,84V16Q6,6 16,6Z';
+    case 'diamond': return poly(4,48,0);
+    case 'star8': return starP(8,48,38);
+    case 'shield': return 'M50,4L90,16V48Q90,78 50,96Q10,78 10,48V16Z';
+    case 'drop': return 'M50,4Q86,44 86,62A36,36 0 1,1 14,62Q14,44 50,4Z';
+    case 'ticket': return 'M8,14H92V40A10,10 0 0,0 92,60V86H8V60A10,10 0 0,0 8,40Z';
+    case 'flower':{let d='';for(let i=0;i<6;i++){const t=i*Math.PI/3;d+=`M${50+26*Math.cos(t)},${50+26*Math.sin(t)}m-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0`;}return d+'M50,22A28,28 0 1,1 49.9,22Z';}
+  }
+  return 'M50,4A46,46 0 1,1 49.9,4Z';
+}
+// 얼굴 (눈, 볼, 웃는 입)
+function face(x,y,s){s=s||1;return `<g transform="translate(${x},${y}) scale(${s})"><circle cx="-5" cy="0" r="1.9" fill="#2b2140"/><circle cx="5" cy="0" r="1.9" fill="#2b2140"/>
+  <circle cx="-8" cy="4" r="2.2" fill="#ff9fb4" opacity=".75"/><circle cx="8" cy="4" r="2.2" fill="#ff9fb4" opacity=".75"/>
+  <path d="M-3,4Q0,7 3,4" stroke="#2b2140" stroke-width="1.5" fill="none" stroke-linecap="round"/></g>`;}
+function starPts(cx,cy,r1,r2,n){n=n||5;let a=[];for(let i=0;i<n*2;i++){const t=-Math.PI/2+i*Math.PI/n,r=i%2?r2:r1;a.push((cx+r*Math.cos(t)).toFixed(1)+','+(cy+r*Math.sin(t)).toFixed(1));}return a.join(' ');}
+// 캐릭터 그림
+function charSVG(ch){
+  const W='#fffdf5', K='#2b2140';
+  switch(ch){
+    case 'sparkle': return `<polygon points="${starPts(50,52,24,11)}" fill="#ffe27a" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>${face(50,54,.9)}<path d="M76,26l2,5l5,2l-5,2l-2,5l-2,-5l-5,-2l5,-2z" fill="#fff"/>`;
+    case 'lantern': return `<path d="M44,24h12M50,20v4" stroke="${K}" stroke-width="2.5" stroke-linecap="round"/><rect x="32" y="28" width="36" height="42" rx="16" fill="#ffb38a" stroke="${K}" stroke-width="2"/><rect x="40" y="70" width="20" height="6" rx="2" fill="${K}"/><path d="M38,36h24M38,62h24" stroke="#fff" stroke-width="1.5" opacity=".6"/>${face(50,50)}`;
+    case 'galaxy': return `<ellipse cx="50" cy="52" rx="34" ry="11" fill="none" stroke="#d9d2ff" stroke-width="3" transform="rotate(-18 50 52)"/><circle cx="50" cy="52" r="19" fill="#b9acff" stroke="${K}" stroke-width="2"/><path d="M25,64A34,11 -18 0,0 75,40" stroke="#d9d2ff" stroke-width="3" fill="none" transform="rotate(0)"/>${face(50,53)}<circle cx="24" cy="30" r="2" fill="#fff"/><circle cx="78" cy="72" r="1.6" fill="#fff"/>`;
+    case 'bookworm': return `<path d="M22,40L50,46L78,40V72L50,78L22,72Z" fill="${W}" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><path d="M50,46V78" stroke="${K}" stroke-width="2"/><circle cx="62" cy="36" r="11" fill="#9fe0a8" stroke="${K}" stroke-width="2"/><path d="M58,26l-3,-6M66,26l3,-6" stroke="${K}" stroke-width="2" stroke-linecap="round"/>${face(62,37,.7)}<path d="M30,52h12M30,58h12M58,56h12" stroke="#c9c2b0" stroke-width="2"/>`;
+    case 'owl': return `<path d="M30,34L36,22L44,32M70,34L64,22L56,32" fill="#c9a27a" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><ellipse cx="50" cy="54" rx="22" ry="24" fill="#c9a27a" stroke="${K}" stroke-width="2"/><ellipse cx="50" cy="62" rx="13" ry="12" fill="#f1dfc4"/><circle cx="42" cy="46" r="7" fill="#fff" stroke="${K}" stroke-width="2"/><circle cx="58" cy="46" r="7" fill="#fff" stroke="${K}" stroke-width="2"/><path d="M49,46h2" stroke="${K}" stroke-width="2"/><circle cx="42" cy="46" r="2.2" fill="${K}"/><circle cx="58" cy="46" r="2.2" fill="${K}"/><path d="M47,53l3,4l3,-4z" fill="#f4b942"/>`;
+    case 'rabbit': return `<path d="M64,24A26,26 0 1,0 72,70A22,22 0 1,1 64,24Z" fill="#fff1a8" stroke="${K}" stroke-width="2"/><ellipse cx="42" cy="30" rx="5" ry="14" fill="${W}" stroke="${K}" stroke-width="2"/><ellipse cx="54" cy="30" rx="5" ry="14" fill="${W}" stroke="${K}" stroke-width="2"/><circle cx="48" cy="56" r="17" fill="${W}" stroke="${K}" stroke-width="2"/>${face(48,56)}`;
+    case 'meteor': return `<path d="M20,78L46,52M28,84L50,60M14,68L40,46" stroke="#bfe3ff" stroke-width="4" stroke-linecap="round" opacity=".9"/><polygon points="${starPts(58,42,20,9)}" fill="#9fd0ff" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>${face(58,44,.75)}`;
+    case 'polaris': return `<path d="M38,22l6,8l6,-10l6,10l6,-8l-2,12h-20z" fill="#ffd34d" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><polygon points="${starPts(50,58,26,12)}" fill="#fff3b0" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>${face(50,60,.9)}`;
+    case 'fairy': return `<ellipse cx="34" cy="48" rx="12" ry="8" fill="#e8dcff" stroke="${K}" stroke-width="1.6" transform="rotate(-25 34 48)"/><ellipse cx="66" cy="48" rx="12" ry="8" fill="#e8dcff" stroke="${K}" stroke-width="1.6" transform="rotate(25 66 48)"/><path d="M50,30Q66,52 66,62A16,16 0 1,1 34,62Q34,52 50,30Z" fill="#cdb8ff" stroke="${K}" stroke-width="2"/>${face(50,62,.85)}<path d="M68,66L80,40" stroke="${K}" stroke-width="2"/><polygon points="${starPts(81,37,6,2.6)}" fill="#ffe27a" stroke="${K}" stroke-width="1"/>`;
+    case 'scholar': return `<polygon points="${starPts(50,58,24,11)}" fill="#a8d4ff" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><path d="M30,30L50,22L70,30L50,38Z" fill="${K}"/><path d="M40,34v6q10,5 20,0v-6" fill="${K}"/><path d="M68,31v10" stroke="#f4b942" stroke-width="2"/><circle cx="44" cy="59" r="4.5" fill="none" stroke="${K}" stroke-width="1.6"/><circle cx="56" cy="59" r="4.5" fill="none" stroke="${K}" stroke-width="1.6"/>${face(50,59,.8)}`;
+    case 'detective': return `<path d="M64,64L80,80" stroke="#8a5a3a" stroke-width="7" stroke-linecap="round"/><circle cx="46" cy="46" r="22" fill="#e9f6ff" stroke="${K}" stroke-width="3"/><path d="M32,38Q38,30 46,30" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>${face(46,48)}<path d="M34,24q12,-10 24,0z" fill="#b86b4b" stroke="${K}" stroke-width="1.6"/>`;
+    case 'parrot': return `<path d="M36,70Q30,86 40,90M44,72Q42,86 50,88" stroke="#3fae6a" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="52" rx="20" ry="24" fill="#5fd38a" stroke="${K}" stroke-width="2"/><path d="M50,30q8,-8 14,-2q-6,2 -8,8z" fill="#ff6b6b"/><path d="M56,52q12,2 8,12q-6,-4 -10,-6z" fill="#f4b942" stroke="${K}" stroke-width="1.5"/><path d="M34,56q-8,8 -2,18q6,-6 8,-14z" fill="#3fae6a"/>${face(46,48,.85)}`;
+    case 'globe': return `<circle cx="50" cy="52" r="24" fill="#8fd3ff" stroke="${K}" stroke-width="2"/><path d="M38,38q8,4 6,12q-6,4 -10,0M58,62q8,-4 12,2q-4,8 -12,6z" fill="#7ad28f"/><ellipse cx="50" cy="52" rx="10" ry="24" fill="none" stroke="#fff" stroke-width="1.4" opacity=".7"/><path d="M26,52h48" stroke="#fff" stroke-width="1.4" opacity=".7"/>${face(50,54,.9)}`;
+    case 'telescope': return `<path d="M36,84L48,60L60,84" stroke="${K}" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="26" y="40" width="50" height="18" rx="9" fill="#9fa8ff" stroke="${K}" stroke-width="2" transform="rotate(-24 50 49)"/><circle cx="74" cy="36" r="8" fill="#e6e9ff" stroke="${K}" stroke-width="2"/>${face(46,52,.8)}<polygon points="${starPts(26,24,6,2.5)}" fill="#ffe27a"/>`;
+    case 'rainbow': return `<path d="M18,62A32,32 0 0,1 82,62" stroke="#ff8a8a" stroke-width="6" fill="none"/><path d="M25,62A25,25 0 0,1 75,62" stroke="#ffd36b" stroke-width="6" fill="none"/><path d="M32,62A18,18 0 0,1 68,62" stroke="#7ad6a5" stroke-width="6" fill="none"/><path d="M28,78q-12,0 -10,-10q2,-8 12,-6q4,-10 16,-6q10,-6 18,4q12,-2 12,10q0,8 -10,8z" fill="${W}" stroke="${K}" stroke-width="2"/>${face(48,70,.8)}`;
+    case 'butterfly': return `<path d="M50,50Q30,24 20,38Q14,52 34,56Q18,66 30,76Q42,80 50,58Q58,80 70,76Q82,66 66,56Q86,52 80,38Q70,24 50,50Z" fill="#f0b6ff" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><circle cx="34" cy="42" r="4" fill="#fff" opacity=".8"/><circle cx="66" cy="42" r="4" fill="#fff" opacity=".8"/><ellipse cx="50" cy="56" rx="6" ry="16" fill="#9b6bd6" stroke="${K}" stroke-width="2"/><path d="M47,40q-4,-10 -8,-12M53,40q4,-10 8,-12" stroke="${K}" stroke-width="1.6" fill="none"/>${face(50,52,.55)}`;
+    case 'sunmoon': return `<path d="M50,28A24,24 0 0,0 50,76Z" fill="#ffd36b" stroke="${K}" stroke-width="2"/><path d="M50,28A24,24 0 0,1 50,76Z" fill="#5b6bb5" stroke="${K}" stroke-width="2"/><path d="M22,52h-6M26,34l-5,-4M26,70l-5,4" stroke="#ffb84d" stroke-width="3" stroke-linecap="round"/><circle cx="64" cy="40" r="1.5" fill="#fff"/><circle cx="70" cy="58" r="1.2" fill="#fff"/>${face(50,54,.9)}`;
+    case 'firefly': return `<ellipse cx="38" cy="42" rx="12" ry="7" fill="#e9f3ff" stroke="${K}" stroke-width="1.6" opacity=".9" transform="rotate(-30 38 42)"/><ellipse cx="58" cy="40" rx="12" ry="7" fill="#e9f3ff" stroke="${K}" stroke-width="1.6" opacity=".9" transform="rotate(20 58 40)"/><circle cx="62" cy="68" r="14" fill="#fff59d" opacity=".55"/><ellipse cx="60" cy="66" rx="10" ry="9" fill="#ffe94d" stroke="${K}" stroke-width="2"/><circle cx="44" cy="54" r="14" fill="#6d5a9e" stroke="${K}" stroke-width="2"/><path d="M38,40q-4,-8 -10,-8M46,40q2,-8 8,-10" stroke="${K}" stroke-width="1.6" fill="none"/><g transform="translate(44,54)"><circle cx="-5" cy="0" r="1.9" fill="#fff"/><circle cx="5" cy="0" r="1.9" fill="#fff"/><path d="M-3,4Q0,7 3,4" stroke="#fff" stroke-width="1.5" fill="none"/></g>`;
+    case 'crown': return `<path d="M22,70L30,34L44,52L50,28L56,52L70,34L78,70Z" fill="#ffd34d" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><rect x="22" y="68" width="56" height="10" rx="3" fill="#f4b942" stroke="${K}" stroke-width="2"/><path d="M30,34L50,28L70,34" stroke="#fff" stroke-width="1" stroke-dasharray="2 2"/><circle cx="30" cy="32" r="3" fill="#fff"/><circle cx="50" cy="26" r="3.5" fill="#fff"/><circle cx="70" cy="32" r="3" fill="#fff"/>${face(50,58,.9)}`;
+  }
+  return '';
+}
+function stampSVG(st,got){
+  const c=got?st.c:'#8b90a8', d=framePath(st.f);
+  return `<svg viewBox="0 0 100 100" aria-hidden="true">
+    <path d="${d}" fill="${c}" fill-rule="nonzero"/>
+    <path d="${d}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2" stroke-dasharray="3 3" transform="translate(50 50) scale(.86) translate(-50 -50)"/>
+    <g ${got?'':'opacity=".0"'}>${charSVG(st.ch)}</g>
+    ${got?'':`<text x="50" y="62" text-anchor="middle" font-size="34" fill="#fff" font-family="serif">?</text>`}
+  </svg>`;
+}
+
+// ── 설정 (테마 · 언어) ──
 const THEMES={
-  night:{sky1:'#0b1033',sky2:'#1b1f5e',sky3:'#3a2a72',gold:'#ffd86b',goldrgb:'255,216,107'},
-  dawn:{sky1:'#1e1029',sky2:'#4d2752',sky3:'#a35570',gold:'#ffcf9e',goldrgb:'255,207,158'},
-  aurora:{sky1:'#03111a',sky2:'#0a2f3c',sky3:'#13695a',gold:'#9ff5d2',goldrgb:'159,245,210'},
-  moon:{sky1:'#14213d',sky2:'#2c4675',sky3:'#7891bd',gold:'#fff1b8',goldrgb:'255,241,184'}};
-let settings={theme:'night',music:'none',vol:50};
+  dark:{sky1:'#0b1033',sky2:'#1b1f5e',sky3:'#3a2a72',gold:'#ffd86b',goldrgb:'255,216,107'},
+  light:{sky1:'#f7f8fd',sky2:'#eef1fa',sky3:'#e2e7f6',gold:'#a86b00',goldrgb:'190,130,20'}};
+let settings={theme:'dark'};
 try{ settings=Object.assign(settings,JSON.parse(localStorage.getItem('starSettings')||'{}')); }catch(e){}
-if(!THEMES[settings.theme])settings.theme='night';
+delete settings.music; delete settings.vol;
+if(!THEMES[settings.theme])settings.theme='dark';
 function saveSettings(){ try{localStorage.setItem('starSettings',JSON.stringify(settings))}catch(e){} }
-function applyTheme(){const t=THEMES[settings.theme],r=document.documentElement.style;
+function applyTheme(){const t=THEMES[settings.theme],r=document.documentElement.style; document.documentElement.dataset.theme=settings.theme;
   r.setProperty('--sky1',t.sky1);r.setProperty('--sky2',t.sky2);r.setProperty('--sky3',t.sky3);r.setProperty('--gold',t.gold);r.setProperty('--goldrgb',t.goldrgb);}
 applyTheme();
 function openSettings(){drawSettings();go('s-settings');}
@@ -1167,83 +1356,14 @@ function setChoice(el,items,cur,onPick){
 function drawSettings(){
   setChoice('themeChips',Object.keys(THEMES).map(k=>{const t=THEMES[k];
     return [k,`<span class="thsw" style="background:linear-gradient(135deg,${t.sky1},${t.sky2} 55%,${t.sky3});box-shadow:inset 0 0 0 2px ${t.gold}55"></span><b>${T('th_'+k)}</b>`];}),
-    settings.theme,k=>{settings.theme=k;saveSettings();applyTheme();});
-  setChoice('musicChips',['none','box','pad','rain'].map(k=>[k,`<b>${T('mu_'+k)}</b>`]),settings.music,k=>{settings.music=k;saveSettings();startMusic(k);});
+    settings.theme,k=>{if(k!==settings.theme){settings.theme=k;saveSettings();applyTheme();award('theme');}});
   setChoice('langSetChips',[['ko','<b>한국어</b>'],['en','<b>English</b>']],LANG,k=>{if(k!==LANG)toggleLang();});
-  const v=document.getElementById('volIn');v.value=settings.vol;document.getElementById('volOut').textContent=settings.vol;
 }
-function setVol(v){settings.vol=+v;saveSettings();document.getElementById('volOut').textContent=v;
-  if(MU.master&&MU.ctx)MU.master.gain.setTargetAtTime(settings.vol/100*0.5,MU.ctx.currentTime,0.1);}
-
-// ── 배경음악 (Web Audio로 직접 만든 소리) ──
-const MU={ctx:null,master:null,timers:[],nodes:[],kind:'none'};
-function muCtx(){
-  if(!MU.ctx){const AC=window.AudioContext||window.webkitAudioContext; if(!AC)return null; MU.ctx=new AC();}
-  if(MU.ctx.state==='suspended')MU.ctx.resume().catch(()=>{});
-  return MU.ctx;
-}
-function stopMusic(){
-  MU.timers.forEach(t=>clearTimeout(t));MU.timers=[];
-  const old=MU.master, ctx=MU.ctx;
-  if(old&&ctx){try{old.gain.setTargetAtTime(0,ctx.currentTime,0.3);}catch(e){} setTimeout(()=>{try{old.disconnect()}catch(e){}},1500);}
-  MU.nodes.forEach(n=>{try{n.stop&&n.stop(ctx.currentTime+1.2)}catch(e){}});MU.nodes=[];MU.master=null;MU.kind='none';
-}
-function startMusic(kind){
-  stopMusic(); if(kind==='none')return;
-  const ctx=muCtx(); if(!ctx)return;
-  MU.kind=kind;
-  const master=ctx.createGain(); master.gain.value=0; master.connect(ctx.destination);
-  master.gain.setTargetAtTime(settings.vol/100*0.5,ctx.currentTime,0.8); MU.master=master;
-  // 은은한 울림 (딜레이)
-  const dl=ctx.createDelay(1.5); dl.delayTime.value=0.38; const fb=ctx.createGain(); fb.gain.value=0.38;
-  const lp=ctx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=2400;
-  dl.connect(lp); lp.connect(fb); fb.connect(dl); lp.connect(master);
-  const send=n=>{n.connect(master); n.connect(dl);};
-  const loop=(fn,ms)=>{const go=()=>{if(MU.kind!==kind)return; const next=fn(); MU.timers.push(setTimeout(go,next||ms));}; go();};
-  if(kind==='box'){
-    const scale=[523.25,587.33,659.25,783.99,880,1046.5,1174.66,1318.51];
-    loop(()=>{
-      const t=ctx.currentTime+0.02, f=scale[Math.floor(Math.random()*scale.length)];
-      [[f,0.18],[f*2,0.05]].forEach(([fr,vol])=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type='sine';o.frequency.value=fr;
-        g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+0.01);g.gain.exponentialRampToValueAtTime(0.0001,t+2.2);
-        o.connect(g);send(g);o.start(t);o.stop(t+2.3);});
-      return 450+Math.random()*700;
-    });
-  }else if(kind==='pad'){
-    const chords=[[220,261.63,329.63],[174.61,220,261.63],[196,246.94,293.66],[164.81,196,246.94]]; let ci=0;
-    loop(()=>{
-      const t=ctx.currentTime+0.05, ch=chords[ci++%chords.length], dur=8;
-      const f=ctx.createBiquadFilter();f.type='lowpass';f.frequency.value=900;const g=ctx.createGain();
-      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(0.09,t+2.5);g.gain.setValueAtTime(0.09,t+dur-2.5);g.gain.linearRampToValueAtTime(0,t+dur+1);
-      f.connect(g);send(g);
-      ch.forEach(fr=>[-4,4].forEach(dt=>{const o=ctx.createOscillator();o.type='triangle';o.frequency.value=fr;o.detune.value=dt;o.connect(f);o.start(t);o.stop(t+dur+1.2);}));
-      return (dur-1)*1000;
-    });
-  }else if(kind==='rain'){
-    const len=ctx.sampleRate*3, buf=ctx.createBuffer(1,len,ctx.sampleRate), d=buf.getChannelData(0); let last=0;
-    for(let i=0;i<len;i++){const w=Math.random()*2-1; last=(last+0.06*w)/1.06; d[i]=last*3.2+w*0.08;}
-    const src=ctx.createBufferSource();src.buffer=buf;src.loop=true;
-    const hp=ctx.createBiquadFilter();hp.type='highpass';hp.frequency.value=350;
-    const lp2=ctx.createBiquadFilter();lp2.type='lowpass';lp2.frequency.value=3500;
-    const g=ctx.createGain();g.gain.value=0.55; src.connect(hp);hp.connect(lp2);lp2.connect(g);g.connect(master);
-    src.start(); MU.nodes.push(src);
-    loop(()=>{ // 가끔 떨어지는 물방울
-      const t=ctx.currentTime+0.02,o=ctx.createOscillator(),gg=ctx.createGain();o.type='sine';
-      o.frequency.setValueAtTime(1400+Math.random()*900,t);o.frequency.exponentialRampToValueAtTime(500,t+0.08);
-      gg.gain.setValueAtTime(0.05,t);gg.gain.exponentialRampToValueAtTime(0.0001,t+0.12);o.connect(gg);gg.connect(master);o.start(t);o.stop(t+0.15);
-      return 300+Math.random()*1500;
-    });
-  }
-}
-// 브라우저 규칙: 소리는 사용자가 한 번 누른 뒤에만 시작돼요
-function musicKick(){ if(settings.music!=='none'&&MU.kind==='none')startMusic(settings.music); }
-['pointerdown','keydown'].forEach(ev=>document.addEventListener(ev,musicKick,{once:false,passive:true}));
-document.addEventListener('visibilitychange',()=>{ if(!MU.ctx)return; if(document.hidden)MU.ctx.suspend().catch(()=>{}); else if(MU.kind!=='none')MU.ctx.resume().catch(()=>{}); });
-
 function toggleLang(){
   LANG=LANG==='ko'?'en':'ko';
+  if(LANG==='en'&&!stats.lang){stats.lang=1;saveStamps();}
   try{localStorage.setItem('starLang',LANG)}catch(e){}
-  applyData(); applyStatic(); refreshAll(); drawGreet();
+  applyData(); applyStatic(); refreshAll(); drawGreet(); checkStamps(); if(document.getElementById('s-stamps').classList.contains('on'))drawStamps();
   if(document.getElementById('s-profile').classList.contains('on')){document.getElementById('pfDel').textContent=T(pfDelArm?'pfDelSure':'pfDel');pfChoice('pfAges',AGES,'age',false);pfChoice('pfEngs',ENGS,'eng',true);}
 }
 function refreshAll(){
@@ -1270,7 +1390,7 @@ function refreshAll(){
     if(bk&&window._shootPick!=null){const nb=bookEl(BOOKS[window._shootPick]);bk.replaceWith(nb);document.querySelector('#shootResult .shoot-sum').textContent=BOOKS[window._shootPick].s;const nx=document.querySelector('#shootResult .shoot-next');if(nx)nx.textContent=T('dailyNext',{t:timeLeft()});}}
 }
 applyStatic(); refreshAll(); drawGreet();
-updateHomeCounts();
+updateHomeCounts(); setTimeout(checkStamps,600);
 </script>
 </body>
 </html>
