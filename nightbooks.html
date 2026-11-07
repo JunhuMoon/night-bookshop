@@ -215,30 +215,31 @@ input::placeholder{color:#8e93c4}
 .mact .nopebtn.on{background:rgba(255,255,255,.12);border-color:var(--soft)}
 .book.noped{opacity:.4}
 
-html[data-theme="light"]{--text:#1f2340;--soft:#5b6180;--card:rgba(30,40,90,.05);--line:rgba(30,40,90,.16);--star:#7a86b8}
-html[data-theme="light"] body{background:linear-gradient(180deg,#fbfcff 0%,#eef1fa 60%,#e4e8f5 100%) fixed}
+html[data-theme="light"]{--text:#2e2a24;--soft:#6e665a;--card:rgba(90,70,40,.05);--line:rgba(90,70,40,.16);--star:#a89a80;--paper:#f6f1e6;--paper2:#efe8da}
+html[data-theme="light"] body{background:linear-gradient(180deg,#ebe4d6 0%,#e4dccb 60%,#ddd3c0 100%) fixed}
 html[data-theme="light"] #stars{opacity:.35}
 html[data-theme="light"] .shoot{display:none}
 html[data-theme="light"] .hero h1,html[data-theme="light"] .result-head h2{text-shadow:none}
 html[data-theme="light"] .moon{filter:none}
-html[data-theme="light"] input[type=text]{background:#fff;color:var(--text)}
-html[data-theme="light"] input::placeholder{color:#9aa0bf}
-html[data-theme="light"] .sug button,html[data-theme="light"] .searchbar button,html[data-theme="light"] .icons button,html[data-theme="light"] .pill{background:#fff;color:var(--text)}
-html[data-theme="light"] .menu3 button,html[data-theme="light"] .chip,html[data-theme="light"] .greet{background:#fff}
+html[data-theme="light"] input[type=text]{background:var(--paper);color:var(--text)}
+html[data-theme="light"] input::placeholder{color:#a59c8c}
+html[data-theme="light"] .sug button,html[data-theme="light"] .searchbar button,html[data-theme="light"] .icons button,html[data-theme="light"] .pill{background:var(--paper);color:var(--text)}
+html[data-theme="light"] .menu3 button,html[data-theme="light"] .chip,html[data-theme="light"] .greet{background:var(--paper)}
 html[data-theme="light"] .chip.sel{background:rgba(var(--goldrgb),.14)}
-html[data-theme="light"] .btn.ghost{background:#fff}
-html[data-theme="light"] #setBtn,html[data-theme="light"] #langBtn{background:#fff}
-html[data-theme="light"] .mbox{background:#fff;border-color:var(--line);box-shadow:0 20px 60px rgba(20,30,80,.18)}
-html[data-theme="light"] .modal{background:rgba(30,40,90,.35)}
-html[data-theme="light"] .rstars button{color:rgba(30,40,90,.2)}
-html[data-theme="light"] .readbox,html[data-theme="light"] .fitbox{background:#f6f7fc}
+html[data-theme="light"] .btn.ghost{background:var(--paper)}
+html[data-theme="light"] #setBtn,html[data-theme="light"] #langBtn{background:var(--paper)}
+html[data-theme="light"] .mbox{background:var(--paper);border-color:var(--line);box-shadow:0 20px 60px rgba(60,45,20,.18)}
+html[data-theme="light"] .modal{background:rgba(50,40,25,.35)}
+html[data-theme="light"] .rstars button{color:rgba(60,45,20,.22)}
+html[data-theme="light"] .readbox,html[data-theme="light"] .fitbox{background:var(--paper2)}
 html[data-theme="light"] .why{background:rgba(var(--goldrgb),.1)}
 html[data-theme="light"] #sky{background:#141842}
-html[data-theme="light"] .tag.miss{background:#fff}
-html[data-theme="light"] .cover{box-shadow:0 8px 20px rgba(20,30,80,.2)}
-html[data-theme="light"] .readmark{background:rgba(255,255,255,.92);color:#8a5a00}
-html[data-theme="light"] #toast{background:#fff;color:var(--text)}
-html[data-theme="light"] .stampcard{background:#fff}
+html[data-theme="light"] .tag.miss{background:var(--paper)}
+html[data-theme="light"] .cover{box-shadow:0 8px 20px rgba(60,45,20,.2)}
+html[data-theme="light"] .readmark{background:rgba(246,241,230,.94);color:#8a5a00}
+html[data-theme="light"] #toast{background:var(--paper);color:var(--text)}
+html[data-theme="light"] .fitbox .ogline b{color:#2b6ea8}
+html[data-theme="light"] .stampcard{background:var(--paper)}
 
 .stamprog{display:flex;align-items:center;gap:12px;margin:4px 0 20px}
 .stamprog .bar{flex:1;height:8px;border-radius:9px;background:var(--line);overflow:hidden}
@@ -1338,7 +1339,7 @@ function stampSVG(st,got){
 // ── 설정 (테마 · 언어) ──
 const THEMES={
   dark:{sky1:'#0b1033',sky2:'#1b1f5e',sky3:'#3a2a72',gold:'#ffd86b',goldrgb:'255,216,107'},
-  light:{sky1:'#f7f8fd',sky2:'#eef1fa',sky3:'#e2e7f6',gold:'#a86b00',goldrgb:'190,130,20'}};
+  light:{sky1:'#ebe4d6',sky2:'#e4dccb',sky3:'#d6cab3',gold:'#9a6410',goldrgb:'170,115,30'}};
 let settings={theme:'dark'};
 try{ settings=Object.assign(settings,JSON.parse(localStorage.getItem('starSettings')||'{}')); }catch(e){}
 delete settings.music; delete settings.vol;
