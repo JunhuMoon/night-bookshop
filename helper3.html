@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>밤하늘 책방 · 표지 모으기 도우미 (탐정 버전)</title>
+<style>
+body{font-family:'Malgun Gothic',sans-serif;background:#141842;color:#eef0ff;max-width:760px;margin:0 auto;padding:24px;line-height:1.6}
+h1{color:#ffd86b}.box{background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.18);border-radius:16px;padding:18px;margin:16px 0}
+input{width:100%;font-size:18px;padding:12px;border-radius:10px;border:1px solid #888;box-sizing:border-box}
+button{font-size:20px;padding:12px 26px;border-radius:999px;border:none;background:#ffd86b;color:#2a1d4d;cursor:pointer;margin-top:12px;font-weight:bold}
+button:disabled{opacity:.5}
+#bar{height:14px;background:rgba(255,255,255,.15);border-radius:99px;overflow:hidden;margin-top:12px}#bar i{display:block;height:100%;width:0;background:#ffd86b;transition:width .2s}
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:8px;margin-top:12px}
+#grid img{width:100%;border-radius:4px}#grid .no{aspect-ratio:2/3;background:#333;border-radius:4px;font-size:10px;display:flex;align-items:center;justify-content:center;text-align:center;padding:2px}
+textarea{width:100%;height:120px;font-size:12px;box-sizing:border-box;border-radius:10px}
+.big{font-size:20px;color:#ffd86b}
+</style></head><body>
+<h1>🌙 표지 모으기 도우미 🔍 남은 표지 모으기</h1>
+<div class="box">
+<b>1. 메모장에 복사해 둔 REST API 키를 아래 칸에 붙여 넣어요.</b><br>
+<small>(열쇠는 이 화면에서만 쓰이고, 어디에도 저장되거나 보내지지 않아요.)</small>
+<input id="key" type="password" placeholder="여기에 열쇠 붙여 넣기 (Ctrl+V)">
+<b><br>2. 버튼을 눌러요.</b><br>
+<button id="go">🔍 표지 모으기 시작</button>
+<div id="msg"></div><div id="bar"><i></i></div>
+</div>
+<div class="box" id="done" style="display:none">
+<div class="big">✨ 다 모았어요!</div>
+<b>3. 아래 노란 버튼을 누르고, Claude 채팅창에 붙여 넣어요. (Ctrl+V)</b><br>
+<button id="copy">📋 결과 복사하기</button> <span id="copied"></span>
+<textarea id="out" readonly></textarea>
+</div>
+<div id="grid"></div>
+<script>
+const BOOKS=[[1, "파랑 채집가", "로이스 로리"], [57, "레모니 스니켓의 위험한 대결", "레모니 스니켓"], [61, "웨이사이드 학교 별난 아이들", "루이스 새커"], [88, "멋진 신세계", "올더스 헉슬리"], [89, "1984", "조지 오웰"], [90, "화씨 451", "레이 브래드버리"], [91, "다이버전트", "베로니카 로스"], [92, "메신저", "로이스 로리"], [93, "태양의 아들", "로이스 로리"], [94, "와일드 로봇의 탈출", "피터 브라운"], [95, "마션", "앤디 위어"], [96, "프로젝트 헤일메리", "앤디 위어"], [97, "타임머신", "H.G. 웰스"], [98, "우주 전쟁", "H.G. 웰스"], [99, "프랑켄슈타인", "메리 셸리"], [100, "시간을 파는 상점", "김선영"], [101, "그리고 아무도 없었다", "애거서 크리스티"], [102, "오리엔트 특급 살인", "애거서 크리스티"], [103, "셜록 홈즈: 바스커빌가의 사냥개", "아서 코난 도일"], [104, "웨스팅 게임", "엘렌 라스킨"], [105, "지킬 박사와 하이드", "로버트 루이스 스티븐슨"], [106, "파리대왕", "윌리엄 골딩"], [107, "몬테크리스토 백작", "알렉상드르 뒤마"], [108, "삼총사", "알렉상드르 뒤마"], [109, "반지 원정대", "J.R.R. 톨킨"], [110, "미스 페레그린과 이상한 아이들의 집", "랜섬 릭스"], [111, "지구 속 여행", "쥘 베른"], [112, "허클베리 핀의 모험", "마크 트웨인"], [113, "로빈슨 크루소", "대니얼 디포"], [114, "걸리버 여행기", "조너선 스위프트"], [115, "정글북", "러디어드 키플링"], [116, "홍길동전", "허균"], [117, "멋진 여우 씨", "로알드 달"], [118, "멍청씨 부부 이야기", "로알드 달"], [119, "책 먹는 여우", "프란치스카 비어만"], [120, "13층 나무 집", "앤디 그리피스"], [121, "잔소리 없는 날", "안네마리 노르덴"], [122, "엄마 사용법", "김성진"], [123, "진짜 도둑", "윌리엄 스타이그"], [124, "크리스마스 캐럴", "찰스 디킨스"], [125, "오 헨리 단편선", "오 헨리"], [126, "너도 하늘말나리야", "이금이"], [127, "아홉 살 인생", "위기철"], [128, "괭이부리말 아이들", "김중미"], [129, "몽실 언니", "권정생"], [130, "우리들의 일그러진 영웅", "이문열"], [131, "데미안", "헤르만 헤세"], [132, "호밀밭의 파수꾼", "J.D. 샐린저"], [133, "수레바퀴 아래서", "헤르만 헤세"], [134, "갈매기의 꿈", "리처드 바크"], [135, "노인과 바다", "어니스트 헤밍웨이"], [136, "소피의 세계", "요슈타인 가아더"], [137, "정의란 무엇인가", "마이클 샌델"], [138, "사피엔스", "유발 하라리"], [139, "총, 균, 쇠", "재레드 다이아몬드"], [140, "팩트풀니스", "한스 로슬링"], [141, "이기적 유전자", "리처드 도킨스"], [142, "코스모스", "칼 세이건"], [143, "침묵의 봄", "레이첼 카슨"], [144, "열두 발자국", "정재승"], [145, "미움받을 용기", "기시미 이치로"], [146, "죽음의 수용소에서", "빅터 프랭클"], [147, "소크라테스의 변명", "플라톤"], [148, "명상록", "마르쿠스 아우렐리우스"], [149, "월든", "헨리 데이비드 소로"], [150, "어떻게 살 것인가", "유시민"], [151, "지적 대화를 위한 넓고 얕은 지식", "채사장"], [152, "철학은 어떻게 삶의 무기가 되는가", "야마구치 슈"], [153, "이방인", "알베르 카뮈"], [154, "변신", "프란츠 카프카"], [155, "연금술사", "파울로 코엘료"], [156, "싯다르타", "헤르만 헤세"], [157, "군주론", "니콜로 마키아벨리"], [158, "공부란 무엇인가", "김영민"]];
+const clean=s=>(s||'').replace(/[\s:·,!?《》()\-]/g,'').toLowerCase();
+async function search(key,title){
+  const u='https://dapi.kakao.com/v3/search/book?target=title&size=10&query='+encodeURIComponent(title);
+  const r=await fetch(u,{headers:{Authorization:'KakaoAK '+key}});
+  if(!r.ok){let t='';try{t=await r.text()}catch(e){};const er=new Error('HTTP '+r.status+' '+t);er.http=r.status;throw er;}
+  return (await r.json()).documents||[];
+}
+function pick(docs,title,author){
+  const t=clean(title),a=clean(author);
+  let best=null,bs=-1;
+  docs.forEach((d,i)=>{ if(!d.thumbnail)return;
+    let sc=0;const dt=clean(d.title);
+    if(dt===t)sc+=5;else if(dt.includes(t)||t.includes(dt))sc+=3;
+    const da=clean((d.authors||[]).join(''));
+    if(a&&da&&(da.includes(a)||a.includes(da)||da.includes(a.slice(-2))))sc+=4;
+    sc-=i*0.1;
+    if(sc>bs){bs=sc;best=d;}
+  });
+  return best;
+}
+document.getElementById('go').onclick=async()=>{
+  const key=document.getElementById('key').value.trim();
+  const msg=document.getElementById('msg');
+  if(!key){msg.textContent='❗ 열쇠를 먼저 붙여 넣어 줘요.';return;}
+  const btn=document.getElementById('go');btn.disabled=true;
+  const grid=document.getElementById('grid');grid.innerHTML='';
+  const res={};let found=0;
+  for(let i=0;i<BOOKS.length;i++){
+    const [id,t,a]=BOOKS[i];
+    msg.textContent=`(${i+1}/${BOOKS.length}) 《${t}》 표지 찾는 중...`;
+    try{
+      const d=pick(await search(key,t),t,a);
+      if(d){res[id]=d.thumbnail;found++;grid.insertAdjacentHTML('beforeend',`<img src="${d.thumbnail}" title="${t}">`);}
+      else{grid.insertAdjacentHTML('beforeend',`<div class="no">${t}<br>(못 찾음)</div>`);
+        if(false){msg.innerHTML='❗ 책 3권이 연속으로 검색되지 않았어요.<br><b>이 화면을 사진 찍어서 Claude에게 보여 줘요.</b>';btn.disabled=false;return;}}
+    }catch(e){
+      let why='';
+      if(e.http===401)why='열쇠가 맞지 않는 것 같아요.';
+      else if(e.http===403)why='이 열쇠로 책 검색을 쓸 수 없게 막혀 있어요.';
+      else if(e instanceof TypeError)why='이 컴퓨터에서 카카오로 연결이 막혔어요.';
+      msg.innerHTML='❗ '+why+'<br><br><b>아래 노란 칸의 글자를 복사해서 Claude에게 보내 줘요.</b><textarea style="height:90px;background:#fff6c9">진단: '+(e.name||'')+' / '+(e.message||'').replace(/</g,'&lt;').slice(0,400)+'</textarea>';
+      btn.disabled=false;return;
+    }
+    document.querySelector('#bar i').style.width=((i+1)/BOOKS.length*100)+'%';
+    await new Promise(r=>setTimeout(r,120));
+  }
+  msg.textContent=`🎉 ${BOOKS.length}권 중 ${found}권의 표지를 찾았어요!`;
+  document.getElementById('out').value='밤하늘책방표지3'+JSON.stringify(res);
+  document.getElementById('done').style.display='block';btn.disabled=false;
+};
+document.getElementById('copy').onclick=async()=>{
+  const o=document.getElementById('out');
+  try{await navigator.clipboard.writeText(o.value);}catch(e){o.select();document.execCommand('copy');}
+  document.getElementById('copied').textContent='✅ 복사했어요!';
+};
+</script></body></html>
