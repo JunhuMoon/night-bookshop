@@ -289,6 +289,25 @@ html[data-theme="light"] .stampcard{background:var(--paper)}
 .dinfo .au{color:var(--soft);font-size:14px;margin-top:2px}
 .dmore{font-size:16px;padding:9px 18px;margin-top:12px}
 .dother{color:var(--soft);font-size:13px;margin-top:14px}
+
+/* ── 글씨 왼쪽 정렬 (버튼 글자와 그림 표지 안 글자는 가운데 유지) ── */
+.hero,.result-head,.book,.stampcard,.empty,.note,.skyhint,.pf-preview,#shootResult,.dinfo,.shoot-sum,.shoot-next,.dother,.shoot-msg,.pf-del{text-align:left}
+.hero{padding-top:36px}
+.btns{justify-content:flex-start}
+.greet{justify-content:flex-start;margin-left:0}
+.searchbar,.menu3{margin-left:0}
+#shootResult{align-items:flex-start}
+.friend{align-items:flex-end}
+.stampcard svg{margin:0 0 8px}
+.cover,.cover *{text-align:center}
+.menu3 button{text-align:center}
+.viewtog{justify-content:flex-start}
+#shootResult .book{align-self:flex-start}
+#shootResult{max-width:100%}
+.shootwrap{align-items:stretch}
+.dcards{align-self:center}
+.fadein{animation:fadeUp .6s ease-out}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 </style>
 </head>
 <body>
@@ -1145,7 +1164,7 @@ function pickDaily(i){
 }
 function drawDailyInfo(st){
   const b=BOOKS[st.ids[st.pick]], el=document.getElementById('dailyInfo');
-  el.innerHTML=`<div class="dinfo pop"><h3>${b.t}</h3><div class="au">${b.a}</div><p class="shoot-sum">${b.s}</p>
+  el.innerHTML=`<div class="dinfo fadein"><h3>${b.t}</h3><div class="au">${b.a}</div><p class="shoot-sum">${b.s}</p>
     <button class="btn ghost dmore" onclick="openModal(${b.id})">${T('dfMore')}</button>
     <p class="dother">${T('dfOther')}</p><p class="shoot-next">${T('dailyNext',{t:timeLeft()})}</p></div>`;
 }
