@@ -1323,7 +1323,7 @@ const STAMPS=[
  {id:'profile',f:'square',c:'#c77dd6', ch:'butterfly',ex:'smile',ko:['나비별 나나','내 프로필','프로필을 만들면'], en:['Nana the Butterfly','My profile','Create your profile'], v:()=>profile?1:0, goal:1},
  {id:'theme',f:'diamond',c:'#7d8aa8', ch:'sunmoon',ex:'wink', ko:['해달이','테마 바꾸기','화면 테마를 바꿔 보면'], en:['Sunny-Moon','New look','Change the screen theme'], v:()=>stats.theme, goal:1},
  {id:'night',f:'octa',   c:'#2e3a7a', ch:'firefly',ex:'sleepy', ko:['반딧불 반디','밤의 손님','밤 9시 이후에 책방에 오면'], en:['Bandi the Firefly','Night visitor','Visit the bookshop after 9 p.m.'], v:()=>stats.night, goal:1},
- {id:'all',  f:'star8',  c:'#f2c94c', ch:'crown',ex:'proud',   ko:['별자리 왕관','별자리 완성','다른 별 도장을 모두 모으면'], en:['Constellation Crown','All stars','Collect every other star stamp'], v:()=>STAMPS.filter(x=>x.id!=='all'&&stamps[x.id]).length, goal:18},
+ {id:'all',  f:'star8',  c:'#f2c94c', ch:'family',ex:'happy',   ko:['책방 친구들','다 함께 모였어요','다른 별 도장을 모두 모으면'], en:['Bookshop Friends','All together','Collect every other star stamp'], v:()=>STAMPS.filter(x=>x.id!=='all'&&stamps[x.id]).length, goal:18},
 ];
 function freshStats(){return {rec:0,days:[],orig:0,lang:0,sky:0,search:0,theme:0,night:0,genres:[]};}
 let stats=freshStats(), stamps={};
@@ -1430,6 +1430,11 @@ function charSVG(ch,ex){
     case 'butterfly': return `<path d="M50,50Q30,24 20,38Q14,52 34,56Q18,66 30,76Q42,80 50,58Q58,80 70,76Q82,66 66,56Q86,52 80,38Q70,24 50,50Z" fill="#f0b6ff" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><circle cx="34" cy="42" r="4" fill="#fff" opacity=".8"/><circle cx="66" cy="42" r="4" fill="#fff" opacity=".8"/><ellipse cx="50" cy="56" rx="6" ry="16" fill="#9b6bd6" stroke="${K}" stroke-width="2"/><path d="M47,40q-4,-10 -8,-12M53,40q4,-10 8,-12" stroke="${K}" stroke-width="1.6" fill="none"/>${face(50,52,.55,ex)}`;
     case 'sunmoon': return `<path d="M50,28A24,24 0 0,0 50,76Z" fill="#ffd36b" stroke="${K}" stroke-width="2"/><path d="M50,28A24,24 0 0,1 50,76Z" fill="#5b6bb5" stroke="${K}" stroke-width="2"/><path d="M22,52h-6M26,34l-5,-4M26,70l-5,4" stroke="#ffb84d" stroke-width="3" stroke-linecap="round"/><circle cx="64" cy="40" r="1.5" fill="#fff"/><circle cx="70" cy="58" r="1.2" fill="#fff"/>${face(50,54,.9,ex)}`;
     case 'firefly': return `<ellipse cx="38" cy="42" rx="12" ry="7" fill="#e9f3ff" stroke="${K}" stroke-width="1.6" opacity=".9" transform="rotate(-30 38 42)"/><ellipse cx="58" cy="40" rx="12" ry="7" fill="#e9f3ff" stroke="${K}" stroke-width="1.6" opacity=".9" transform="rotate(20 58 40)"/><circle cx="62" cy="68" r="14" fill="#fff59d" opacity=".55"/><ellipse cx="60" cy="66" rx="10" ry="9" fill="#ffe94d" stroke="${K}" stroke-width="2"/><circle cx="44" cy="54" r="14" fill="#6d5a9e" stroke="${K}" stroke-width="2"/><path d="M38,40q-4,-8 -10,-8M46,40q2,-8 8,-10" stroke="${K}" stroke-width="1.6" fill="none"/>${face(44,54,.95,ex,'#fff')}`;
+    case 'family': {
+      const g=(c,x,y,sc,e)=>`<g transform="translate(${x} ${y}) scale(${sc}) translate(-50 -54)">${charSVG(c,e)}</g>`;
+      return g('owl',50,35,.38,'smile')+g('rabbit',29,45,.36,'happy')+g('parrot',71,45,.36,'grin')
+        +g('fairy',27,68,.36,'wink')+g('firefly',73,68,.36,'happy')+g('sparkle',50,70,.46,'proud')
+        +`<path d="M44,53.5l2.2,3.6l3.8,-5.2l3.8,5.2l2.2,-3.6l-0.9,6.2h-10.2z" fill="#ffd34d" stroke="#2b2140" stroke-width="1.1" stroke-linejoin="round"/>`;}
     case 'crown': return `<path d="M22,70L30,34L44,52L50,28L56,52L70,34L78,70Z" fill="#ffd34d" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><rect x="22" y="68" width="56" height="10" rx="3" fill="#f4b942" stroke="${K}" stroke-width="2"/><path d="M30,34L50,28L70,34" stroke="#fff" stroke-width="1" stroke-dasharray="2 2"/><circle cx="30" cy="32" r="3" fill="#fff"/><circle cx="50" cy="26" r="3.5" fill="#fff"/><circle cx="70" cy="32" r="3" fill="#fff"/>${face(50,58,.9,ex)}`;
   }
   return '';
