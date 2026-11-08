@@ -1116,8 +1116,9 @@ function saveDaily(st){try{localStorage.setItem('starDaily',JSON.stringify(st))}
 function dailyPick(){const st=dailyState();return BOOKS[st.ids[st.pick==null?0:st.pick]];}
 function timeLeft(){const n=new Date(),t=new Date(n);t.setHours(24,0,0,0);const mins=Math.max(1,Math.round((t-n)/60000));return T('hm',{h:Math.floor(mins/60),m:mins%60});}
 function josaIe(w){const c=w.charCodeAt(w.length-1);return (c>=0xAC00&&c<=0xD7A3&&(c-0xAC00)%28)?'이에요':'예요';}
-function friendOf(st){return STAMPS.filter(x=>x.id!=='all')[st.friend%18];}
-function friendSVG(fr){return `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="52" r="44" fill="${fr.c}" opacity=".28"/><circle cx="50" cy="52" r="44" fill="none" stroke="${fr.c}" stroke-width="2"/>${charSVG(fr.ch)}</svg>`;}
+const FRIENDS=['rec1','lib1','day3','rate1','search','orig'];
+function friendOf(st){return STAMPS.find(x=>x.id===FRIENDS[st.friend%FRIENDS.length]);}
+function friendSVG(fr){return `<svg viewBox="0 0 100 100" aria-hidden="true"><circle cx="50" cy="52" r="44" fill="${fr.c}" opacity=".28"/><circle cx="50" cy="52" r="44" fill="none" stroke="${fr.c}" stroke-width="2"/><g transform="translate(50 54) scale(1.12) translate(-50 -54)">${charSVG(fr.ch,'smile','')}</g></svg>`;}
 function friendLine(st){
   const fr=friendOf(st), nm=stampName(fr)[0], who=profile?esc(profile.name):'';
   if(st.pick==null){
@@ -1305,25 +1306,25 @@ function deleteProfile(){
 // ── 별 도장 ──
 // 도장마다 모양(frame)과 캐릭터(ch)가 달라요
 const STAMPS=[
- {id:'rec1', f:'circle', c:'#f4b942', ch:'sparkle', ko:['반짝이','첫 추천','책을 처음 추천받으면'], en:['Twinkle','First pick','Get your first recommendation'], v:()=>stats.rec, goal:1},
- {id:'rec5', f:'scallop',c:'#f08a5d', ch:'lantern', ko:['초롱이','추천 5번','책을 5번 추천받으면'], en:['Lanterny','5 picks','Get recommendations 5 times'], v:()=>stats.rec, goal:5},
- {id:'rec10',f:'hex',    c:'#7b6cf6', ch:'galaxy',  ko:['은하','추천 10번','책을 10번 추천받으면'], en:['Galaxy','10 picks','Get recommendations 10 times'], v:()=>stats.rec, goal:10},
- {id:'lib1', f:'square', c:'#4fb39a', ch:'bookworm',ko:['책벌레 꼬물이','첫 책 담기','내 서재에 책을 1권 담으면'], en:['Wiggle the Bookworm','First book saved','Put 1 book in your library'], v:libSize, goal:1},
- {id:'lib5', f:'octa',   c:'#8a6d4b', ch:'owl',     ko:['부엉 박사','서재 5권','내 서재에 책을 5권 담으면'], en:['Dr. Hoot','5 books saved','Put 5 books in your library'], v:libSize, goal:5},
- {id:'lib10',f:'flower', c:'#e98ab8', ch:'rabbit',  ko:['달토끼 토리','서재 10권','내 서재에 책을 10권 담으면'], en:['Tori the Moon Rabbit','10 books saved','Put 10 books in your library'], v:libSize, goal:10},
- {id:'day3', f:'diamond',c:'#5aa9e6', ch:'meteor',  ko:['별똥이','오늘의 책 3일','오늘의 책을 서로 다른 3일 동안 보면'], en:['Zoomy the Meteor','3 days of books','Open the Book of the Day on 3 different days'], v:()=>stats.days.length, goal:3},
- {id:'day7', f:'star8',  c:'#e7c03a', ch:'polaris', ko:['북극성 폴라','오늘의 책 7일','오늘의 책을 서로 다른 7일 동안 보면'], en:['Polly the North Star','7 days of books','Open the Book of the Day on 7 different days'], v:()=>stats.days.length, goal:7},
- {id:'rate1',f:'drop',   c:'#9b7be0', ch:'fairy',   ko:['별점 요정 피피','첫 별점','읽은 책에 처음 별점을 주면'], en:['Pipi the Rating Fairy','First rating','Rate a book you read'], v:()=>Object.keys(read).length, goal:1},
- {id:'rate5',f:'shield', c:'#3d8bd4', ch:'scholar', ko:['책 선생님 별','별점 5권','책 5권에 별점을 주면'], en:['Professor Star','5 ratings','Rate 5 books'], v:()=>Object.keys(read).length, goal:5},
- {id:'search',f:'ticket',c:'#d9734e', ch:'detective',ko:['돋보기 탐정','첫 검색','책을 처음 검색하면'], en:['Detective Lens','First search','Search for a book'], v:()=>stats.search, goal:1},
- {id:'orig', f:'circle', c:'#2fa37a', ch:'parrot',  ko:['앵무새 헬로','첫 원서 추천','영어 원서로 추천받으면'], en:['Hello the Parrot','First English pick','Get English original recommendations'], v:()=>stats.orig, goal:1},
- {id:'lang', f:'scallop',c:'#4b7bd8', ch:'globe',   ko:['지구별 글로비','영어로 둘러보기','화면을 영어로 바꿔 보면'], en:['Globby','Try English','Switch the screen to English'], v:()=>stats.lang, goal:1},
- {id:'sky',  f:'hex',    c:'#3b3f8f', ch:'telescope',ko:['망원경 루미','별자리 지도','추천 결과를 별자리로 보면'], en:['Lumi the Telescope','Constellation map','View your results as a constellation'], v:()=>stats.sky, goal:1},
- {id:'genre5',f:'flower',c:'#5cc0c7', ch:'rainbow', ko:['무지개 구름','분야 탐험가','서로 다른 분야의 책 5가지를 구경하면'], en:['Rainbow Cloud','Genre explorer','Look at books from 5 different genres'], v:()=>stats.genres.length, goal:5},
- {id:'profile',f:'square',c:'#c77dd6', ch:'butterfly',ko:['나비별 나나','내 프로필','프로필을 만들면'], en:['Nana the Butterfly','My profile','Create your profile'], v:()=>profile?1:0, goal:1},
- {id:'theme',f:'diamond',c:'#7d8aa8', ch:'sunmoon', ko:['해달이','테마 바꾸기','화면 테마를 바꿔 보면'], en:['Sunny-Moon','New look','Change the screen theme'], v:()=>stats.theme, goal:1},
- {id:'night',f:'octa',   c:'#2e3a7a', ch:'firefly', ko:['반딧불 반디','밤의 손님','밤 9시 이후에 책방에 오면'], en:['Bandi the Firefly','Night visitor','Visit the bookshop after 9 p.m.'], v:()=>stats.night, goal:1},
- {id:'all',  f:'star8',  c:'#f2c94c', ch:'crown',   ko:['별자리 왕관','별자리 완성','다른 별 도장을 모두 모으면'], en:['Constellation Crown','All stars','Collect every other star stamp'], v:()=>STAMPS.filter(x=>x.id!=='all'&&stamps[x.id]).length, goal:18},
+ {id:'rec1', f:'circle', c:'#f4b942', ch:'sparkle',ex:'smile',acc:'', ko:['반짝이','첫 추천','책을 처음 추천받으면'], en:['Twinkle','First pick','Get your first recommendation'], v:()=>stats.rec, goal:1},
+ {id:'rec5', f:'scallop',c:'#f08a5d', ch:'sparkle',ex:'grin',acc:'book', ko:['반짝이','추천 5번','책을 5번 추천받으면'], en:['Twinkle','5 picks','Get recommendations 5 times'], v:()=>stats.rec, goal:5},
+ {id:'rec10',f:'hex',    c:'#7b6cf6', ch:'sparkle',ex:'proud',acc:'crown',  ko:['반짝이','추천 10번','책을 10번 추천받으면'], en:['Twinkle','10 picks','Get recommendations 10 times'], v:()=>stats.rec, goal:10},
+ {id:'lib1', f:'square', c:'#4fb39a', ch:'owl',ex:'smile',acc:'book',ko:['부엉박사','첫 책 담기','내 서재에 책을 1권 담으면'], en:['Dr. Hoot','First book saved','Put 1 book in your library'], v:libSize, goal:1},
+ {id:'lib5', f:'octa',   c:'#8a6d4b', ch:'owl',ex:'happy',acc:'books',     ko:['부엉박사','서재 5권','내 서재에 책을 5권 담으면'], en:['Dr. Hoot','5 books saved','Put 5 books in your library'], v:libSize, goal:5},
+ {id:'lib10',f:'flower', c:'#e98ab8', ch:'owl',ex:'proud',acc:'books',  ko:['부엉박사','서재 10권','내 서재에 책을 10권 담으면'], en:['Dr. Hoot','10 books saved','Put 10 books in your library'], v:libSize, goal:10},
+ {id:'day3', f:'diamond',c:'#5aa9e6', ch:'rabbit',ex:'smile',acc:'letter',  ko:['토리','오늘의 책 3일','오늘의 책을 서로 다른 3일 동안 보면'], en:['Tori','3 days of books','Open the Book of the Day on 3 different days'], v:()=>stats.days.length, goal:3},
+ {id:'day7', f:'star8',  c:'#e7c03a', ch:'rabbit',ex:'grin',acc:'gift', ko:['토리','오늘의 책 7일','오늘의 책을 서로 다른 7일 동안 보면'], en:['Tori','7 days of books','Open the Book of the Day on 7 different days'], v:()=>stats.days.length, goal:7},
+ {id:'rate1',f:'drop',   c:'#9b7be0', ch:'fairy',ex:'wow',acc:'',   ko:['피피','첫 별점','읽은 책에 처음 별점을 주면'], en:['Pipi','First rating','Rate a book you read'], v:()=>Object.keys(read).length, goal:1},
+ {id:'rate5',f:'shield', c:'#3d8bd4', ch:'fairy',ex:'happy',acc:'stars', ko:['피피','별점 5권','책 5권에 별점을 주면'], en:['Pipi','5 ratings','Rate 5 books'], v:()=>Object.keys(read).length, goal:5},
+ {id:'search',f:'ticket',c:'#d9734e', ch:'firefly',ex:'smile',acc:'',ko:['반디','첫 검색','책을 처음 검색하면'], en:['Bandi','First search','Search for a book'], v:()=>stats.search, goal:1},
+ {id:'orig', f:'circle', c:'#2fa37a', ch:'parrot',ex:'smile',acc:'abc',  ko:['헬로','첫 원서 추천','영어 원서로 추천받으면'], en:['Hello','First English pick','Get English original recommendations'], v:()=>stats.orig, goal:1},
+ {id:'lang', f:'scallop',c:'#4b7bd8', ch:'parrot',ex:'grin',acc:'hi',   ko:['헬로','영어로 둘러보기','화면을 영어로 바꿔 보면'], en:['Hello','Try English','Switch the screen to English'], v:()=>stats.lang, goal:1},
+ {id:'sky',  f:'hex',    c:'#3b3f8f', ch:'firefly',ex:'wow',acc:'scope',ko:['반디','별자리 지도','추천 결과를 별자리로 보면'], en:['Bandi','Constellation map','View your results as a constellation'], v:()=>stats.sky, goal:1},
+ {id:'genre5',f:'flower',c:'#5cc0c7', ch:'firefly',ex:'grin',acc:'stars', ko:['반디','분야 탐험가','서로 다른 분야의 책 5가지를 구경하면'], en:['Bandi','Genre explorer','Look at books from 5 different genres'], v:()=>stats.genres.length, goal:5},
+ {id:'profile',f:'square',c:'#c77dd6', ch:'sparkle',ex:'wink',acc:'heart',ko:['반짝이','내 프로필','프로필을 만들면'], en:['Twinkle','My profile','Create your profile'], v:()=>profile?1:0, goal:1},
+ {id:'theme',f:'diamond',c:'#7d8aa8', ch:'fairy',ex:'wink',acc:'palette', ko:['피피','테마 바꾸기','화면 테마를 바꿔 보면'], en:['Pipi','New look','Change the screen theme'], v:()=>stats.theme, goal:1},
+ {id:'night',f:'octa',   c:'#2e3a7a', ch:'firefly',ex:'sleepy',acc:'moon', ko:['반디','밤의 손님','밤 9시 이후에 책방에 오면'], en:['Bandi','Night visitor','Visit the bookshop after 9 p.m.'], v:()=>stats.night, goal:1},
+ {id:'all',  f:'star8',  c:'#f2c94c', ch:'family',ex:'happy',acc:'',   ko:['책방 식구들','다 함께','다른 별 도장을 모두 모으면'], en:['The Bookshop Family','All together','Collect every other star stamp'], v:()=>STAMPS.filter(x=>x.id!=='all'&&stamps[x.id]).length, goal:18},
 ];
 function freshStats(){return {rec:0,days:[],orig:0,lang:0,sky:0,search:0,theme:0,night:0,genres:[]};}
 let stats=freshStats(), stamps={};
@@ -1388,34 +1389,59 @@ function framePath(f){
   }
   return 'M50,4A46,46 0 1,1 49.9,4Z';
 }
-// 얼굴 (눈, 볼, 웃는 입)
-function face(x,y,s){s=s||1;return `<g transform="translate(${x},${y}) scale(${s})"><circle cx="-5" cy="0" r="1.9" fill="#2b2140"/><circle cx="5" cy="0" r="1.9" fill="#2b2140"/>
-  <circle cx="-8" cy="4" r="2.2" fill="#ff9fb4" opacity=".75"/><circle cx="8" cy="4" r="2.2" fill="#ff9fb4" opacity=".75"/>
-  <path d="M-3,4Q0,7 3,4" stroke="#2b2140" stroke-width="1.5" fill="none" stroke-linecap="round"/></g>`;}
+// 얼굴 (눈은 작게, 표정은 다양하게)
+function face(x,y,s,ex,col){s=s||1;ex=ex||'smile';const K=col||'#2b2140';
+  const dot=(cx)=>`<circle cx="${cx}" cy="0" r="2.3" fill="${K}"/><circle cx="${cx+0.8}" cy="-0.8" r="0.75" fill="#fff"/>`;
+  const arcU=(cx)=>`<path d="M${cx-2.8},0.8Q${cx},-2.8 ${cx+2.8},0.8" stroke="${K}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+  const arcD=(cx)=>`<path d="M${cx-2.6},-0.4Q${cx},1.8 ${cx+2.6},-0.4" stroke="${K}" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
+  const smileM=`<path d="M-3,4Q0,7 3,4" stroke="${K}" stroke-width="1.5" fill="none" stroke-linecap="round"/>`;
+  const grinM=`<path d="M-3.4,3.6Q0,9 3.4,3.6Z" fill="#c2405e" stroke="${K}" stroke-width="1.2" stroke-linejoin="round"/>`;
+  const E={smile:dot(-5)+dot(5)+smileM, grin:dot(-5)+dot(5)+grinM, happy:arcU(-5)+arcU(5)+smileM, proud:arcU(-5)+arcU(5)+grinM,
+    wink:dot(-5)+arcU(5)+smileM, wow:dot(-5)+dot(5)+`<ellipse cx="0" cy="5" rx="1.8" ry="2.2" fill="#c2405e" stroke="${K}" stroke-width="1.1"/>`,
+    sleepy:arcD(-5)+arcD(5)+`<path d="M-1.8,5Q0,6.2 1.8,5" stroke="${K}" stroke-width="1.3" fill="none" stroke-linecap="round"/>`};
+  return `<g transform="translate(${x},${y}) scale(${s})">${E[ex]||E.smile}
+  <circle cx="-8.5" cy="4" r="2.3" fill="#ff9fb4" opacity=".75"/><circle cx="8.5" cy="4" r="2.3" fill="#ff9fb4" opacity=".75"/></g>`;}
 function starPts(cx,cy,r1,r2,n){n=n||5;let a=[];for(let i=0;i<n*2;i++){const t=-Math.PI/2+i*Math.PI/n,r=i%2?r2:r1;a.push((cx+r*Math.cos(t)).toFixed(1)+','+(cy+r*Math.sin(t)).toFixed(1));}return a.join(' ');}
-// 캐릭터 그림
-function charSVG(ch){
-  const W='#fffdf5', K='#2b2140';
+// 캐릭터 그림: 밤하늘 책방 식구들 6명 (반짝이, 부엉박사, 토리, 피피, 반디, 헬로)
+function charSVG(ch,ex,acc){
+  const W='#fffdf5', K='#2b2140'; let h='';
   switch(ch){
-    case 'sparkle': return `<polygon points="${starPts(50,52,24,11)}" fill="#ffe27a" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>${face(50,54,.9)}<path d="M76,26l2,5l5,2l-5,2l-2,5l-2,-5l-5,-2l5,-2z" fill="#fff"/>`;
-    case 'lantern': return `<path d="M44,24h12M50,20v4" stroke="${K}" stroke-width="2.5" stroke-linecap="round"/><rect x="32" y="28" width="36" height="42" rx="16" fill="#ffb38a" stroke="${K}" stroke-width="2"/><rect x="40" y="70" width="20" height="6" rx="2" fill="${K}"/><path d="M38,36h24M38,62h24" stroke="#fff" stroke-width="1.5" opacity=".6"/>${face(50,50)}`;
-    case 'galaxy': return `<ellipse cx="50" cy="52" rx="34" ry="11" fill="none" stroke="#d9d2ff" stroke-width="3" transform="rotate(-18 50 52)"/><circle cx="50" cy="52" r="19" fill="#b9acff" stroke="${K}" stroke-width="2"/><path d="M25,64A34,11 -18 0,0 75,40" stroke="#d9d2ff" stroke-width="3" fill="none" transform="rotate(0)"/>${face(50,53)}<circle cx="24" cy="30" r="2" fill="#fff"/><circle cx="78" cy="72" r="1.6" fill="#fff"/>`;
-    case 'bookworm': return `<path d="M22,40L50,46L78,40V72L50,78L22,72Z" fill="${W}" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><path d="M50,46V78" stroke="${K}" stroke-width="2"/><circle cx="62" cy="36" r="11" fill="#9fe0a8" stroke="${K}" stroke-width="2"/><path d="M58,26l-3,-6M66,26l3,-6" stroke="${K}" stroke-width="2" stroke-linecap="round"/>${face(62,37,.7)}<path d="M30,52h12M30,58h12M58,56h12" stroke="#c9c2b0" stroke-width="2"/>`;
-    case 'owl': return `<path d="M30,34L36,22L44,32M70,34L64,22L56,32" fill="#c9a27a" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><ellipse cx="50" cy="54" rx="22" ry="24" fill="#c9a27a" stroke="${K}" stroke-width="2"/><ellipse cx="50" cy="62" rx="13" ry="12" fill="#f1dfc4"/><circle cx="42" cy="46" r="7" fill="#fff" stroke="${K}" stroke-width="2"/><circle cx="58" cy="46" r="7" fill="#fff" stroke="${K}" stroke-width="2"/><path d="M49,46h2" stroke="${K}" stroke-width="2"/><circle cx="42" cy="46" r="2.2" fill="${K}"/><circle cx="58" cy="46" r="2.2" fill="${K}"/><path d="M47,53l3,4l3,-4z" fill="#f4b942"/>`;
-    case 'rabbit': return `<path d="M64,24A26,26 0 1,0 72,70A22,22 0 1,1 64,24Z" fill="#fff1a8" stroke="${K}" stroke-width="2"/><ellipse cx="42" cy="30" rx="5" ry="14" fill="${W}" stroke="${K}" stroke-width="2"/><ellipse cx="54" cy="30" rx="5" ry="14" fill="${W}" stroke="${K}" stroke-width="2"/><circle cx="48" cy="56" r="17" fill="${W}" stroke="${K}" stroke-width="2"/>${face(48,56)}`;
-    case 'meteor': return `<path d="M20,78L46,52M28,84L50,60M14,68L40,46" stroke="#bfe3ff" stroke-width="4" stroke-linecap="round" opacity=".9"/><polygon points="${starPts(58,42,20,9)}" fill="#9fd0ff" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>${face(58,44,.75)}`;
-    case 'polaris': return `<path d="M38,22l6,8l6,-10l6,10l6,-8l-2,12h-20z" fill="#ffd34d" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><polygon points="${starPts(50,58,26,12)}" fill="#fff3b0" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>${face(50,60,.9)}`;
-    case 'fairy': return `<ellipse cx="34" cy="48" rx="12" ry="8" fill="#e8dcff" stroke="${K}" stroke-width="1.6" transform="rotate(-25 34 48)"/><ellipse cx="66" cy="48" rx="12" ry="8" fill="#e8dcff" stroke="${K}" stroke-width="1.6" transform="rotate(25 66 48)"/><path d="M50,30Q66,52 66,62A16,16 0 1,1 34,62Q34,52 50,30Z" fill="#cdb8ff" stroke="${K}" stroke-width="2"/>${face(50,62,.85)}<path d="M68,66L80,40" stroke="${K}" stroke-width="2"/><polygon points="${starPts(81,37,6,2.6)}" fill="#ffe27a" stroke="${K}" stroke-width="1"/>`;
-    case 'scholar': return `<polygon points="${starPts(50,58,24,11)}" fill="#a8d4ff" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><path d="M30,30L50,22L70,30L50,38Z" fill="${K}"/><path d="M40,34v6q10,5 20,0v-6" fill="${K}"/><path d="M68,31v10" stroke="#f4b942" stroke-width="2"/><circle cx="44" cy="59" r="4.5" fill="none" stroke="${K}" stroke-width="1.6"/><circle cx="56" cy="59" r="4.5" fill="none" stroke="${K}" stroke-width="1.6"/>${face(50,59,.8)}`;
-    case 'detective': return `<path d="M64,64L80,80" stroke="#8a5a3a" stroke-width="7" stroke-linecap="round"/><circle cx="46" cy="46" r="22" fill="#e9f6ff" stroke="${K}" stroke-width="3"/><path d="M32,38Q38,30 46,30" stroke="#fff" stroke-width="3" fill="none" stroke-linecap="round"/>${face(46,48)}<path d="M34,24q12,-10 24,0z" fill="#b86b4b" stroke="${K}" stroke-width="1.6"/>`;
-    case 'parrot': return `<path d="M36,70Q30,86 40,90M44,72Q42,86 50,88" stroke="#3fae6a" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="52" rx="20" ry="24" fill="#5fd38a" stroke="${K}" stroke-width="2"/><path d="M50,30q8,-8 14,-2q-6,2 -8,8z" fill="#ff6b6b"/><path d="M56,52q12,2 8,12q-6,-4 -10,-6z" fill="#f4b942" stroke="${K}" stroke-width="1.5"/><path d="M34,56q-8,8 -2,18q6,-6 8,-14z" fill="#3fae6a"/>${face(46,48,.85)}`;
-    case 'globe': return `<circle cx="50" cy="52" r="24" fill="#8fd3ff" stroke="${K}" stroke-width="2"/><path d="M38,38q8,4 6,12q-6,4 -10,0M58,62q8,-4 12,2q-4,8 -12,6z" fill="#7ad28f"/><ellipse cx="50" cy="52" rx="10" ry="24" fill="none" stroke="#fff" stroke-width="1.4" opacity=".7"/><path d="M26,52h48" stroke="#fff" stroke-width="1.4" opacity=".7"/>${face(50,54,.9)}`;
-    case 'telescope': return `<path d="M36,84L48,60L60,84" stroke="${K}" stroke-width="3" fill="none" stroke-linecap="round"/><rect x="26" y="40" width="50" height="18" rx="9" fill="#9fa8ff" stroke="${K}" stroke-width="2" transform="rotate(-24 50 49)"/><circle cx="74" cy="36" r="8" fill="#e6e9ff" stroke="${K}" stroke-width="2"/>${face(46,52,.8)}<polygon points="${starPts(26,24,6,2.5)}" fill="#ffe27a"/>`;
-    case 'rainbow': return `<path d="M18,62A32,32 0 0,1 82,62" stroke="#ff8a8a" stroke-width="6" fill="none"/><path d="M25,62A25,25 0 0,1 75,62" stroke="#ffd36b" stroke-width="6" fill="none"/><path d="M32,62A18,18 0 0,1 68,62" stroke="#7ad6a5" stroke-width="6" fill="none"/><path d="M28,78q-12,0 -10,-10q2,-8 12,-6q4,-10 16,-6q10,-6 18,4q12,-2 12,10q0,8 -10,8z" fill="${W}" stroke="${K}" stroke-width="2"/>${face(48,70,.8)}`;
-    case 'butterfly': return `<path d="M50,50Q30,24 20,38Q14,52 34,56Q18,66 30,76Q42,80 50,58Q58,80 70,76Q82,66 66,56Q86,52 80,38Q70,24 50,50Z" fill="#f0b6ff" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><circle cx="34" cy="42" r="4" fill="#fff" opacity=".8"/><circle cx="66" cy="42" r="4" fill="#fff" opacity=".8"/><ellipse cx="50" cy="56" rx="6" ry="16" fill="#9b6bd6" stroke="${K}" stroke-width="2"/><path d="M47,40q-4,-10 -8,-12M53,40q4,-10 8,-12" stroke="${K}" stroke-width="1.6" fill="none"/>${face(50,52,.55)}`;
-    case 'sunmoon': return `<path d="M50,28A24,24 0 0,0 50,76Z" fill="#ffd36b" stroke="${K}" stroke-width="2"/><path d="M50,28A24,24 0 0,1 50,76Z" fill="#5b6bb5" stroke="${K}" stroke-width="2"/><path d="M22,52h-6M26,34l-5,-4M26,70l-5,4" stroke="#ffb84d" stroke-width="3" stroke-linecap="round"/><circle cx="64" cy="40" r="1.5" fill="#fff"/><circle cx="70" cy="58" r="1.2" fill="#fff"/>${face(50,54,.9)}`;
-    case 'firefly': return `<ellipse cx="38" cy="42" rx="12" ry="7" fill="#e9f3ff" stroke="${K}" stroke-width="1.6" opacity=".9" transform="rotate(-30 38 42)"/><ellipse cx="58" cy="40" rx="12" ry="7" fill="#e9f3ff" stroke="${K}" stroke-width="1.6" opacity=".9" transform="rotate(20 58 40)"/><circle cx="62" cy="68" r="14" fill="#fff59d" opacity=".55"/><ellipse cx="60" cy="66" rx="10" ry="9" fill="#ffe94d" stroke="${K}" stroke-width="2"/><circle cx="44" cy="54" r="14" fill="#6d5a9e" stroke="${K}" stroke-width="2"/><path d="M38,40q-4,-8 -10,-8M46,40q2,-8 8,-10" stroke="${K}" stroke-width="1.6" fill="none"/><g transform="translate(44,54)"><circle cx="-5" cy="0" r="1.9" fill="#fff"/><circle cx="5" cy="0" r="1.9" fill="#fff"/><path d="M-3,4Q0,7 3,4" stroke="#fff" stroke-width="1.5" fill="none"/></g>`;
-    case 'crown': return `<path d="M22,70L30,34L44,52L50,28L56,52L70,34L78,70Z" fill="#ffd34d" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><rect x="22" y="68" width="56" height="10" rx="3" fill="#f4b942" stroke="${K}" stroke-width="2"/><path d="M30,34L50,28L70,34" stroke="#fff" stroke-width="1" stroke-dasharray="2 2"/><circle cx="30" cy="32" r="3" fill="#fff"/><circle cx="50" cy="26" r="3.5" fill="#fff"/><circle cx="70" cy="32" r="3" fill="#fff"/>${face(50,58,.9)}`;
+    case 'sparkle': h=`<polygon points="${starPts(50,54,26,12)}" fill="#ffe27a" stroke="${K}" stroke-width="2" stroke-linejoin="round"/>${face(50,56,.95,ex)}<path d="M77,27l2,5l5,2l-5,2l-2,5l-2,-5l-5,-2l5,-2z" fill="#fff"/>`; break;
+    case 'owl': {
+      const pup=(cx)=>`<circle cx="${cx}" cy="46" r="2.4" fill="${K}"/><circle cx="${cx+0.8}" cy="45.2" r=".8" fill="#fff"/>`;
+      const arc=(cx)=>`<path d="M${cx-3},47Q${cx},43 ${cx+3},47" stroke="${K}" stroke-width="1.7" fill="none" stroke-linecap="round"/>`;
+      const sl=(cx)=>`<path d="M${cx-3},46Q${cx},48.5 ${cx+3},46" stroke="${K}" stroke-width="1.6" fill="none" stroke-linecap="round"/>`;
+      const eyes={smile:pup(42)+pup(58),grin:pup(42)+pup(58),wow:pup(42)+pup(58),happy:arc(42)+arc(58),proud:arc(42)+arc(58),wink:pup(42)+arc(58),sleepy:sl(42)+sl(58)}[ex]||pup(42)+pup(58);
+      const beak=(ex==='grin'||ex==='proud'||ex==='wow')?`<path d="M46.5,53l3.5,6l3.5,-6z" fill="#f4b942" stroke="${K}" stroke-width="1"/><path d="M47.5,55h5" stroke="#c2405e" stroke-width="1.4"/>`:`<path d="M47,53l3,4.5l3,-4.5z" fill="#f4b942"/>`;
+      h=`<path d="M30,34L36,22L44,32M70,34L64,22L56,32" fill="#c9a27a" stroke="${K}" stroke-width="2" stroke-linejoin="round"/><ellipse cx="50" cy="55" rx="23" ry="25" fill="#c9a27a" stroke="${K}" stroke-width="2"/><ellipse cx="50" cy="64" rx="13" ry="12" fill="#f1dfc4"/>
+      <circle cx="42" cy="46" r="7.2" fill="#fff" stroke="${K}" stroke-width="2"/><circle cx="58" cy="46" r="7.2" fill="#fff" stroke="${K}" stroke-width="2"/><path d="M49.2,46h1.6" stroke="${K}" stroke-width="2"/>${eyes}${beak}
+      <circle cx="33" cy="54" r="2.4" fill="#ff9fb4" opacity=".7"/><circle cx="67" cy="54" r="2.4" fill="#ff9fb4" opacity=".7"/>`; break; }
+    case 'rabbit': h=`<path d="M66,26A26,26 0 1,0 74,72A22,22 0 1,1 66,26Z" fill="#fff1a8" stroke="${K}" stroke-width="2"/><ellipse cx="42" cy="30" rx="5.5" ry="15" fill="${W}" stroke="${K}" stroke-width="2"/><ellipse cx="42" cy="31" rx="2.2" ry="9" fill="#ffc4d4"/><ellipse cx="55" cy="30" rx="5.5" ry="15" fill="${W}" stroke="${K}" stroke-width="2"/><ellipse cx="55" cy="31" rx="2.2" ry="9" fill="#ffc4d4"/><circle cx="48.5" cy="58" r="18" fill="${W}" stroke="${K}" stroke-width="2"/>${face(48.5,58,1,ex)}`; break;
+    case 'fairy': h=`<ellipse cx="33" cy="49" rx="12" ry="8" fill="#e8dcff" stroke="${K}" stroke-width="1.6" transform="rotate(-25 33 49)"/><ellipse cx="67" cy="49" rx="12" ry="8" fill="#e8dcff" stroke="${K}" stroke-width="1.6" transform="rotate(25 67 49)"/><path d="M50,28Q67,52 67,62A17,17 0 1,1 33,62Q33,52 50,28Z" fill="#cdb8ff" stroke="${K}" stroke-width="2"/>${face(50,62,.9,ex)}<path d="M69,67L80,42" stroke="${K}" stroke-width="2"/><polygon points="${starPts(81,38,6.5,2.8)}" fill="#ffe27a" stroke="${K}" stroke-width="1"/>`; break;
+    case 'firefly': h=`<ellipse cx="37" cy="41" rx="12" ry="7" fill="#e9f3ff" stroke="${K}" stroke-width="1.6" opacity=".95" transform="rotate(-30 37 41)"/><ellipse cx="59" cy="39" rx="12" ry="7" fill="#e9f3ff" stroke="${K}" stroke-width="1.6" opacity=".95" transform="rotate(20 59 39)"/><circle cx="63" cy="69" r="15" fill="#fff59d" opacity=".5"/><ellipse cx="61" cy="67" rx="10.5" ry="9.5" fill="#ffe94d" stroke="${K}" stroke-width="2"/><circle cx="44" cy="55" r="15" fill="#6d5a9e" stroke="${K}" stroke-width="2"/><path d="M38,41q-4,-8 -10,-8M46,41q2,-8 8,-10" stroke="${K}" stroke-width="1.6" fill="none"/><circle cx="28" cy="33" r="2.2" fill="#ffe94d"/><circle cx="54" cy="31" r="2.2" fill="#ffe94d"/>${face(44,55,.95,ex,'#fff')}`; break;
+    case 'parrot': h=`<path d="M37,72Q31,88 41,92M45,74Q43,88 51,90" stroke="#3fae6a" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="50" cy="54" rx="21" ry="25" fill="#5fd38a" stroke="${K}" stroke-width="2"/><path d="M50,31q8,-9 15,-2q-6,2 -8,8z" fill="#ff6b6b" stroke="${K}" stroke-width="1.2"/><path d="M58,53q12,2 8,12q-6,-4 -10,-6z" fill="#f4b942" stroke="${K}" stroke-width="1.5"/><path d="M33,58q-8,8 -2,18q6,-6 8,-14z" fill="#3fae6a"/>${face(46,50,.9,ex)}`; break;
+    case 'family': {
+      const P=[['sparkle',30,36],['owl',50,32],['rabbit',70,36],['fairy',30,66],['firefly',50,70],['parrot',70,66]];
+      h=P.map(([c,x,y])=>`<g transform="translate(${x} ${y}) scale(.36) translate(-50 -54)">${charSVG(c,'happy','')}</g>`).join('')+`<path d="M41,14l4,5l5,-7l5,7l4,-5l-1.5,8h-15z" fill="#ffd34d" stroke="${K}" stroke-width="1.4" stroke-linejoin="round"/>`; break; }
+  }
+  return h+accSVG(acc);
+}
+// 도장마다 다른 소품
+function accSVG(acc){
+  const K='#2b2140';
+  switch(acc){
+    case 'book': return `<g transform="translate(70 74)"><path d="M-11,-4L0,-1L11,-4V8L0,11L-11,8Z" fill="#fff8e6" stroke="${K}" stroke-width="1.6" stroke-linejoin="round"/><path d="M0,-1V11" stroke="${K}" stroke-width="1.4"/></g>`;
+    case 'books': return `<g transform="translate(25 80)"><rect x="-11" y="-2" width="22" height="7" rx="1.5" fill="#e8584f" stroke="${K}" stroke-width="1.4"/><rect x="-9" y="-9" width="19" height="7" rx="1.5" fill="#4b7bd8" stroke="${K}" stroke-width="1.4"/><rect x="-10" y="-16" width="20" height="7" rx="1.5" fill="#4fb39a" stroke="${K}" stroke-width="1.4"/></g>`;
+    case 'crown': return `<path d="M39,22l4,6l7,-9l7,9l4,-6l-2,10h-18z" fill="#ffd34d" stroke="${K}" stroke-width="1.6" stroke-linejoin="round"/>`;
+    case 'heart': return `<path d="M76,72c-3,-4 -9,-2 -7,3c1,3 7,7 7,7s6,-4 7,-7c2,-5 -4,-7 -7,-3z" fill="#ff7a9a" stroke="${K}" stroke-width="1.4"/>`;
+    case 'letter': return `<g transform="translate(74 76)"><rect x="-10" y="-7" width="20" height="14" rx="2" fill="#fff8e6" stroke="${K}" stroke-width="1.5"/><path d="M-10,-6L0,2L10,-6" stroke="${K}" stroke-width="1.4" fill="none"/><circle cx="0" cy="1.5" r="2" fill="#e8584f"/></g>`;
+    case 'gift': return `<g transform="translate(74 76)"><rect x="-9" y="-6" width="18" height="14" rx="2" fill="#7bc8f0" stroke="${K}" stroke-width="1.5"/><path d="M0,-6V8M-9,0H9" stroke="#ffd34d" stroke-width="2.4"/><path d="M0,-6q-6,-6 -6,-1zq6,-6 6,-1z" fill="#ffd34d" stroke="${K}" stroke-width="1"/></g>`;
+    case 'stars': return `<polygon points="${starPts(20,30,5,2.2)}" fill="#fff3a0"/><polygon points="${starPts(82,24,4,1.8)}" fill="#fff3a0"/><polygon points="${starPts(84,70,4.5,2)}" fill="#fff3a0"/>`;
+    case 'palette': return `<g transform="translate(76 76)"><path d="M0,-9c8,0 11,6 9,10c-1,3 -5,1 -6,4c-1,4 -4,5 -8,4c-6,-2 -7,-18 5,-18z" fill="#fff8e6" stroke="${K}" stroke-width="1.4"/><circle cx="-3" cy="-4" r="1.8" fill="#e8584f"/><circle cx="3" cy="-5" r="1.8" fill="#4b7bd8"/><circle cx="-5" cy="2" r="1.8" fill="#4fb39a"/></g>`;
+    case 'scope': return `<g transform="translate(76 76) rotate(-30)"><rect x="-10" y="-3.5" width="18" height="7" rx="3" fill="#9fa8ff" stroke="${K}" stroke-width="1.4"/><rect x="8" y="-4.5" width="5" height="9" rx="1.5" fill="#e6e9ff" stroke="${K}" stroke-width="1.4"/></g>`;
+    case 'moon': return `<path d="M24,18a9,9 0 1,0 10,11a7,7 0 1,1 -10,-11z" fill="#fff1a8" stroke="${K}" stroke-width="1.3"/><text x="74" y="30" font-size="10" font-weight="700" fill="#e6e9ff" font-family="sans-serif">z</text><text x="81" y="22" font-size="7" font-weight="700" fill="#e6e9ff" font-family="sans-serif">z</text>`;
+    case 'abc': return `<g transform="translate(73 76)"><rect x="-9" y="-10" width="18" height="20" rx="2" fill="#4b7bd8" stroke="${K}" stroke-width="1.5"/><text x="0" y="5" text-anchor="middle" font-size="12" font-weight="700" fill="#fff" font-family="sans-serif">A</text></g>`;
+    case 'hi': return `<g transform="translate(77 26)"><rect x="-12" y="-8" width="24" height="15" rx="6" fill="#fff8e6" stroke="${K}" stroke-width="1.4"/><path d="M-4,7l-3,6l7,-6" fill="#fff8e6" stroke="${K}" stroke-width="1.4" stroke-linejoin="round"/><text x="0" y="3" text-anchor="middle" font-size="9" font-weight="700" fill="${K}" font-family="sans-serif">Hi!</text></g>`;
   }
   return '';
 }
@@ -1424,7 +1450,7 @@ function stampSVG(st,got){
   return `<svg viewBox="0 0 100 100" aria-hidden="true">
     <path d="${d}" fill="${c}" fill-rule="nonzero"/>
     <path d="${d}" fill="none" stroke="#fff" stroke-opacity=".7" stroke-width="2" stroke-dasharray="3 3" transform="translate(50 50) scale(.86) translate(-50 -50)"/>
-    <g ${got?'':'opacity=".0"'}>${charSVG(st.ch)}</g>
+    <g ${got?'':'opacity="0"'} transform="translate(50 54) scale(1.14) translate(-50 -54)">${charSVG(st.ch,st.ex,st.acc)}</g>
     ${got?'':`<text x="50" y="62" text-anchor="middle" font-size="34" fill="#fff" font-family="serif">?</text>`}
   </svg>`;
 }
