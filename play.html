@@ -122,6 +122,29 @@ canvas#cv{display:block;width:100%;touch-action:none}
 .pbtn{width:74px;height:74px;border-radius:50%;border:2px solid rgba(var(--goldrgb),.45);background:rgba(255,255,255,.07);font-size:26px;color:var(--text);display:flex;align-items:center;justify-content:center;touch-action:none;-webkit-touch-callout:none;cursor:pointer}
 .pbtn.jump{width:92px;height:92px;font-family:'Gowun Batang',serif;font-size:17px;background:radial-gradient(circle at 35% 30%,rgba(255,243,196,.35),rgba(var(--goldrgb),.18));border-color:var(--gold);color:var(--gold)}
 .pbtn.down{background:rgba(var(--goldrgb),.28);transform:scale(.95)}
+
+/* 책방과 같은 테마 (종이, 새벽 하늘) — 게임 속 장면은 밤 그대로 */
+html[data-theme="light"]{--text:var(--lt-text);--soft:var(--lt-soft);--card:var(--lt-card);--line:var(--lt-line)}
+html[data-theme="light"] .obox{background:var(--paper);border-color:var(--line)}
+html[data-theme="light"] .overlay{background:rgba(40,40,60,.35)}
+html[data-theme="light"] .overlay.full{background:rgba(40,40,60,.45)}
+html[data-theme="light"] .bar{background:rgba(0,0,0,.08)}
+html[data-theme="light"] .fb{background:var(--paper2)}
+html[data-theme="light"] .map{background:linear-gradient(180deg,var(--paper) 0%,var(--paper2) 55%,var(--sky3) 100%)}
+html[data-theme="light"] .map svg circle{fill:var(--lt-star)}
+html[data-theme="light"] .node .nm{background:var(--paper);color:var(--text);border:1px solid var(--line)}
+html[data-theme="light"] .node.lock .dot{background:var(--paper2);color:var(--soft);border:1.5px solid var(--line)}
+html[data-theme="light"] .fchip canvas{background:linear-gradient(160deg,#2b2f7a,#151a4a);border-radius:12px}
+html[data-theme="light"] .pbtn{background:var(--paper);color:var(--text);border-color:rgba(var(--goldrgb),.45)}
+html[data-theme="light"] .pbtn.jump{background:var(--paper2);color:var(--gold);border-color:var(--gold)}
+html[data-theme="light"] .pbtn.down{background:rgba(var(--goldrgb),.2)}
+html[data-theme="light"] .toast{background:var(--paper);color:var(--gold)}
+html[data-theme="light"] .wtabs.msg::after{background:var(--paper)}
+html[data-theme="light"] .stage{border-color:var(--line)}
+html[data-theme="light"] .sbtn.on{color:#a8405f;background:rgba(255,120,160,.14);border-color:#e08aa6}
+.hud .score{color:#ffd86b}.hud .score small{color:#b9b4dc}.pow{color:#f3f0ff}
+.hudbtns .iconbtn{color:#f3f0ff;border-color:rgba(255,255,255,.2)}
+.map svg path{stroke:rgba(var(--goldrgb),.5)}
 </style>
 </head>
 <body>
@@ -200,6 +223,16 @@ canvas#cv{display:block;width:100%;touch-action:none}
 </div>
 
 <script>
+// ── 책방에서 고른 화면 테마를 그대로 써요 ──
+(function(){
+  const TH={dark:{sky1:'#0b1033',sky2:'#1b1f5e',sky3:'#3a2a72',gold:'#ffd86b',goldrgb:'255,216,107'},
+    paper:{mode:'light',sky1:'#ebe4d6',sky2:'#e4dccb',sky3:'#ddd3c0',gold:'#9a6410',goldrgb:'170,115,30',lt:{text:'#2e2a24',soft:'#6e665a',card:'rgba(90,70,40,.05)',line:'rgba(90,70,40,.16)',star:'#a89a80',paper:'#f6f1e6',paper2:'#efe8da'}},
+    dawn:{mode:'light',sky1:'#dfe8f1',sky2:'#d6e1ec',sky3:'#cbd8e6',gold:'#2f5f8f',goldrgb:'47,95,143',lt:{text:'#1f2a36',soft:'#55667a',card:'rgba(30,60,100,.05)',line:'rgba(30,60,100,.16)',star:'#8ea3bd',paper:'#eef3f8',paper2:'#e4ebf3'}}};
+  let t='dark';try{t=(JSON.parse(localStorage.getItem('starSettings'))||{}).theme||'dark'}catch(e){}
+  if(t==='light')t='paper';const th=TH[t]||TH.dark,r=document.documentElement.style;
+  ['sky1','sky2','sky3','gold','goldrgb'].forEach(k=>r.setProperty('--'+k,th[k]));
+  if(th.mode==='light'){document.documentElement.dataset.theme='light';for(const k in th.lt)r.setProperty(k==='paper'||k==='paper2'?'--'+k:'--lt-'+k,th.lt[k])}
+})();
 // ── 저장 (책방 앱과 같은 브라우저 저장소를 함께 써요) ──
 const LS={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
@@ -1213,7 +1246,7 @@ function openMap(w){
   const pts=NODES.map(([x,y])=>`${x},${y}`);
   let svg=`<svg class="path" viewBox="0 0 100 100" preserveAspectRatio="none">`;
   for(let i=0;i<40;i++){const x=(i*37)%100,y=(i*53)%100;svg+=`<circle cx="${x}" cy="${y}" r="${0.25+(i%3)*0.15}" fill="#fff" opacity="${0.3+(i%4)*0.12}"/>`}
-  svg+=`<path d="M${NODES.map((p,i)=>i?`Q${(NODES[i-1][0]+p[0])/2+(i%2?14:-14)},${(NODES[i-1][1]+p[1])/2} ${p[0]},${p[1]}`:`${p[0]},${p[1]}`).join(' ')}" fill="none" stroke="rgba(255,216,107,.45)" stroke-width="0.8" stroke-dasharray="1.6 1.6" vector-effect="non-scaling-stroke" style="stroke-width:3px"/></svg>`;
+  svg+=`<path d="M${NODES.map((p,i)=>i?`Q${(NODES[i-1][0]+p[0])/2+(i%2?14:-14)},${(NODES[i-1][1]+p[1])/2} ${p[0]},${p[1]}`:`${p[0]},${p[1]}`).join(' ')}" fill="none" stroke-width="0.8" stroke-dasharray="1.6 1.6" vector-effect="non-scaling-stroke" style="stroke-width:3px"/></svg>`;
   m.innerHTML=svg+idx.map((i,j)=>{const s=STAGES[i],op=unlocked(i),r=play.adv[s.id];
     return `<button class="node ${op?'':'lock'} ${i===firstOpen?'now':''}" style="left:${NODES[j][0]}%;top:${NODES[j][1]}%" ${op?`onclick="openStage(${i})"`:''}>
       <span class="dot">${op?s.id:'🔒'}</span><span class="nm">${T(s.name)}</span><span class="st">${op?(r&&r.clear?T('bestS',{s:r.best})+' ✓':T('newS')):T('locked')}</span></button>`}).join('');
