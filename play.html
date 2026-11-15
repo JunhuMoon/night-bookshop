@@ -14,6 +14,9 @@ p,h1,h2,h3,li,b{word-break:keep-all}
 body{background:linear-gradient(180deg,var(--sky1),var(--sky2) 60%,var(--sky3));background-attachment:fixed;color:var(--text);font-family:'Gowun Dodum',sans-serif;min-height:100vh;-webkit-tap-highlight-color:transparent}
 button{font-family:inherit;color:inherit}
 .wrap{max-width:560px;margin:0 auto;padding:14px 16px 30px}
+body.gaming .wrap{max-width:min(1100px,100%)}
+body.gaming .pad{max-width:1100px}
+@media (min-width:700px){body.gaming .hud .hearts{font-size:26px}body.gaming .hud .score{font-size:24px}body.gaming .pow{font-size:14px}}
 .top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:12px}
 .back{background:none;border:none;color:var(--soft);font-size:15px;cursor:pointer;padding:6px 2px;text-decoration:none}
 .iconbtn{background:var(--card);border:1.5px solid var(--line);border-radius:999px;width:38px;height:38px;font-size:17px;cursor:pointer;display:inline-flex;align-items:center;justify-content:center}
@@ -333,7 +336,7 @@ const FRIENDS=[
   {id:'sparkle',price:150,jumps:3}];
 const FR=id=>FRIENDS.find(f=>f.id===id)||FRIENDS[0];
 
-function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));window.scrollTo(0,0)}
+function go(id){document.querySelectorAll('.screen').forEach(s=>s.classList.toggle('on',s.id===id));document.body.classList.toggle('gaming',id==='s-game');window.scrollTo(0,0)}
 function esc(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
 let toastT=0;function toast(s){const t=document.getElementById('toast');t.textContent=s;t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),1500)}
 
@@ -542,8 +545,8 @@ let W=360,H=380,DPR=1,SC=1,VW=360;
 const dark=document.createElement('canvas'),dctx=dark.getContext('2d');
 function resize(){
   const w=stageEl.clientWidth||360;W=w;
-  const room=window.innerHeight-250;
-  H=Math.round(Math.max(300,Math.min(w*1.05,480,room)));
+  const room=window.innerHeight-(w>=600?190:250);
+  H=Math.round(Math.max(300,Math.min(w*(w>=600?0.62:1.05),w>=600?900:480,room)));
   DPR=Math.min(window.devicePixelRatio||1,2);cv.width=Math.round(W*DPR);cv.height=Math.round(H*DPR);cv.style.height=H+'px';
   dark.width=cv.width;dark.height=cv.height;
   SC=H/VH;VW=W/SC;
@@ -1105,8 +1108,8 @@ function draw(){
   // 어두운 탑
   if(g.st.dark){
     const d=dctx;d.setTransform(1,0,0,1,0,0);d.globalCompositeOperation='source-over';d.clearRect(0,0,dark.width,dark.height);
-    d.fillStyle='rgba(4,5,18,.9)';d.fillRect(0,0,dark.width,dark.height);
-    const p=g.p,R=(g.fr.light?200:115)*SC*DPR,px=((p.x+p.w/2-g.cam.x)*SC)*DPR,py=((p.y+p.h/2-g.cam.y)*SC)*DPR;
+    d.fillStyle='rgba(4,5,18,.84)';d.fillRect(0,0,dark.width,dark.height);
+    const p=g.p,R=(g.fr.light?210:140)*SC*DPR,px=((p.x+p.w/2-g.cam.x)*SC)*DPR,py=((p.y+p.h/2-g.cam.y)*SC)*DPR;
     d.globalCompositeOperation='destination-out';const gr=d.createRadialGradient(px,py,R*0.25,px,py,R);gr.addColorStop(0,'rgba(0,0,0,1)');gr.addColorStop(1,'rgba(0,0,0,0)');d.fillStyle=gr;d.beginPath();d.arc(px,py,R,0,7);d.fill();
     c.setTransform(1,0,0,1,0,0);c.drawImage(dark,0,0);
     c.setTransform(DPR*SC,0,0,DPR*SC,-g.cam.x*SC*DPR,-g.cam.y*SC*DPR);
